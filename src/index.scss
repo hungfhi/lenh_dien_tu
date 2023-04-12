@@ -172,38 +172,38 @@ input[type=number] {
   }
   .ant-menu-title-content {
     font-weight: 600;
-    font-size: 16px;
+    font-size: 14px;
     margin-left: 10px;
   }
   .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
     background-color: #FFE8DB !important;
   }
   .ant-menu-vertical .ant-menu-item::after, .ant-menu-vertical-left .ant-menu-item::after, .ant-menu-vertical-right .ant-menu-item::after, .ant-menu-inline .ant-menu-item::after {
-    border-right: 3px solid #FF7043 !important;
+    border-right: 3px solid #01579B !important;
   }
   .ant-menu-light .ant-menu-item:hover, .ant-menu-light .ant-menu-item-active, .ant-menu-light .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-light .ant-menu-submenu-active, .ant-menu-light .ant-menu-submenu-title:hover {
-    color: #FF7043 !important;
+    color: #01579B !important;
   }
   .ant-menu-item-selected {
-    color: #FF7043 !important;
+    color: #01579B !important;
   }
 }
 .ant-layout-sider-trigger {
   background: #fff !important;
   span.anticon.anticon-left {
-    color: #FF7043 !important;
+    color: #01579B !important;
   }
   span.anticon.anticon-right {
-    color: #FF7043 !important;
+    color: #01579B !important;
   }
 
 }
 .ant-input-affix-wrapper:focus, .ant-input-affix-wrapper-focused {
-  border-color: #FF7043 !important;
+  border-color: #01579B !important;
   box-shadow: 0 0 0 2px rgba(240, 115, 13, 0.2) !important;
 }
 .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
-  border-color: #FF7043 !important;
+  border-color: #01579B !important;
 }
 .ant-breadcrumb {
   li {
@@ -235,20 +235,20 @@ input[type=number] {
   color: #B19A93;
   background-color: #FFF8F6;
   &:hover {
-    background-color: #FF7043;
+    background-color: #01579B;
     color: #fff;
   }
 }
 
 .ant-pagination-item-active {
-  border-color: #FF7043 !important;
+  border-color: #01579B !important;
 }
 .ant-pagination-item-active a {
-  color: #FF7043 !important;
+  color: #01579B !important;
 }
 
 .ant-spin-dot-item {
-  background-color: #FF7043 !important;
+  background-color: #01579B !important;
 }
 .status_completed {
   background: #EEFAEC;

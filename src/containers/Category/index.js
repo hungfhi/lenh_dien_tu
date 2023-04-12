@@ -11,7 +11,7 @@ import styled from "styled-components";
 
 
 
-const Statistics = ({className}) => {
+const Category = ({className}) => {
   const [data, setData] = useState([])
   const [totalPage, setTotalPage] = useState(0);
   const [loadding, setLoadding] = useState(false)
@@ -159,23 +159,14 @@ const Statistics = ({className}) => {
          <div className='mb-10'>
            
             <div className='font-600 color-black fs-18 mx-2 mb-3'>
-              Investment list
+              category
             </div>
-            <Spin spinning={loadding}>
-              <Table columns={columns} 
-                dataSource={data} 
-                scroll={{x: '100%'}}
-                pagination={{
-                  total: totalPage
-                }}
-                onChange={onChange}
-              />
-            </Spin>
+           
         </div>
        </div>
     )
 };
-export default styled(Statistics)`
+export default styled(Category)`
   .item {
     background: #fff !important;
     padding: 10px;

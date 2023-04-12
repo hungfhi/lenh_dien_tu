@@ -8,6 +8,8 @@ import {LIST_MENU_SIDE_BAR} from 'utils/constants';
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import {setProfileUser} from 'redux/action'
+import { COLOR_PRIMARY, COLOR_WHITE } from 'theme/colors';
+import { DIMENSION_PADDING_NORMAL } from 'theme/dimensions';
 
 
 const { confirm } = Modal;
@@ -16,6 +18,8 @@ const {  Content, Sider } = Layout;
 const LayoutContent = ({children}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state) => state?.rootReducer?.user);
+ 
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -58,32 +62,41 @@ const LayoutContent = ({children}) => {
       style={{ minHeight: '100vh', }}
     >
       <Sider className='cms_sidebar' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div style={{height: 50}} className="cursor-pointer" 
+        <div 
+          style={{height: 50}} 
+          className="cursor-pointer" 
           onClick={() => {
-            navigate('/user')
+            // navigate('/user')
           }}
         >
           {
             !collapsed ? (
-              <div className='mx-6 my-2 font-600 fs-24 '>
-                Admin
+              <div className='mx-6 my-2 font-600 fs-20 '>
+                Admin Havaz
               </div>
             ) : <div className='flex justify-center items-center'>
               <img src={icon_logo} className="img-menu-logo w-10 mt-2"/>
             </div>
           }
         </div>
-        <Menu onClick={onClickMenu} defaultSelectedKeys={[useCurrentRoute()?.key]} mode="inline" items={LIST_MENU_SIDE_BAR} />
+        <Menu 
+          onClick={onClickMenu} 
+          defaultSelectedKeys={[useCurrentRoute()?.key]}
+          mode="inline" 
+          items={LIST_MENU_SIDE_BAR} 
+          inlineIndent={10}
+          />
       </Sider>
       <Layout className="site-layout">
         <Content
-          style={{ margin: '0 16px', }}
+          style={{ margin: '0px 0px', }}
         >
-          <div className='flex justify-between items-center' style={{minHeight: 60}}>
+          <div className='flex justify-between items-center' style={{minHeight: 60, backgroundColor: COLOR_PRIMARY}}>
             <Breadcrumb style={{ margin: '16px 0', }} >
               <Breadcrumb.Item className='font-600 color-black fs-18'>{currentPathLabel}</Breadcrumb.Item>
               <Breadcrumb.Item>{currentPathLabel}</Breadcrumb.Item>
             </Breadcrumb>
+            <div className='font-600 fs-14' style={{color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL}}>{user?.email}</div>
            
           </div>
           <div className="site-layout-background" style={{  minHeight: '90%',  borderRadius: 10, }}  >

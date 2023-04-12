@@ -1,0 +1,11 @@
+
+export const DIMENSION_PADDING_TINY = 4;
+export const DIMENSION_PADDING_SMALL = 8;
+export const DIMENSION_PADDING_NORMAL = 12;
+export const DIMENSION_PADDING_MEDIUM = 16;
+export const DIMENSION_PADDING_LARGE = 24;
+
+export const DIMENSION_RADIUS_MEDIUM = 8;
+export const DIMENSION_RADIUS_LARGE = 12;
+export const DIMENSION_RADIUS_GIANT = 20;
+

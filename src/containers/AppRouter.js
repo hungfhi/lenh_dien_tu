@@ -12,11 +12,13 @@ import PrivateRoute from 'components/PrivateRoute';
 // screens 
 import User from './User'
 import SignIn from './SignIn'
-import Withdraw from './Withdraw'
-import Statistics from './Statistics'
-import Kyc from './Kyc'
+import Home from './Home'
 import NotFound from './NotFound'
-import UserDetail from './UserDetail'
+import Plan from './Plan';
+import Category from './Category';
+import Command from './Command';
+import Report from './Report';
+import Admin from './Admin';
 
 const AppRouter = () => {
   // const user = useSelector((state) => state?.rootReducer?.user);
@@ -56,45 +58,54 @@ const AppRouter = () => {
           <Route path="/sign-in" element={<SignIn/>}/>
 
           <Route
-            path="/statistics"
+            path="/home"
             element={
               <PrivateRoute>
-                <Statistics />
+                <Home />
               </PrivateRoute>
             }
           />
           <Route
-            path="/withdraw"
+            path="/plan"
             element={
               <PrivateRoute>
-                <Withdraw />
+               <Plan />
               </PrivateRoute>
             }
           />
           <Route
-            path="/kyc"
+            path="/category"
             element={
               <PrivateRoute>
-                <Kyc />
+                <Category/>
               </PrivateRoute>
             }
           />
           <Route
-            path="/user"
+            path="/command"
             element={
               <PrivateRoute>
-                <User />
+               <Command/>
               </PrivateRoute>
             }
           />
           <Route
-            path="/user-detail"
+            path="/report"
             element={
               <PrivateRoute>
-                <UserDetail />
+                <Report />
               </PrivateRoute>
             }
           />
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute>
+                <Admin />
+              </PrivateRoute>
+            }
+          />
+
 
       </Routes>
   </BrowserRouter>
