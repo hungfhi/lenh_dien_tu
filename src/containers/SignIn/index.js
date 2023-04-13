@@ -63,7 +63,7 @@ const SignIn = ({className}) => {
 
   return (
     <div className={className}>
-      <div style={{ width: 200, height: '100vh'}}/>
+     
       <div className='flex items-center justify-center flex-1'>
         <div className='form flex flex-col items-center justify-center bg-white px-16 py-10 rounded-2xl'>
           <div className='font-600 fs-32 mb-6'>Đăng nhập</div>
@@ -103,13 +103,13 @@ const SignIn = ({className}) => {
           
         </div>
       </div>
-      <div style={{ width: 200,}}/>
+  
     </div>
   );
 };
 
 export default styled(SignIn)`
-  background-color: #FFE8DB !important;
+  background-color: white !important;
   height: 100vh;
   display: flex;
   align-items: center;
