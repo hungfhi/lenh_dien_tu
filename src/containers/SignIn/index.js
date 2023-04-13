@@ -28,7 +28,7 @@ const SignIn = ({className}) => {
         token: 'result?.value?.token?.token',
       }));
       setTimeout(() => {
-        navigate("/user", {replace: true}) 
+        navigate("/home", {replace: true}) 
       }, 500)
     // const result = await ServiceBase.requestJson({
     //   method: "POST",

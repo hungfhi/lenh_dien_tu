@@ -72,7 +72,7 @@ const location = useLocation()
         </div>
         <Menu 
           onClick={onClickMenu} 
-          // defaultSelectedKeys={[useCurrentRoute()?.key]}
+          defaultSelectedKeys={['home']}
           mode="inline" 
           items={LIST_MENU_SIDE_BAR} 
           inlineIndent={10}
