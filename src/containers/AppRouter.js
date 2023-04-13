@@ -19,6 +19,11 @@ import Category from './Category';
 import Command from './Command';
 import Report from './Report';
 import Admin from './Admin';
+import TransportUnitManagement from './TransportUnitManagement';
+import BusStationManagement from './BusStationManagement';
+import VehicleManagement from './VehicleManagement';
+import AccountManagement from './AccountManagement';
+import BusRouteManagement from './BusRouteManagement';
 
 const AppRouter = () => {
   // const user = useSelector((state) => state?.rootReducer?.user);
@@ -105,7 +110,46 @@ const AppRouter = () => {
               </PrivateRoute>
             }
           />
-
+          <Route
+            path="/category/transport-unit-management"
+            element={
+              <PrivateRoute>
+                <TransportUnitManagement />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/category/bus-station-management"
+            element={
+              <PrivateRoute>
+                <BusStationManagement />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/category/vehicle-management"
+            element={
+              <PrivateRoute>
+                <VehicleManagement />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/category/bus-route-management"
+            element={
+              <PrivateRoute>
+                <BusRouteManagement />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/category/account-management"
+            element={
+              <PrivateRoute>
+                <AccountManagement />
+              </PrivateRoute>
+            }
+          />
 
       </Routes>
   </BrowserRouter>

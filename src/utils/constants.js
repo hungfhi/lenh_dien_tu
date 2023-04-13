@@ -31,11 +31,11 @@ const LIST_MENU_SIDE_BAR = [
     getItem('Option 12', 'plan4'),
   ]),
    getItem('Danh mục', 'category', <AppstoreOutlined />, [
-    getItem('Quản lý tài khoản', 'cate1'),
-    getItem('Quản lý bến xe', 'cate2'),
-    getItem('Quản lý phương tiện', 'cate3'),
-    getItem('Quản lý tuyến', 'cate4'),
-    getItem('Quản lý đơn vị vận tải', 'cate5'),
+    getItem('Quản lý tài khoản', 'category/account-management'),
+    getItem('Quản lý bến xe', 'category/bus-station-management'),
+    getItem('Quản lý phương tiện', 'category/vehicle-management'),
+    getItem('Quản lý tuyến', 'category/bus-route-management'),
+    getItem('Quản lý đơn vị vận tải', 'category/transport-unit-management'),
   ]),
    getItem('Báo cáo', 'report', <PieChartOutlined />),
    getItem('Quản trị', 'admin', <SettingOutlined />)
