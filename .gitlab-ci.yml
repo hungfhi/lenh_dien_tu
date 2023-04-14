@@ -23,7 +23,7 @@ variables:
   averageUtilization: 950
   Timezone: "Asia/Ho_Chi_Minh"
   url_project: https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.haivanplus.com/ben_xe/fe-lenh-dien-tu
-  port: 80
+  port: 3001
 ################################################
 workflow:
   rules:
