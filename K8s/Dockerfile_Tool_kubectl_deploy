@@ -1,0 +1,22 @@
+FROM alpine:3.16.0
+
+CMD ["/bin/sh"]
+
+ARG HELM_VERSION=3.9.0
+ARG KUBECTL_VERSION=1.23.7
+ENV BASE_URL=https://get.helm.sh
+ENV TAR_FILE=helm-v3.9.0-linux-amd64.tar.gz
+
+RUN   apk add --update --no-cache curl ca-certificates bash git make
+
+RUN   curl -sL ${BASE_URL}/${TAR_FILE} | tar -xvz &&     mv linux-amd64/helm /usr/bin/helm &&     chmod +x /usr/bin/helm &&     rm -rf linux-amd64 # buildkit
+
+RUN   curl -sLO https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&     mv kubectl /usr/bin/kubectl &&     chmod +x /usr/bin/kubectl # buildkit
+
+RUN   apk add --update --no-cache python3 &&     python3 -m ensurepip &&     pip3 install --upgrade pip &&     pip3 install awscli &&     pip3 cache purge # buildkit
+
+RUN   apk add --update --no-cache jq # buildkit
+
+RUN   apk add --update --no-cache gettext # buildkit
+
+WORKDIR /apps

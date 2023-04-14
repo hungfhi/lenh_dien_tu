@@ -1,0 +1,165 @@
+stages:
+  - build
+  - deploy
+  - release
+  - restart
+
+variables:
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_VERIFY: 1
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  CI_DEBUG_TRACE: "true"
+####  Important Variable must be set for k8s deployment
+  NAMESPACE: "benxe"
+  gitlab_pull_image_secret: "gitlab-pull-fe-lenh-dien-tu"
+  CPU: "0.1"
+  MEMORY: "500Mi"
+  CPU_LIMIT: "2"
+  MEMORY_LIMIT: "4Gi"
+  replicas: 1
+  minReplicas: 1
+  maxReplicas: 3
+  averageUtilization: 950
+  Timezone: "Asia/Ho_Chi_Minh"
+  url_project: https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.haivanplus.com/ben_xe/fe-lenh-dien-tu
+  port: 3001
+################################################
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+      variables:
+        NAME: "dev-lenh-dien-tu"
+        DOMAIN: "dev.lenhdientu.com"
+        ENV: $env_dev
+        KUBE_CONFIG: $KUBECONFIG_DEV
+        DEVELOP:  "true"
+        ENVIRONMENT: DEV_NHAXE
+        WEBSITE_URL: https://dev.lenhdientu.com
+        TAG_RUNNER: benxe-dev
+        TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest
+        TAG_COMMIT: $CI_REGISTRY_IMAGE:$ENVIRONMENT-$CI_COMMIT_SHORT_SHA
+      when: always
+
+
+build:
+  tags:
+    - $TAG_RUNNER
+  extends: .build
+  rules:
+    - if: $CI_COMMIT_BRANCH ==  "dev"
+      when: on_success
+
+
+deploy:
+  tags:
+    - $TAG_RUNNER
+  extends: .deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH ==  "dev"
+      when: on_success
+
+
+
+restart:
+  tags:
+    - $TAG_RUNNER
+  extends: .restart
+  rules:
+    - if: $CI_COMMIT_BRANCH ==  "dev"
+      when: manual
+
+
+### - Code for extend
+
+.build:
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  stage: build
+  before_script:
+    - i=0; while [ "$i" -lt 12 ]; do docker info && break; sleep 5; i=$(( i + 1 )) ; done
+    - docker system prune -af
+    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - echo $ENV | base64 -d  > .env
+    - docker build -t $TAG_COMMIT -t $TAG_LATEST .
+    - docker push $TAG_COMMIT
+    - docker push $TAG_LATEST
+
+  environment:
+    name: $ENVIRONMENT
+    url:  $WEBSITE_URL
+
+
+.deploy:
+  stage: deploy
+  image: "nampv/haivan:k8s-tool-deploy_1_23_7"
+  before_script:
+    - aws --version
+    - git clone $url_project
+    - mkdir /root/.kube
+
+  script:
+    - echo $KUBE_CONFIG > /root/.kube/config_encode
+    - base64 -d /root/.kube/config_encode  > /root/.kube/config
+    - |
+      git checkout $CI_COMMIT_BRANCH
+
+      envsubst < K8s/deploy_laravel.yaml > k8s-main.yml && kubectl apply -f k8s-main.yml
+      if [[ $? != 0 ]]; then exit 1; fi
+
+      kubectl rollout status -n $NAMESPACE  deployments/$NAME --timeout 1200s
+
+      if [[ $? != 0 ]]; then
+          kubectl logs -n $NAMESPACE $(kubectl get pods -n $NAMESPACE --sort-by=.metadata.creationTimestamp -l name=$NAME | awk '{print $1}' | tac | head -1 ) --tail=100 && exit 1;
+      fi
+  environment:
+    name: $ENVIRONMENT
+    url: $WEBSITE_URL
+
+
+.restart:
+  stage: restart
+  image: "nampv/haivan:k8s-tool-deploy_1_23_7"
+  before_script:
+    - aws --version
+    - mkdir /root/.kube
+
+  script:
+    - echo $KUBE_CONFIG > /root/.kube/config_encode
+    - base64 -d /root/.kube/config_encode  > /root/.kube/config
+    - |
+      kubectl -n $NAMESPACE rollout restart deployments/$NAME
+
+      kubectl rollout status -n $NAMESPACE  deployments/$NAME --timeout 1200s
+
+      if [[ $? != 0 ]]; then
+          kubectl logs -n $NAMESPACE $(kubectl get pods -n $NAMESPACE --sort-by=.metadata.creationTimestamp -l name=$NAME | awk '{print $1}' | tac | head -1 ) --tail=100 && exit 1;
+      fi
+  environment:
+    name: $ENVIRONMENT
+    url: $WEBSITE_URL
+
+release:
+  stage: release
+  #  image: 946587862704.dkr.ecr.ap-southeast-1.amazonaws.com/monitor:release-cli_v0.15.0
+  image: nampv/gitlab:release-cli_v0.15.0
+  before_script: [ ]
+  variables:
+    CI_DEBUG_TRACE: "true"
+  script:
+    - echo "Release from branch $CI_COMMIT_BRANCH vs commit $CI_COMMIT_SHORT_SHA"
+  release:
+    tag_name: v-$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA
+    name: 'Release version v-$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA'
+    description: $CI_COMMIT_MESSAGE
+  allow_failure: true
+  #  when: always
+  needs:
+    - deploy
+  tags:
+    - $TAG_RUNNER
+  only:
+    - main
+    - dev
