@@ -23,23 +23,25 @@ const Index = ({ className, profile }) => {
     name: "",
   });
 
-  // const getDataTable = useCallback(async () => {
-  //   // setLoading(true);
-  //   const result = await ServiceBase.requestJson({
-  //     method: "GET",
-  //     url: "/v1/category-declare/quota",
-  //     data: {
-  //       ...params,
-  //     },
-  //   });
-  //   if (result.hasErrors) {
-  //     Ui.showErrors(result.errors);
-  //   } else {
-  //     // setTotal(result.value.meta.total);
-  //     setData(result.value.data);
-  //   }
-  //   await setLoading(false);
-  // }, [params]);
+  const getDataTable = useCallback(async () => {
+    // setLoading(true);
+    const result = await ServiceBase.requestJson({
+      method: "GET",
+      url: "/v1/category-declare/quota",
+      data: {
+        ...params,
+      },
+    });
+    Ui.showSuccess({ message: "Success!" });
+    if (result.hasErrors) {
+      // Ui.showErrors(result.errors);
+      // Ui.showError({ message: "eRROR" });
+    } else {
+      // setTotal(result.value.meta.total);
+      setData(result?.value?.data);
+    }
+    await setLoading(false);
+  }, [params]);
 
 
   const onHiddenModal = useCallback(() => {
@@ -61,20 +63,20 @@ const Index = ({ className, profile }) => {
       },
     });
     if (result.hasErrors) {
-      Ui.showErrors(result.errors);
+      Ui.showErrors(result?.errors);
     } else {
-      setItemSelected(result.value.data)
+      setItemSelected(result?.value?.data)
     }
   }, [])
 
 
-  // useEffect(() => {
-  //   getDataTable();
-  // }, [getDataTable]);
+  useEffect(() => {
+    getDataTable();
+  }, [getDataTable]);
 
-  // const onRefreshList = () => {
-  //   getDataTable();
-  // }
+  const onRefreshList = () => {
+    getDataTable();
+  }
 
 
   return (
@@ -88,10 +90,8 @@ const Index = ({ className, profile }) => {
             params={params}
             loadding={loadding}
             data={data}
-            total={total}
-            setTotal={setTotal}
             onEdit={onEdit}
-            // onRefreshList={onRefreshList}
+            onRefreshList={onRefreshList}
             setParams={setParams}
           />
         </Spin>
@@ -106,7 +106,7 @@ const Index = ({ className, profile }) => {
         visible={isShowModal}
       >
         <Create
-          // onRefreshList={onRefreshList}
+          onRefreshList={onRefreshList}
           onHiddenModal={onHiddenModal}
         />
       </Drawer>
@@ -122,7 +122,7 @@ const Index = ({ className, profile }) => {
         {
           itemSelected ? (
             <Update
-              // onRefreshList={onRefreshList}
+              onRefreshList={onRefreshList}
               onHiddenModalEdit={onHiddenModalEdit}
               itemSelected={itemSelected}
             />
