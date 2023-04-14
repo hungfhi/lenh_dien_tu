@@ -8,6 +8,6 @@ RUN yarn install
 RUN yarn build
 RUN chown -R node:node .
 USER node
-CMD ["npm", "start"]
-
+RUN rm -rf .git/
 EXPOSE 3001
+CMD ["npm", "start"]
