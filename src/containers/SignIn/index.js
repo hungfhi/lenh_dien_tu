@@ -1,15 +1,16 @@
-import { Button, Spin, Form, Input, notification } from 'antd';
+import { Button, Spin, Form, Input,  } from 'antd';
 import React, { useState } from 'react';
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import {setProfileUser} from 'redux/action'
+import { setProfileUser } from 'redux/action'
 import { useDispatch } from 'react-redux';
 import { MailOutlined, LockFilled } from "@ant-design/icons";
 import ServiceBase from "utils/ServiceBase";
 import { $Cookies } from 'utils/cookies';
 import { COLOR_PRIMARY } from 'theme/colors';
+import BG from '../../assets/images/bg.png';
 
-const SignIn = ({className}) => {
+const SignIn = ({ className }) => {
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch();
 
@@ -23,13 +24,13 @@ const SignIn = ({className}) => {
       email: values?.email,
       password: values?.password
     }
-     dispatch(setProfileUser({
-        ...values,
-        token: 'result?.value?.token?.token',
-      }));
-      setTimeout(() => {
-        navigate("/home", {replace: true}) 
-      }, 500)
+    dispatch(setProfileUser({
+      ...values,
+      token: 'result?.value?.token?.token',
+    }));
+    setTimeout(() => {
+      navigate("/home", { replace: true })
+    }, 500)
     // const result = await ServiceBase.requestJson({
     //   method: "POST",
     //   url: `auth/admin/login`,
@@ -62,9 +63,9 @@ const SignIn = ({className}) => {
   console.log("Button", form)
 
   return (
-    <div className={className}>
-     
-      <div className='flex items-center justify-center flex-1'>
+    <div className={className} >
+      {/* style={{ backgroundImage: `url(${BG})` }} */}
+      <div className='flex items-center justify-center flex-1' style={{ marginTop: -200,}}>
         <div className='form flex flex-col items-center justify-center bg-white px-16 py-10 rounded-2xl'>
           <div className='font-600 fs-32 mb-6'>Đăng nhập</div>
           <Spin spinning={loading}>
@@ -89,26 +90,31 @@ const SignIn = ({className}) => {
                 />
               </Form.Item>
               <Form.Item>
-                <Button 
-                loading={false} 
-                htmlType="submit" 
-                className="login-button" style={{
-                  backgroundColor: COLOR_PRIMARY
-                }}>
+                <Button
+                  loading={false}
+                  htmlType="submit"
+                  className="login-button" style={{
+                    backgroundColor: COLOR_PRIMARY
+                  }}>
                   <b className='fs-16' style={{ color: "#fff" }}>{'Đăng nhập'}</b>
                 </Button>
               </Form.Item>
             </Form>
           </Spin>
-          
+
         </div>
       </div>
-  
     </div>
   );
 };
 
 export default styled(SignIn)`
+  background-image:url(${BG})
+  height: 100vh;
+  display: flex;
+  background-position: center center!important;
+  background-size: cover!important;
+  transition: all 0.5s ease;
   background-color: white !important;
   height: 100vh;
   display: flex;

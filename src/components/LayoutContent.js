@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "../index.scss";
 import { Link, useLocation } from "react-router-dom"
 import _ from 'lodash'
-import { Breadcrumb, Layout, Menu, Modal } from 'antd';
+import { Breadcrumb, Layout, Menu, Modal,Dropdown , Button} from 'antd';
 import icon_logo from 'assets/icon_logo.png';
-import {LIST_MENU_SIDE_BAR} from 'utils/constants';
+import { LIST_MENU_SIDE_BAR } from 'utils/constants';
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import {setProfileUser} from 'redux/action'
+import { setProfileUser } from 'redux/action'
 import { COLOR_PRIMARY, COLOR_WHITE } from 'theme/colors';
 import { DIMENSION_PADDING_NORMAL } from 'theme/dimensions';
 import styled from 'styled-components';
 
 const { confirm } = Modal;
-const {  Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 
-const LayoutContent = ({children, className}) => {
-const location = useLocation()
+const LayoutContent = ({ children, className }) => {
+  const location = useLocation()
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state?.rootReducer?.user);
@@ -27,7 +27,7 @@ const location = useLocation()
 
 
   const onClickMenu = (item) => {
-    if(item.key == 'logout') {
+    if (item.key == 'logout') {
       confirm({
         title: <>Do you want to log out?</>,
         okText: "Yes",
@@ -46,16 +46,40 @@ const location = useLocation()
       navigate(`/${item.key}`, { replace: true });
     }
   }
+  const onLogOut = () => {
+    localStorage.clear();
+    window.location.replace("/");
+  } 
+
+  const items = [
+    {
+      key: '1',
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="/account">
+          Thông tin tài khoản
+        </a>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <a target="_blank" rel="noopener noreferrer" onClick={onLogOut}>
+          Đăng xuất
+        </a>
+      ),
+    },
+  ];
+
 
   return (
     <Layout
-    className={className}
+      className={className}
       style={{ minHeight: '100vh', }}
     >
       <Sider className='cms_sidebar' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div 
-          style={{height: 50}} 
-          className="cursor-pointer" 
+        <div
+          style={{ height: 50 }}
+          className="cursor-pointer"
           onClick={() => {
             // navigate('/user')
           }}
@@ -66,58 +90,65 @@ const location = useLocation()
                 Admin Havaz
               </div>
             ) : <div className='flex justify-center items-center'>
-              <img src={icon_logo} className="img-menu-logo w-10 mt-2"/>
+              <img src={icon_logo} className="img-menu-logo w-10 mt-2" />
             </div>
           }
         </div>
-        <Menu 
-          onClick={onClickMenu} 
+        <Menu
+          onClick={onClickMenu}
           defaultSelectedKeys={['home']}
-          mode="inline" 
-          items={LIST_MENU_SIDE_BAR} 
+          mode="inline"
+          items={LIST_MENU_SIDE_BAR}
           inlineIndent={10}
-          />
+        />
       </Sider>
       <Layout className="site-layout">
         <Content
           style={{ margin: '0px 0px', }}
         >
-          <div className='flex justify-between items-center' style={{minHeight: 48, backgroundColor: COLOR_PRIMARY, paddingLeft: DIMENSION_PADDING_NORMAL}}>
+          <div className='flex justify-between items-center' style={{ minHeight: 48, backgroundColor: COLOR_PRIMARY, paddingLeft: DIMENSION_PADDING_NORMAL }}>
             <Breadcrumb separator=">">
-                {pathnames.map((name, index) => {
-                  let newName ='';
-                  const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
-                  const isLast = index === pathnames.length - 1;
-                
-                 if(!isLast || index ===0){
-                    LIST_MENU_SIDE_BAR.map(item => {
-                      if(item?.key === name) {
-                        newName = item?.label
-                      }
-                    })
-                 } else {
+              {pathnames.map((name, index) => {
+                let newName = '';
+                const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
+                const isLast = index === pathnames.length - 1;
+
+                if (!isLast || index === 0) {
                   LIST_MENU_SIDE_BAR.map(item => {
-                      item?.children?.map(row => {
-                        if(row?.key === location?.pathname.slice(1)) {
+                    if (item?.key === name) {
+                      newName = item?.label
+                    }
+                  })
+                } else {
+                  LIST_MENU_SIDE_BAR.map(item => {
+                    item?.children?.map(row => {
+                      if (row?.key === location?.pathname.slice(1)) {
                         newName = row?.label
                       }
-                      })
                     })
-                 }
-                  return isLast ? (
-                    <Breadcrumb.Item>{capitalize(newName)}</Breadcrumb.Item>
-                  ) : (
-                    <Breadcrumb.Item>
-                      <Link to={`${routeTo}`}>{capitalize(newName)}</Link>
-                    </Breadcrumb.Item>
-                  );
-                })}
-              </Breadcrumb>
-            <div className='font-600 fs-14' style={{color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL}}>{user?.email}</div>
-           
+                  })
+                }
+                return isLast ? (
+                  <Breadcrumb.Item>{capitalize(newName)}</Breadcrumb.Item>
+                ) : (
+                  <Breadcrumb.Item>
+                    <Link to={`${routeTo}`}>{capitalize(newName)}</Link>
+                  </Breadcrumb.Item>
+                );
+              })}
+            </Breadcrumb>
+            <div className='font-600 fs-14' style={{ color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL }}><Dropdown
+              menu={{
+                items,
+              }}
+              placement="bottomLeft"
+            >
+              <div style={{cursor:'pointer'}}>{user?.email}</div>
+            </Dropdown></div>
+
           </div>
-          <div className="site-layout-background" style={{  minHeight: '90%',  borderRadius: 10, }}  >
-              {children}
+          <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10, }}  >
+            {children}
           </div>
         </Content>
       </Layout>
