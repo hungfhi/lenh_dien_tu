@@ -9,3 +9,5 @@ RUN yarn build
 RUN chown -R node:node .
 USER node
 CMD ["npm", "start"]
+
+EXPOSE 3001
