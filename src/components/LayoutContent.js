@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setProfileUser } from 'redux/action'
 import { COLOR_PRIMARY, COLOR_WHITE } from 'theme/colors';
 import { DIMENSION_PADDING_NORMAL } from 'theme/dimensions';
+import { UserOutlined} from '@ant-design/icons';
 import styled from 'styled-components';
 
 const { confirm } = Modal;
@@ -143,11 +144,11 @@ const LayoutContent = ({ children, className }) => {
               }}
               placement="bottomLeft"
             >
-              <div style={{cursor:'pointer'}}>{user?.email}</div>
+              <div style={{cursor:'pointer',padding: "4px 4px", borderRadius: 4, border: "2px solid white",}}><UserOutlined style={{fontSize: 16}}/>&nbsp;&nbsp;{user?.email}</div>
             </Dropdown></div>
 
           </div>
-          <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10, }}  >
+          <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10,margin:15 }}  >
             {children}
           </div>
         </Content>
