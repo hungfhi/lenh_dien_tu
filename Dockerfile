@@ -9,5 +9,4 @@ RUN yarn build
 RUN chown -R node:node .
 USER node
 RUN rm -rf .git/
-EXPOSE 3001
 CMD ["npm", "start"]

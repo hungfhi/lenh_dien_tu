@@ -75,7 +75,7 @@ spec:
               port: $port
               path: /
               scheme: HTTP
-            initialDelaySeconds: 10
+            initialDelaySeconds: 100
             periodSeconds: 10
             failureThreshold: 5
             successThreshold: 1
