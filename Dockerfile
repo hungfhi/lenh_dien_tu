@@ -8,4 +8,5 @@ RUN yarn install
 RUN yarn build
 RUN chown -R node:node .
 USER node
+RUN rm -rf .git/
 CMD ["npm", "start"]
