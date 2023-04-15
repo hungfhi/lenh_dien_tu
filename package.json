@@ -20,7 +20,7 @@
     "react-router-dom": "^6.2.1",
     "react-scripts": "4.0.3",
     "react-slick": "^0.28.1",
-    "react-toastify": "^8.1.1",
+    "react-toastify": "^5.5.0",
     "react-youtube": "^8.2.1",
     "redux": "^4.2.0",
     "slick-carousel": "^1.8.1",
@@ -32,7 +32,7 @@
     "react-error-overlay": "6.0.9"
   },
   "scripts": {
-    "start": "PORT=3001 craco start",
+    "start": "set PORT=3001 && react-scripts start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"

@@ -1,0 +1,6 @@
+.Toastify__toast--default{
+    background:none !important;
+  }
+  .Toastify__toast{
+    box-shadow:none  !important;
+  }

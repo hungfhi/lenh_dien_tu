@@ -124,8 +124,8 @@ body {
 
 
 .ant-table-thead > tr > th {
-  background: #FFE8DE !important ;
-  color: #864332;
+  background: #01579B !important ;
+  color: #fff;
 }
 
 .ReactModal__Content.ReactModal__Content--after-open {
@@ -159,9 +159,6 @@ input[type=number] {
 }
  
 
-.site-layout-background {
-  border: 1px solid #EFE9E8;
-}
 .cms_sidebar {
   height: 100vh;
   background-color: #fff !important;
@@ -176,7 +173,7 @@ input[type=number] {
     margin-left: 10px;
   }
   .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-    background-color: #FFE8DB !important;
+    background-color: #01579B !important;
   }
   .ant-menu-vertical .ant-menu-item::after, .ant-menu-vertical-left .ant-menu-item::after, .ant-menu-vertical-right .ant-menu-item::after, .ant-menu-inline .ant-menu-item::after {
     border-right: 3px solid #01579B !important;
@@ -185,7 +182,7 @@ input[type=number] {
     color: #01579B !important;
   }
   .ant-menu-item-selected {
-    color: #01579B !important;
+    color: #fff !important;
   }
 }
 .ant-layout-sider-trigger {
@@ -213,7 +210,7 @@ input[type=number] {
   }
 }
 .ant-table-thead > tr > th {
-  color: #BD4714 !important;
+  color: #fff !important;
   font-family: 'NotoSans-Bold';
   font-size: 16px;
 }
