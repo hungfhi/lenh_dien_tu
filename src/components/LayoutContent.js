@@ -133,7 +133,7 @@ const LayoutContent = ({ children, className }) => {
                   <Breadcrumb.Item>{capitalize(newName)}</Breadcrumb.Item>
                 ) : (
                   <Breadcrumb.Item>
-                    <Link to={`${routeTo}`}>{capitalize(newName)}</Link>
+                    <div style={{color:'white',fontWeight:'bold'}}>{capitalize(newName)}</div>
                   </Breadcrumb.Item>
                 );
               })}
