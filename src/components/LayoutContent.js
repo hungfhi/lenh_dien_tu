@@ -22,11 +22,12 @@ const LayoutContent = ({ children, className }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state?.rootReducer?.user);
+  const menu = useSelector((state) => state?.rootReducer?.menu);
   const pathnames = location?.pathname.split("/").filter((item) => item);
   const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const [collapsed, setCollapsed] = useState(false);
-
-
+  // console.log(menu)
+  // console.log(LIST_MENU_SIDE_BAR)
 
   const onClickMenu = (item) => {
     if (item.key == 'logout') {
@@ -45,7 +46,7 @@ const LayoutContent = ({ children, className }) => {
         },
       });
     } else {
-      navigate(`/${item.key}`, { replace: true });
+      navigate(`${item.key}`, { replace: true });
     }
   }
   const onLogOut = () => {
@@ -115,7 +116,7 @@ const LayoutContent = ({ children, className }) => {
           onClick={onClickMenu}
           defaultSelectedKeys={['home']}
           mode="inline"
-          items={LIST_MENU_SIDE_BAR}
+          items={menu}
           inlineIndent={10}
         />
       </Sider>
@@ -130,28 +131,24 @@ const LayoutContent = ({ children, className }) => {
                 const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
                 const isLast = index === pathnames.length - 1;
 
-                if (!isLast || index === 0) {
-                  LIST_MENU_SIDE_BAR.map(item => {
-                    if (item?.key === name) {
-                      newName = item?.label
-                    }
-                  })
-                } else {
-                  LIST_MENU_SIDE_BAR.map(item => {
+                // if (!isLast || index === 0) {
+                //   menu.map(item => {
+                //     if (item?.key === name) {
+                //       newName = item?.label
+                //     }
+                //   })
+                // } else {
+                  menu.map(item => {
                     item?.children?.map(row => {
-                      if (row?.key === location?.pathname.slice(1)) {
+                      if (row?.key === location?.pathname) {
                         newName = row?.label
                       }
                     })
                   })
-                }
-                return isLast ? (
-                  <Breadcrumb.Item>{capitalize(newName)}</Breadcrumb.Item>
-                ) : (
-                  <Breadcrumb.Item>
-                    <div style={{ color: 'white', fontWeight: 'bold' }}>{capitalize(newName)}</div>
+                // }
+                return  <Breadcrumb.Item>
+                    <div style={{color:'white'}}>{capitalize(newName)}</div>
                   </Breadcrumb.Item>
-                );
               })}
             </Breadcrumb>
             <div className='font-600 fs-14' style={{ color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL }}><Dropdown
