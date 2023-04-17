@@ -3,7 +3,7 @@
 import Axios from "axios";
 import _ from "lodash";
 import Result from "./result";
-import {settings} from 'configs';
+import {domain} from 'configs';
 import { $Token } from './token';
 
 
@@ -12,7 +12,7 @@ export default class ServiceBase {
     let axiosResult = null;
     let result = null;
     const axiosRequestConfig = {
-      baseURL: opts.baseUrl || settings?.ServiceAddress,
+      baseURL: opts.baseUrl || domain?.ServiceAddress,
       timeout: 300000,
       headers: $Token.get('JWT_TOKEN') ? {
         'Content-Type': _.get(opts, 'contentType', 'application/json'),

@@ -1,4 +1,5 @@
-import settings from './settings'
+import domain from './domain'
 import apis from './apis'
+import auth from './auth'
 
-export { settings,  apis }
+export { domain,  apis, auth }
