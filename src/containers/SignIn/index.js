@@ -1,4 +1,4 @@
-import { Button, Spin, Form, Input,  } from 'antd';
+import { Button, Spin, Form, Input,message } from 'antd';
 import React, { useState } from 'react';
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,8 @@ import ServiceBase from "utils/ServiceBase";
 import { $Cookies } from 'utils/cookies';
 import { COLOR_PRIMARY } from 'theme/colors';
 import BG from '../../assets/images/bg.png';
-
+import { Ui } from "utils/Ui";
+import { apis } from '../../configs'
 const SignIn = ({ className }) => {
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch();
@@ -18,42 +19,48 @@ const SignIn = ({ className }) => {
 
   const [form] = Form.useForm();
 
+  const isNumber = (str) => {
+    var pattern = /^\d+$/;
+    return pattern.test(str)
+  }
+
+
   const onFinish = async (values) => {
-    setLoading(true)
     const payload = {
-      email: values?.email,
+      phone: values?.phone,
       password: values?.password
     }
+
     dispatch(setProfileUser({
       ...values,
       token: 'result?.value?.token?.token',
     }));
+
+    // if (!isNumber(payload?.phone))
+    //   return message.warning('Số điện thoại không hợp lệ');
+    // if (!(payload?.phone).startsWith('0'))
+    //   return message.warning('Số điện thoại không hợp lệ');
+    
+    // apis.onLogin(payload)
+    //   .then(res => {
+    //     if (res.status === 200) {
+    //       Ui.showSuccess({ message: "Thành công" });
+    //       dispatch(setProfileUser({
+    //         ...values,
+    //         access_token: res?.data?.data?.access_token,
+    //         token_type: res?.data?.data?.token_type,
+    //       }));
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log('errerr')
+    //     Ui.showError({ message: err?.response?.data?.message });
+    //   })
+    
     setTimeout(() => {
       navigate("/home", { replace: true })
     }, 500)
-    // const result = await ServiceBase.requestJson({
-    //   method: "POST",
-    //   url: `auth/admin/login`,
-    //   data: payload,
-    // });
-    // setLoading(false)
-    // if(result?.value?.status == 200) {
-    //   $Cookies.set('JWT_TOKEN', result?.value?.token?.token);
 
-    //   dispatch(setProfileUser({
-    //     ...values,
-    //     token: result?.value?.token?.token,
-    //   }));
-    //   setTimeout(() => {
-    //     navigate("/user", {replace: true}) 
-    //   }, 500)
-    // } else {
-    //   setLoading(false)
-    //   notification['error']({
-    //     message: 'Đăng nhập thất bại',
-    //     description: result?.value?.msg,
-    //   });
-    // }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -65,14 +72,14 @@ const SignIn = ({ className }) => {
   return (
     <div className={className} >
       {/* style={{ backgroundImage: `url(${BG})` }} */}
-      <div className='flex items-center justify-center flex-1' style={{ marginTop: -200,}}>
+      <div className='flex items-center justify-center flex-1' style={{ marginTop: -200, }}>
         <div className='form flex flex-col items-center justify-center bg-white px-16 py-10 rounded-2xl'>
           <div className='font-600 fs-32 mb-6'>Đăng nhập</div>
           <Spin spinning={loading}>
             <Form name="basic" autoComplete="off" onFinish={onFinish} form={form}
               onFinishFailed={onFinishFailed}
             >
-              <Form.Item name="email" rules={[{ required: true, message: 'Hãy nhập tài khoản đăng nhập' }]}>
+              <Form.Item name="phone" rules={[{ required: true, message: 'Hãy nhập tài khoản đăng nhập' }]}>
                 <Input
                   size="large"
                   placeholder={'Tên đăng nhập'}

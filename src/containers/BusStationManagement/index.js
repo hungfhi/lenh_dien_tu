@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Row, Spin } from "antd";
+import { Button, Col, Drawer, Row, Spin, message } from "antd";
 import PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
@@ -9,6 +9,7 @@ import Create from './Create';
 import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
+import { apis } from '../../configs'
 
 const Index = ({ className, profile }) => {
   const [data, setData] = useState([]);
@@ -24,22 +25,21 @@ const Index = ({ className, profile }) => {
   });
 
   const getDataTable = useCallback(async () => {
-    // setLoading(true);
-    const result = await ServiceBase.requestJson({
-      method: "GET",
-      url: "/v1/category-declare/quota",
-      data: {
-        ...params,
-      },
-    });
-    Ui.showSuccess({ message: "Success!" });
-    if (result.hasErrors) {
-      // Ui.showErrors(result.errors);
-      // Ui.showError({ message: "eRROR" });
-    } else {
-      // setTotal(result.value.meta.total);
-      setData(result?.value?.data);
-    }
+    setLoading(true);
+      apis.getBusStation(data)
+          .then(res => {
+              console.log(res)
+              if (res.status === 200) {
+                Ui.showSuccess({ message: "Thành công" });
+              }
+          })
+          .catch(err => {
+              console.log(err.response)
+              if (err.response?.status === 422 && err.response?.data?.errors) {
+                  message.warn(err.response.data?.errors[0].msg)
+                  message.error('Error!')
+              }
+          })
     await setLoading(false);
   }, [params]);
 

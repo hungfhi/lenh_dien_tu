@@ -16,6 +16,8 @@ import AppRouter from './containers/AppRouter'
 const applicationState = JSON.parse(localStorage.getItem('applicationState'));
 if(applicationState?.rootReducer?.user?.token) {
     const token = applicationState?.rootReducer?.user?.token
+
+    console.log('applicationState?.rootReducer?.user',applicationState?.rootReducer?.user)
     axios.defaults.headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
