@@ -19,7 +19,7 @@ const apis = {
 
 
     getBusStation(payload) {
-        return axios.get(`${domain.ServiceAddress}admin/user-invest/${payload?.uuid}`, {
+        return axios.get(`${domain.ServiceAddress}/menus`, {
             params: payload
         })
     },

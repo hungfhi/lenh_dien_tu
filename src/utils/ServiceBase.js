@@ -60,7 +60,6 @@ export default class ServiceBase {
       }
       result = new Result(axiosResult.data, null);
     } catch (error) {
-      console.log("error", error)
       // if(error?.response?.status == 401) {
       //   window.location.href = "/sign-in";
       // }
