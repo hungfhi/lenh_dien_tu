@@ -18,7 +18,7 @@ const FooterModal = ({
             </Col>
             <Col span={19}>
                 <Row justify="end" gutter={[8, 8]}>
-                    <Button type="primary" onClick={()=> {
+                    <Button style={{backgroundColor:'#01579B',color:'#fff'}} onClick={()=> {
                         if(modal.get('isEdit')){
                             onUpdate()
                         } else {

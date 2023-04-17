@@ -26,8 +26,6 @@ const LayoutContent = ({ children, className }) => {
   const pathnames = location?.pathname.split("/").filter((item) => item);
   const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const [collapsed, setCollapsed] = useState(false);
-  // console.log(menu)
-  // console.log(LIST_MENU_SIDE_BAR)
 
   const onClickMenu = (item) => {
     if (item.key == 'logout') {
@@ -40,8 +38,6 @@ const LayoutContent = ({ children, className }) => {
           try {
             dispatch(setProfileUser(null));
           } finally {
-            // localStorage.clear();
-            // window.location.replace("/");
           }
         },
       });
@@ -138,7 +134,7 @@ const LayoutContent = ({ children, className }) => {
                 //     }
                 //   })
                 // } else {
-                  menu.map(item => {
+                  menu?.map(item => {
                     item?.children?.map(row => {
                       if (row?.key === location?.pathname) {
                         newName = row?.label

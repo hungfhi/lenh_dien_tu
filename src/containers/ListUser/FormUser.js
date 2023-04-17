@@ -191,8 +191,7 @@ const FormAccount = ({
                     </Button>
                     <Button
                         htmlType="submit"
-                        type="primary"
-                        style={{ height: 35, float: "right" }}
+                        style={{ height: 35, float: "right",backgroundColor:'#01579B',color:'#fff' }}
                     >
                         {itemSelected ? "Cập nhật" : "Lưu"}
                     </Button>
