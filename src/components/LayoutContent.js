@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "../index.scss";
-import { Link, useLocation } from "react-router-dom"
+import { Link,  useLocation } from "react-router-dom"
 import _ from 'lodash'
 import { Breadcrumb, Layout, Menu, Modal, Dropdown, Button } from 'antd';
 import { LIST_MENU_SIDE_BAR } from 'utils/constants';
@@ -137,13 +137,14 @@ const LayoutContent = ({ children, className }) => {
                   menu?.map(item => {
                     item?.children?.map(row => {
                       if (row?.key === location?.pathname) {
-                        newName = row?.label
+                        newName =<div>{item?.label}<span> > </span> <span style={{fontWeight:600}}>{row?.label}</span></div>
                       }
                     })
                   })
                 // }
+                console.log('newName',newName)
                 return  <Breadcrumb.Item>
-                    <div style={{color:'white'}}>{capitalize(newName)}</div>
+                    <div style={{color:'white'}}>{newName}</div>
                   </Breadcrumb.Item>
               })}
             </Breadcrumb>
