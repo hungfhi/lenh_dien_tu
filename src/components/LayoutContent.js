@@ -157,7 +157,7 @@ const LayoutContent = ({ children, className }) => {
               }}
               placement="bottomLeft"
             >
-              <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4, border: "2px solid white", }}><UserOutlined style={{ fontSize: 16 }} />&nbsp;&nbsp;{user?.info?.username}</div>
+              <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4,  }}><UserOutlined style={{ fontSize: 16 }} />&nbsp;&nbsp;{user?.info?.username}</div>
             </Dropdown></div>
           </div>
           <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10, margin: 15 }}  >

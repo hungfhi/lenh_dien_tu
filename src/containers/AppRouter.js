@@ -34,36 +34,35 @@ import Merchants from './Merchants';
 
 const AppRouter = () => {
   const dispatch = useDispatch()
+ const user = useSelector((state) => state?.rootReducer?.user);
 
-  // if(user) {
-  //   console.log("user", user)
-  //   axios.defaults.headers = {
-  //     'Accept': 'application/json',
-  //     'Content-Type': 'application/json',
-  //     'Authorization': `Bearer ${user?.token}`,
-  // }
-  // axios.interceptors.response.use((response) => {
-  //     return response;
-  // }, (error) => {
-  //     if (error.response && error.response.status === 401) {
-  //         axios.defaults.headers = {
-  //             'Accept': 'application/json',
-  //             'Content-Type': 'application/json',
-  //         }
-  //     } else
-  //         return Promise.reject(error);
-  // });
-  // }
+  if(user) {
+    console.log("user", user)
+    axios.defaults.headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `${user?.token_type} ${user?.token}`,
+  }
+  axios.interceptors.response.use((response) => {
+      return response;
+  }, (error) => {
+      if (error.response && error.response.status === 401) {
+          axios.defaults.headers = {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+          }
+      } else
+          return Promise.reject(error);
+  });
+  }
  
-  const user = useSelector((state) => state?.rootReducer?.user);
-  
 
   useEffect(()=>{
     if(user) {
       axios.defaults.headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer 1|McD9VJUNPwhDlcxDxpbUwWXjQfyhixwHukGulmtd`,
+        'Authorization': `${user?.token_type} ${user?.token}`,
       }
     profile.getMenu()
         .then(res => {
