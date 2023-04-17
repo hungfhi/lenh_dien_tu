@@ -27,7 +27,8 @@
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.3",
     "universal-cookie": "^4.0.4",
-    "wow.js": "^1.2.2"
+    "wow.js": "^1.2.2",
+    "recompose": "^0.30.0"
   },
   "resolutions": {
     "react-error-overlay": "6.0.9"

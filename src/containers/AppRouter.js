@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash'
 import PrivateRoute from 'components/PrivateRoute';
 // screens 
-import User from './User'
 import SignIn from './SignIn'
 import Home from './Home'
 import NotFound from './NotFound'
@@ -101,19 +100,11 @@ const AppRouter = () => {
     <BrowserRouter>
       <Routes>
         <Route path='*' element={<NotFound />} />
-
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <User />
-            </PrivateRoute>
-          }
-        />
+        
         <Route path="/sign-in" element={<SignIn />} />
 
         <Route
-          path="/home"
+          path="/"
           element={
             <PrivateRoute>
               <Home />

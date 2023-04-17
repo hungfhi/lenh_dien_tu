@@ -43,7 +43,7 @@ const SignIn = ({ className }) => {
             token_type: res?.data?.data?.token_type,
           }));
           Ui.showSuccess({ message: "Đăng nhập hệ thống thành công" });
-          navigate("/home", { replace: true })
+          navigate("/", { replace: true })
         }
       })
       .catch(err => {

@@ -1,178 +1,168 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Spin, Input, Row, Col, notification } from 'antd';
-import _ from 'lodash';
-import ServiceBase from "utils/ServiceBase";
-import formatHash from 'utils/formatHash'
-import icon_down from 'assets/icon_down.png'
-import icon_up from 'assets/icon_up.png'
-import formatNumber from 'utils/formatNumber';
-import moment from 'moment'
+import React, { useState, useCallback, useEffect } from "react";
+import { Row, Col, Button, Drawer, Spin,Modal } from "antd";
+import { Tabs, TabPane } from "components";
 import styled from "styled-components";
-
-
-
-const ListUser = ({className}) => {
-  const [data, setData] = useState([])
-  const [totalPage, setTotalPage] = useState(0);
-  const [loadding, setLoadding] = useState(false)
-  const [loaddingTop, setLoaddingTop] = useState(false)
-
-  const [dataStatistic, setDataStatistic] = useState(null);
-
-  const [params, setParams] = useState({
-    page: 1,
-    limit: 10,
-  });
-
-  const columns = [
-    {
-      title: 'User ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Time',
-      dataIndex: 'depositRef',
-      key: 'depositRef',
-      render: (value) => moment(value?.depositRef).format("DD/MM/YYYY HH:mm:ss")
-    },
-    {
-      title: 'Sender',
-      dataIndex: 'depositRef',
-      key: 'depositRef',
-      render: value => formatHash(value?.address)
-    },
-    {
-      title: 'Amount',
-      dataIndex: 'amount',
-      key: 'amount',
-      render: (value) => <div className='color-app font-600 text-center'>${`${formatNumber(value)}`}</div>
-    },
-    {
-      title: 'Token',
-      dataIndex: 'depositRef',
-      key: 'depositRef',
-      render: value => formatHash(value.token)
-    },
-    {
-      title: 'Hash',
-      dataIndex: 'depositRef',
-      key: 'depositRef',
-      render: value => formatHash(value.txHash)
-    },
-    
-  ]
-  
- 
-
-  const getListInvestmentList = async () => {
-    setLoadding(true)
-    const result = await ServiceBase.requestJson({
-      method: "GET",
-      url: `admin/investments?date=2022-07-12&isClosed=0&sortBy=amount:asc&populate=depositRef`,
-      data: {
-        ...params,
-      },
+import PropTypes from "prop-types";
+import { Map } from "immutable";
+import moment from 'moment'
+import ServiceBase from "utils/ServiceBase";
+import { URI } from "utils/constants";
+import { Ui } from "utils/Ui";
+import { DownloadOutlined } from "@ant-design/icons";
+import Filter from './Filter';
+import FormChangePass from './FormChangePass';
+import UsertList from './UsertList';
+import CreateUser from './CreateUser';
+import UpdateUser from './UpdateUser';
+import { useLocation } from "react-router-dom";
+import * as qs from "query-string";
+import users from "configs/users";
+const ListUser = ({ className, profile }) => {
+    const { search } = useLocation();
+    const [data, setData] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [loadding, setLoading] = useState(false);
+    const [itemSelected, setItemSelected] = useState(null);
+    const [isShowModal, setShowModal] = useState(false);
+    const [isShowModalEdit, setShowModalEdit] = useState(false)
+    const [showChange, setShowChange] = useState(false);
+    const [getId, setGetId] = useState("");
+    const [params, setParams] = useState({
+        page: 1,
+        per_page: 10,
     });
-    if(result?.value) {
-      setLoadding(false)
-      setData(result?.value?.data)
-      setTotalPage(result?.value?.options?.totalResults)
-    } else {
-      setLoadding(false)
-      notification['error']({
-        message: 'Lấy dữ liệu thất bại',
-        description:
-          '',
-      });
-    }
-	
-	}
 
-  const getStatistic = async () => {
-    setLoaddingTop(true)
-    const result = await ServiceBase.requestJson({
-      method: "GET",
-      url: `admin/investments/volume`,
-      data: {},
+
+    const getAgencyAccount = useCallback(async () => {
+        setLoading(true);
+
+        const payload = {
+            page: params?.page,
+            per_page: params?.per_page
+          }
+
+          users.getUsers(payload)
+            .then(res => {
+              if (res.status === 200) {
+                setData(res?.data?.data)
+                setTotal(res?.data?.meta?.total)
+              }
+            })
+            .catch(err => {
+              Ui.showError({ message: err?.response?.data?.message });
+            })
+        await setLoading(false);
+    }, [params]);
+
+
+
+    const onEdit = useCallback(async (ids) => {
+        setShowModalEdit(true)
+        const payload = {
+            uuid:ids
+        }
+        users.getInfoUser(payload)
+        .then(res => {
+          if (res.status === 200) {
+            setItemSelected(res?.data?.data)
+          }
+        })
+        .catch(err => {
+          Ui.showError({ message: err?.response?.data?.message });
+        })
+    }, [])
+
+    const onChangeP = (ids) => {
+        setGetId(ids)
+        setShowChange(true);
+      };
+      const handleClose = useCallback(() => {
+        setShowChange(false);
     });
-    if(result?.value?.data) {
-      setLoaddingTop(false)
-      setDataStatistic(result?.value?.data)
-    }
-    else {
-      setLoaddingTop(false)
-      notification['error']({
-        message: 'Lấy dữ liệu thất bại',
-        description:
-          '',
-      });
-    }
-  }
 
-  const onChange = (pagination) => {
-    setParams((prevState) => {
-      let nextState = { ...prevState };
-      nextState.page = pagination?.current;
-      return nextState;
+    const onHiddenModal = useCallback(() => {
+        setShowModal(false);
     });
-  }
+
+    const onHiddenModalEdit = useCallback(() => {
+        setItemSelected(null);
+        setShowModalEdit(false);
+    });
 
 
-
-  useEffect(() => {
-		// getListInvestmentList()
-	}, [params])
-
-
-  useEffect(() => {
-    // getStatistic()
-  }, [])
-
-
-  
-  const renderItem = (item) => {
+    useEffect(() => {
+        getAgencyAccount();
+    }, [getAgencyAccount]);
+    const onRefreshList = () => {
+        getAgencyAccount();
+    }
     return (
-        <Col md={6} sm={12} xs={24} >
-            <div className='item mx-2'  data-aos={item?.animate}>
-                <div className='flex font-700 mb-2'>
-                    <div className='color-vol'>{item?.name}</div>
-                </div>
-                <div className='fs-20 flex items-center font-700 item_value'>
-                    {!loaddingTop ?  formatNumber(item?.value) : 0}&nbsp;
-                    <span className='fs-16 font-600' style={{color: item?.isRed ? '#E53935' : '#28C700' }}>{item?.isRed ? '-' : '+'}{item?.percent}%</span>
-                    <span><img className='w-4 ml-1' src={item?.isRed ? icon_down : icon_up}/></span>
-                </div>
-            </div>
-        </Col>
-    )
-}
+        <Row className={className} gutter={[16, 16]}>
+            <Col xs={24}>
+                <Filter params={params} setParams={setParams} setShowModal={setShowModal} />
+            </Col>
+            <Col xs={24}>
+                <Spin spinning={loadding}>
+                    <UsertList
+                        data={data}
+                        params={params}
+                        setParams={setParams}
+                        total={total}
+                        onRefreshList={onRefreshList}
+                        onEdit={onEdit}
+                        onChangeP={onChangeP}
+                        setTotal={setTotal}
+                    />
+                </Spin>
+            </Col>
+            <Drawer
+                destroyOnClose
+                width={"60%"}
+                title="Thêm mới tài khoản"
+                placement="right"
+                closable={true}
+                onClose={onHiddenModal}
+                visible={isShowModal}
+            >
+                <CreateUser
+                    onRefreshList={onRefreshList}
+                    onHiddenModal={onHiddenModal}
+                />
+            </Drawer>
+            <Drawer
+                destroyOnClose
+                width={"60%"}
+                title="Sửa tài khoản"
+                placement="right"
+                closable={true}
+                onClose={onHiddenModalEdit}
+                visible={isShowModalEdit}
+            >
+                {
+                    itemSelected ? (
+                        <UpdateUser
+                            onRefreshList={onRefreshList}
+                            onHiddenModalEdit={onHiddenModalEdit}
+                            itemSelected={itemSelected}
+                        />
+                    ) : <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spin spinning /></div>
+                }
+            </Drawer>
 
-  
-    return (
-       <div className={className}>
-         <div className='mb-10'>
-           
-            <div className='font-600 color-black fs-18 mx-2 mb-3'>
-              ListUser
-            </div>
-           
-        </div>
-       </div>
-    )
+            <Modal footer={null} title="Đổi mật khẩu" visible={showChange} closable={false} destroyOnClose>
+               <FormChangePass   
+                    onRefreshList={onRefreshList}
+                    handleClose={handleClose}
+                    onChangeP={onChangeP}
+                    getId={getId}
+                />
+            </Modal>
+        </Row>
+    );
+};
+
+ListUser.propTypes = {
+    className: PropTypes.any,
 };
 export default styled(ListUser)`
-  .item {
-    background: #fff !important;
-    padding: 10px;
-    box-shadow: 0px 4px 6px rgba(231, 219, 210, 0.24);
-    border-radius: 5px;
-  }
-`
-
-
+ `;
