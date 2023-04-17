@@ -11,8 +11,9 @@ import { setProfileUser } from 'redux/action'
 import { COLOR_PRIMARY, COLOR_WHITE } from 'theme/colors';
 import { DIMENSION_PADDING_NORMAL } from 'theme/dimensions';
 import { UserOutlined } from '@ant-design/icons';
+import { Ui } from "utils/Ui";
 import styled from 'styled-components';
-
+import { auth } from '../configs'
 const { confirm } = Modal;
 const { Content, Sider } = Layout;
 
@@ -48,8 +49,27 @@ const LayoutContent = ({ children, className }) => {
     }
   }
   const onLogOut = () => {
-    localStorage.clear();
-    window.location.replace("/");
+    const payload = {
+      phone: user?.phone,
+      password: user?.password
+    }
+   
+    auth.onLogin(payload)
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(setProfileUser({
+            info:res?.data?.data?.info,
+            token: res?.data?.data?.access_token,
+            token_type: res?.data?.data?.token_type,
+          }));
+          Ui.showSuccess({ message: "Đăng nhập hệ thống thành công" });
+          navigate("/sign-in", { replace: true })
+        }
+      })
+      .catch(err => {
+        Ui.showError({ message: err?.response?.data?.message });
+      })
+    
   }
 
   const items = [
@@ -144,7 +164,7 @@ const LayoutContent = ({ children, className }) => {
               }}
               placement="bottomLeft"
             >
-              <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4, border: "2px solid white", }}><UserOutlined style={{ fontSize: 16 }} />&nbsp;&nbsp;{user?.info?.full_name}</div>
+              <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4, border: "2px solid white", }}><UserOutlined style={{ fontSize: 16 }} />&nbsp;&nbsp;{user?.info?.username}</div>
             </Dropdown></div>
           </div>
           <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10, margin: 15 }}  >

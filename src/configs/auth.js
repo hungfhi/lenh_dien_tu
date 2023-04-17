@@ -11,13 +11,14 @@ const auth = {
         })
       },
 
-    //login
+    //logout
 
-    // getUserInvestment(payload) {
-    //     return axios.get(`${domain.ServiceAddress}admin/user-invest/${payload?.uuid}`, {
-    //         params: payload
-    //     })
-    // },
+    onLogout(payload) {
+        return axios.post(`${domain.ServiceAddress}/auth/logout`, {
+          'phone': payload?.phone,
+          'password': payload?.password,
+        })
+    },
 
 
     // getBusStation(payload) {
