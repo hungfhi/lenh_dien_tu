@@ -3,7 +3,6 @@ import "../index.scss";
 import { Link, useLocation } from "react-router-dom"
 import _ from 'lodash'
 import { Breadcrumb, Layout, Menu, Modal, Dropdown, Button } from 'antd';
-import icon_logo from 'assets/icon_logo.png';
 import { LIST_MENU_SIDE_BAR } from 'utils/constants';
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
@@ -108,9 +107,9 @@ const LayoutContent = ({ children, className }) => {
               <div className='mx-6 my-2 font-600 fs-20 '>
                 Admin Havaz
               </div>
-            ) : <div className='flex justify-center items-center'>
-              <img src={icon_logo} className="img-menu-logo w-10 mt-2" />
-            </div>
+            ) :  <div className='mx-6 my-2 font-600 fs-20 '>
+                HV
+              </div>
           }
         </div>
         <Menu
