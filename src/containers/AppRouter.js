@@ -26,27 +26,25 @@ import AccountManagement from './AccountManagement';
 import BusRouteManagement from './BusRouteManagement';
 
 const AppRouter = () => {
-  // const user = useSelector((state) => state?.rootReducer?.user);
-  // if(user) {
-  //   console.log("user", user)
-  //   axios.defaults.headers = {
-  //     'Accept': 'application/json',
-  //     'Content-Type': 'application/json',
-  //     'Authorization': `Bearer ${user?.token}`,
-  // }
-  // axios.interceptors.response.use((response) => {
-  //     return response;
-  // }, (error) => {
-  //     if (error.response && error.response.status === 401) {
-  //         axios.defaults.headers = {
-  //             'Accept': 'application/json',
-  //             'Content-Type': 'application/json',
-  //         }
-  //     } else
-  //         return Promise.reject(error);
-  // });
-  // }
-  // console.log("ueser", user)
+  const user = useSelector((state) => state?.rootReducer?.user);
+  if(user) {
+    axios.defaults.headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `${user?.token_type} ${user?.token}`,
+  }
+  axios.interceptors.response.use((response) => {
+      return response;
+  }, (error) => {
+      if (error.response && error.response.status === 401) {
+          axios.defaults.headers = {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+          }
+      } else
+          return Promise.reject(error);
+  });
+  }
   return (
     <BrowserRouter>
       <Routes>

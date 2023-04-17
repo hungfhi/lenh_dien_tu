@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../index.scss";
 import { Link, useLocation } from "react-router-dom"
 import _ from 'lodash'
-import { Breadcrumb, Layout, Menu, Modal,Dropdown , Button} from 'antd';
+import { Breadcrumb, Layout, Menu, Modal, Dropdown, Button } from 'antd';
 import icon_logo from 'assets/icon_logo.png';
 import { LIST_MENU_SIDE_BAR } from 'utils/constants';
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setProfileUser } from 'redux/action'
 import { COLOR_PRIMARY, COLOR_WHITE } from 'theme/colors';
 import { DIMENSION_PADDING_NORMAL } from 'theme/dimensions';
-import { UserOutlined} from '@ant-design/icons';
+import { UserOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 const { confirm } = Modal;
@@ -50,7 +50,7 @@ const LayoutContent = ({ children, className }) => {
   const onLogOut = () => {
     localStorage.clear();
     window.location.replace("/");
-  } 
+  }
 
   const items = [
     {
@@ -133,7 +133,7 @@ const LayoutContent = ({ children, className }) => {
                   <Breadcrumb.Item>{capitalize(newName)}</Breadcrumb.Item>
                 ) : (
                   <Breadcrumb.Item>
-                    <div style={{color:'white',fontWeight:'bold'}}>{capitalize(newName)}</div>
+                    <div style={{ color: 'white', fontWeight: 'bold' }}>{capitalize(newName)}</div>
                   </Breadcrumb.Item>
                 );
               })}
@@ -144,11 +144,10 @@ const LayoutContent = ({ children, className }) => {
               }}
               placement="bottomLeft"
             >
-              <div style={{cursor:'pointer',padding: "4px 4px", borderRadius: 4, border: "2px solid white",}}><UserOutlined style={{fontSize: 16}}/>&nbsp;&nbsp;{user?.email}</div>
+              <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4, border: "2px solid white", }}><UserOutlined style={{ fontSize: 16 }} />&nbsp;&nbsp;{user?.info?.full_name}</div>
             </Dropdown></div>
-
           </div>
-          <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10,margin:15 }}  >
+          <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10, margin: 15 }}  >
             {children}
           </div>
         </Content>

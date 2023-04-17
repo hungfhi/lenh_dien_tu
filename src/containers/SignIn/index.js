@@ -1,16 +1,16 @@
-import { Button, Spin, Form, Input,message } from 'antd';
+import { Button, Spin, Form, Input, message } from 'antd';
 import React, { useState } from 'react';
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { setProfileUser } from 'redux/action'
 import { useDispatch } from 'react-redux';
-import { MailOutlined, LockFilled } from "@ant-design/icons";
+import { PhoneOutlined, LockFilled } from "@ant-design/icons";
 import ServiceBase from "utils/ServiceBase";
 import { $Cookies } from 'utils/cookies';
 import { COLOR_PRIMARY } from 'theme/colors';
 import BG from '../../assets/images/bg.png';
 import { Ui } from "utils/Ui";
-import { apis } from '../../configs'
+import { auth } from '../../configs'
 const SignIn = ({ className }) => {
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch();
@@ -24,42 +24,35 @@ const SignIn = ({ className }) => {
     return pattern.test(str)
   }
 
-
   const onFinish = async (values) => {
     const payload = {
       phone: values?.phone,
       password: values?.password
     }
+    if (!isNumber(payload?.phone))
+      return message.warning('Số điện thoại không hợp lệ');
+    if (!(payload?.phone).startsWith('0'))
+      return message.warning('Số điện thoại không hợp lệ');
 
-    dispatch(setProfileUser({
-      ...values,
-      token: 'result?.value?.token?.token',
-    }));
+    auth.onLogin(payload)
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(setProfileUser({
+            info:res?.data?.data?.info,
+            token: res?.data?.data?.access_token,
+            token_type: res?.data?.data?.token_type,
+          }));
+          Ui.showSuccess({ message: "Đăng nhập hệ thống thành công" });
+          navigate("/home", { replace: true })
+        }
+      })
+      .catch(err => {
+        Ui.showError({ message: err?.response?.data?.message });
+      })
 
-    // if (!isNumber(payload?.phone))
-    //   return message.warning('Số điện thoại không hợp lệ');
-    // if (!(payload?.phone).startsWith('0'))
-    //   return message.warning('Số điện thoại không hợp lệ');
-    
-    // apis.onLogin(payload)
-    //   .then(res => {
-    //     if (res.status === 200) {
-    //       Ui.showSuccess({ message: "Thành công" });
-    //       dispatch(setProfileUser({
-    //         ...values,
-    //         access_token: res?.data?.data?.access_token,
-    //         token_type: res?.data?.data?.token_type,
-    //       }));
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log('errerr')
-    //     Ui.showError({ message: err?.response?.data?.message });
-    //   })
-    
-    setTimeout(() => {
-      navigate("/home", { replace: true })
-    }, 500)
+    // setTimeout(() => {
+    //   navigate("/home", { replace: true })
+    // }, 500)
 
   };
 
@@ -67,7 +60,6 @@ const SignIn = ({ className }) => {
     console.log('Failed:', errorInfo);
   };
 
-  console.log("Button", form)
 
   return (
     <div className={className} >
@@ -83,7 +75,7 @@ const SignIn = ({ className }) => {
                 <Input
                   size="large"
                   placeholder={'Tên đăng nhập'}
-                  prefix={<MailOutlined />}
+                  prefix={<PhoneOutlined />}
                   style={{ borderRadius: 12, height: 50, width: 300, }}
                 />
               </Form.Item>

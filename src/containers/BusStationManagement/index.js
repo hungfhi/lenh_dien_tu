@@ -9,9 +9,16 @@ import Create from './Create';
 import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
+import { useSelector,  } from 'react-redux';
 import { apis } from '../../configs'
 
 const Index = ({ className, profile }) => {
+
+
+  const user = useSelector((state) => state?.rootReducer?.user);
+
+  console.log('user',user)
+
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [loadding, setLoading] = useState(false);
@@ -28,13 +35,11 @@ const Index = ({ className, profile }) => {
     setLoading(true);
       apis.getBusStation(data)
           .then(res => {
-              console.log(res)
               if (res.status === 200) {
                 Ui.showSuccess({ message: "Thành công" });
               }
           })
           .catch(err => {
-              console.log(err.response)
               if (err.response?.status === 422 && err.response?.data?.errors) {
                   message.warn(err.response.data?.errors[0].msg)
                   message.error('Error!')
