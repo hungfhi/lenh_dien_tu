@@ -54,15 +54,11 @@ const LayoutContent = ({ children, className }) => {
       password: user?.password
     }
    
-    auth.onLogin(payload)
+    auth.onLogout(payload)
       .then(res => {
         if (res.status === 200) {
-          dispatch(setProfileUser({
-            info:res?.data?.data?.info,
-            token: res?.data?.data?.access_token,
-            token_type: res?.data?.data?.token_type,
-          }));
-          Ui.showSuccess({ message: "Đăng nhập hệ thống thành công" });
+          dispatch(setProfileUser(null));
+          Ui.showSuccess({ message: "Đăng xuất hệ thống thành công" });
           navigate("/sign-in", { replace: true })
         }
       })
