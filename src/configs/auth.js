@@ -20,12 +20,14 @@ const auth = {
         })
     },
 
-
-    // getBusStation(payload) {
-    //     return axios.get(`${domain.ServiceAddress}admin/user-invest/${payload?.uuid}`, {
-    //         params: payload
-    //     })
-    // },
+    //update pass
+    onUpdatePass(payload) {
+      return axios.put(`${domain.ServiceAddress}/auth/change-password`, {
+        'password_confirmation': payload?.password_confirmation,
+        'password': payload?.password,
+        'logout_other_devices':payload?.logout_other_devices,
+      })
+    },
 
 
     
