@@ -18,7 +18,7 @@ const FormAccount = ({
     let perByRole = itemSelected?.roles || []
     let list_roles =_.map(perByRole , (i) => {
         return {
-                key: i?.id,
+                value: i?.id,
                 label: i?.name,
                 }
     })
