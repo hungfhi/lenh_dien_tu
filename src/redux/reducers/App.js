@@ -1,8 +1,9 @@
-import { INCREMENT, DECREMENT, SET_PROFILE } from '../types';
+import { INCREMENT, DECREMENT, SET_PROFILE, SET_MENU } from '../types';
 
     const INITIAL_STATE = {
         count: 0,
         user: null,
+        menu: []
     };
 
     const reducer = (state = INITIAL_STATE, action) => {
@@ -10,6 +11,10 @@ import { INCREMENT, DECREMENT, SET_PROFILE } from '../types';
             case SET_PROFILE:
                return {
                  ...state, user: action.payload,
+               };
+             case SET_MENU:
+               return {
+                 ...state, menu: action.payload,
                };
             case INCREMENT:
                return {

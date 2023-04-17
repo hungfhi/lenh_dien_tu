@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
 import "../index.scss";
 import {
   BrowserRouter,
@@ -6,8 +7,8 @@ import {
   Route,
 } from "react-router-dom";
 import axios from 'axios'
-import { useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import _ from 'lodash'
 import PrivateRoute from 'components/PrivateRoute';
 // screens 
 import User from './User'
@@ -24,9 +25,16 @@ import BusStationManagement from './BusStationManagement';
 import VehicleManagement from './VehicleManagement';
 import AccountManagement from './AccountManagement';
 import BusRouteManagement from './BusRouteManagement';
+import profile from 'configs/profile';
+import { Ui } from 'utils/Ui';
+import { setMenu } from 'redux/action';
+import Roles from './Roles';
+import ListUser from './ListUser';
+import Merchants from './Merchants';
 
 const AppRouter = () => {
-  // const user = useSelector((state) => state?.rootReducer?.user);
+  const dispatch = useDispatch()
+
   // if(user) {
   //   console.log("user", user)
   //   axios.defaults.headers = {
@@ -46,7 +54,49 @@ const AppRouter = () => {
   //         return Promise.reject(error);
   // });
   // }
-  // console.log("ueser", user)
+ 
+  const user = useSelector((state) => state?.rootReducer?.user);
+  
+
+  useEffect(()=>{
+    if(user) {
+      axios.defaults.headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer 1|McD9VJUNPwhDlcxDxpbUwWXjQfyhixwHukGulmtd`,
+      }
+    profile.getMenu()
+        .then(res => {
+          if (res.status === 200 && res?.data?.data) {
+              let convertMenu = []
+              res?.data?.data.map(item => {
+                let newChild = []
+                item?.children.map(row => {
+                  newChild.push({
+                      ...row,
+                    key: row?.path,
+                    label: row?.name,
+                    children:null
+                  })
+                })
+                convertMenu.push( {
+                  ...item,
+                  key: item?.path === '#' ? '#'+item?.name : item?.path,
+                  label: item?.name,
+                  children: newChild
+                })
+              })
+          
+              dispatch(setMenu(convertMenu));
+            }
+        })
+        .catch(err => {
+          console.log('errerr')
+          Ui.showError({ message: err?.response?.data?.message });
+        })
+    }
+  },[user])
+
   return (
     <BrowserRouter>
       <Routes>
@@ -149,6 +199,30 @@ const AppRouter = () => {
                 <AccountManagement />
               </PrivateRoute>
             }
+          />
+          <Route
+              path="/users"
+              element={
+                <PrivateRoute>
+                  <ListUser />
+                </PrivateRoute>
+              }
+          />
+          <Route
+              path="/roles"
+              element={
+                <PrivateRoute>
+                  <Roles />
+                </PrivateRoute>
+              }
+          />
+          <Route
+              path="/merchants"
+              element={
+                <PrivateRoute>
+                  <Merchants />
+                </PrivateRoute>
+              }
           />
 
       </Routes>
