@@ -80,8 +80,6 @@ const Roles = ({ className, profile }) => {
 
     const onUpdate = useCallback(async () => {
         let newBody = formatBody(body)
-
-        console.log('initValue',initValue)
         let payload = {
             uuid : modal.get('uuid'),
             name:newBody?.name,
