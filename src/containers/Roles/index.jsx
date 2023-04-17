@@ -84,8 +84,8 @@ const Roles = ({ className, profile }) => {
         console.log('initValue',initValue)
         let payload = {
             uuid : modal.get('uuid'),
-            name:newBody?.name == initValue?.name ? undefined : newBody?.name,
-            description:newBody?.description== initValue?.description ? undefined : newBody?.description,
+            name:newBody?.name,
+            description:newBody?.description,
             permissions: newBody?.permissions
         }
         roles.updateInfoRoles(payload)
