@@ -14,6 +14,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { Ui } from "utils/Ui";
 import styled from 'styled-components';
 import { auth } from '../configs'
+import { DIMENSION_PADDING_MEDIUM } from 'theme/dimensions';
 const { confirm } = Modal;
 const { Content, Sider } = Layout;
 
@@ -73,8 +74,8 @@ const LayoutContent = ({ children, className }) => {
     {
       key: '1',
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="/account">
-          Thông tin tài khoản
+        <a target="_blank" rel="noopener noreferrer" href="/me">
+          Tài khoản
         </a>
       ),
     },
@@ -160,8 +161,10 @@ const LayoutContent = ({ children, className }) => {
               <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4,  }}><UserOutlined style={{ fontSize: 16 }} />&nbsp;&nbsp;{user?.info?.username}</div>
             </Dropdown></div>
           </div>
-          <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10, margin: 15 }}  >
+          <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10, margin: DIMENSION_PADDING_MEDIUM }}  >
+           <div style={{padding: DIMENSION_PADDING_MEDIUM }}>
             {children}
+           </div>
           </div>
         </Content>
       </Layout>

@@ -20,6 +20,7 @@ import Category from './Category';
 import Command from './Command';
 import Report from './Report';
 import Admin from './Admin';
+import Account from './Account';
 import TransportUnitManagement from './TransportUnitManagement';
 import BusStationManagement from './BusStationManagement';
 import VehicleManagement from './VehicleManagement';
@@ -34,198 +35,206 @@ import Merchants from './Merchants';
 
 const AppRouter = () => {
   const dispatch = useDispatch()
- const user = useSelector((state) => state?.rootReducer?.user);
+  const user = useSelector((state) => state?.rootReducer?.user);
 
-  if(user) {
+  if (user) {
     console.log("user", user)
     axios.defaults.headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `${user?.token_type} ${user?.token}`,
-  }
-  axios.interceptors.response.use((response) => {
+    }
+    axios.interceptors.response.use((response) => {
       return response;
-  }, (error) => {
+    }, (error) => {
       if (error.response && error.response.status === 401) {
-          axios.defaults.headers = {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-          }
+        axios.defaults.headers = {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
       } else
-          return Promise.reject(error);
-  });
+        return Promise.reject(error);
+    });
   }
- 
 
-  useEffect(()=>{
-    if(user) {
+
+  useEffect(() => {
+    if (user) {
       axios.defaults.headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': `${user?.token_type} ${user?.token}`,
       }
-    profile.getMenu()
+      profile.getMenu()
         .then(res => {
           if (res.status === 200 && res?.data?.data) {
-              let convertMenu = []
-              res?.data?.data.map(item => {
-                let newChild = []
-                item?.children.map(row => {
-                  newChild.push({
-                      ...row,
-                    key: row?.path,
-                    label: row?.name,
-                    children:null
-                  })
-                })
-                convertMenu.push( {
-                  ...item,
-                  key: item?.path === '#' ? '#'+item?.name : item?.path,
-                  label: item?.name,
-                  children: newChild
+            let convertMenu = []
+            res?.data?.data.map(item => {
+              let newChild = []
+              item?.children.map(row => {
+                newChild.push({
+                  ...row,
+                  key: row?.path,
+                  label: row?.name,
+                  children: null
                 })
               })
-          
-              dispatch(setMenu(convertMenu));
-            }
+              convertMenu.push({
+                ...item,
+                key: item?.path === '#' ? '#' + item?.name : item?.path,
+                label: item?.name,
+                children: newChild
+              })
+            })
+
+            dispatch(setMenu(convertMenu));
+          }
         })
         .catch(err => {
           console.log('errerr')
           Ui.showError({ message: err?.response?.data?.message });
         })
     }
-  },[user])
+  }, [user])
 
   return (
     <BrowserRouter>
       <Routes>
-          <Route path='*' element={<NotFound />} />
+        <Route path='*' element={<NotFound />} />
 
-          <Route
-            path="/"
-            element={
-              <PrivateRoute>
-                <User />
-              </PrivateRoute>
-            }
-          />
-          <Route path="/sign-in" element={<SignIn/>}/>
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <User />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/sign-in" element={<SignIn />} />
 
-          <Route
-            path="/home"
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/plan"
-            element={
-              <PrivateRoute>
-               <Plan />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/category"
-            element={
-              <PrivateRoute>
-                <Category/>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/command"
-            element={
-              <PrivateRoute>
-               <Command/>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/report"
-            element={
-              <PrivateRoute>
-                <Report />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <PrivateRoute>
-                <Admin />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/category/transport-unit-management"
-            element={
-              <PrivateRoute>
-                <TransportUnitManagement />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/category/bus-station-management"
-            element={
-              <PrivateRoute>
-                <BusStationManagement />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/category/vehicle-management"
-            element={
-              <PrivateRoute>
-                <VehicleManagement />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/category/bus-route-management"
-            element={
-              <PrivateRoute>
-                <BusRouteManagement />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/category/account-management"
-            element={
-              <PrivateRoute>
-                <AccountManagement />
-              </PrivateRoute>
-            }
-          />
-          <Route
-              path="/users"
-              element={
-                <PrivateRoute>
-                  <ListUser />
-                </PrivateRoute>
-              }
-          />
-          <Route
-              path="/roles"
-              element={
-                <PrivateRoute>
-                  <Roles />
-                </PrivateRoute>
-              }
-          />
-          <Route
-              path="/merchants"
-              element={
-                <PrivateRoute>
-                  <Merchants />
-                </PrivateRoute>
-              }
-          />
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/plan"
+          element={
+            <PrivateRoute>
+              <Plan />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/category"
+          element={
+            <PrivateRoute>
+              <Category />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/command"
+          element={
+            <PrivateRoute>
+              <Command />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/report"
+          element={
+            <PrivateRoute>
+              <Report />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute>
+              <Admin />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/me"
+          element={
+            <PrivateRoute>
+              <Account />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/category/transport-unit-management"
+          element={
+            <PrivateRoute>
+              <TransportUnitManagement />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/category/bus-station-management"
+          element={
+            <PrivateRoute>
+              <BusStationManagement />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/category/vehicle-management"
+          element={
+            <PrivateRoute>
+              <VehicleManagement />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/category/bus-route-management"
+          element={
+            <PrivateRoute>
+              <BusRouteManagement />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/category/account-management"
+          element={
+            <PrivateRoute>
+              <AccountManagement />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <PrivateRoute>
+              <ListUser />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/roles"
+          element={
+            <PrivateRoute>
+              <Roles />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/merchants"
+          element={
+            <PrivateRoute>
+              <Merchants />
+            </PrivateRoute>
+          }
+        />
 
       </Routes>
-  </BrowserRouter>
+    </BrowserRouter>
   );
 };
 
