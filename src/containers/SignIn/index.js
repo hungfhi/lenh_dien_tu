@@ -29,10 +29,10 @@ const SignIn = ({ className }) => {
       phone: values?.phone,
       password: values?.password
     }
-    if (!isNumber(payload?.phone))
-      return message.warning('Số điện thoại không hợp lệ');
-    if (!(payload?.phone).startsWith('0'))
-      return message.warning('Số điện thoại không hợp lệ');
+    // if (!isNumber(payload?.phone))
+    //   return message.warning('Số điện thoại không hợp lệ');
+    // if (!(payload?.phone).startsWith('0'))
+    //   return message.warning('Số điện thoại không hợp lệ');
 
     auth.onLogin(payload)
       .then(res => {
