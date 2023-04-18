@@ -1,22 +1,19 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { Row, Col, Input, Form, Tag, Button } from "antd";
-import styled from "styled-components";
-import PropTypes from "prop-types";
-import moment from 'moment';
-import ServiceBase from "utils/ServiceBase";
-import { useSelector, useDispatch } from 'react-redux';
-import { Map } from "immutable";
-import { URI } from "utils/constants";
-import { Ui } from "utils/Ui";
-import _ from "lodash";
-import avatar from '../../assets/images/avatar.jpeg';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Button, Checkbox, Col, Form, Input, Row } from "antd";
 import { auth } from "configs";
-
-
+import PropTypes from "prop-types";
+import { useCallback, useEffect, useState, } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { Ui } from "utils/Ui";
+import avatar from '../../assets/images/avatar.jpeg';
+import { setProfileUser } from '../../redux/action';
 const Roles = ({ className, profile }) => {
   const user = useSelector((state) => state?.rootReducer?.user?.info);
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [checkLog, setCheckLog] = useState(false);
   const [users, setUser] = useState({
     logout_other_devices: false
   });
@@ -52,18 +49,26 @@ const Roles = ({ className, profile }) => {
     const payload = {
       password: users?.password,
       password_confirmation: users?.password_confirmation,
-      logout_other_devices: users?.logout_other_devices
+      logout_other_devices: checkLog
     }
     auth.onUpdatePass(payload)
       .then(res => {
         if (res.status === 200) {
           Ui.showSuccess({ message: "Thay đổi mật khẩu thành công" });
+          if(payload?.logout_other_devices===true){
+            dispatch(setProfileUser(null));
+          navigate("/sign-in", { replace: true })
+          }
         }
       })
       .catch(err => {
         Ui.showError({ message: err?.response?.data?.message });
       })
   };
+
+  const onChange = (e) => {
+    setCheckLog(e.target.checked)
+  }
 
 
   useEffect(() => {
@@ -165,14 +170,18 @@ const Roles = ({ className, profile }) => {
               </Col>
               <Col span="8"></Col>
               <Col span="16">
+                <Checkbox onChange={onChange}>Đăng xuất khỏi tất cả các thiết bị ?</Checkbox>
+              </Col>
+              <Col span="8"></Col>
+              <Col span="16">
                 <Button type="primary" onClick={onUpdate}>Cập nhật</Button>
               </Col>
             </Row>
           </Col>
-          <Col span="8" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+          <Col span="8" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Row>
               <Col>
-                <img src={avatar} style={{width:200, height:250}} />
+                <img src={avatar} style={{ width: 200, height: 250 }} />
               </Col>
             </Row>
           </Col>

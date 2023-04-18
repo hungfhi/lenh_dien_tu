@@ -41,28 +41,9 @@ const AgencyRoleSelect = memo(
             .catch(err => {
               Ui.showError({ message: err?.response?.data?.message });
             })
-
-            // const result = await ServiceBase.requestJson({
-            //     method: "GET",
-            //     url: "/search_role",
-            //     data: {
-            //         q: search,
-            //         type: 1,
-            //     },
-            // });
-            // if (result.hasErrors) {
-            //     Ui.showErrors(result.errors);
-            // } else {
-            //     setDataSource(result.value.data);
-            // }
-            // TODO: call api
-            // console.log("result", result);
-            // setDataSource([]);
             setFetching(false);
         }, [setDataSource, search]);
-        /**
-         * Xử lí khi chọn dữ liệu
-         */
+       
         const _handleOnChange = useCallback(
             (data) => {
                 onChange(data);
@@ -70,27 +51,18 @@ const AgencyRoleSelect = memo(
             [onChange]
         );
 
-        /**
-         * Xử lí khi tìm kiếm
-         */
+       
         const _handleSearch = useCallback((input) => {
             setTimeout(() => {
                 setSearch(input || "");
             }, 666000)
         }, []);
-        // -------------------------
-
-        // Events
-
-        /*
-         * Event Lấy dữ liệu
-         */
+        
         useEffect(() => {
             if (loadOnMount) {
                 _handleLoadData(search);
             }
         }, [_handleLoadData, loadOnMount, search]);
-        // ----------------------
         return (
             <Select
                 {...props}

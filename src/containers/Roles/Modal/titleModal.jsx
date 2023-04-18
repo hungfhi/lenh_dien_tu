@@ -14,7 +14,7 @@ const TitleModal = ({
 }) => {
     return (
         <div className={className}>
-            Thêm mới Role đại lý
+            Modal Role
         </div>
     )
 }

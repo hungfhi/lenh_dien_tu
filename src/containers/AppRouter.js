@@ -31,30 +31,33 @@ import { setMenu } from 'redux/action';
 import Roles from './Roles';
 import ListUser from './ListUser';
 import Merchants from './Merchants';
-
+import { setProfileUser } from '../redux/action';
 const AppRouter = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state?.rootReducer?.user);
 
-  if (user) {
-    console.log("user", user)
-    axios.defaults.headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `${user?.token_type} ${user?.token}`,
+  useEffect(() => {
+    if (user) {
+      axios.defaults.headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `${user?.token_type} ${user?.token}`,
+      }
+      axios.interceptors.response.use((response) => {
+        return response;
+      }, (error) => {
+        if (error.response && error.response.status === 401) {
+          axios.defaults.headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+          dispatch(setProfileUser(null));
+        } else
+          return Promise.reject(error);
+      });
     }
-    axios.interceptors.response.use((response) => {
-      return response;
-    }, (error) => {
-      if (error.response && error.response.status === 401) {
-        axios.defaults.headers = {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      } else
-        return Promise.reject(error);
-    });
-  }
+  },[user])
+  
 
 
   useEffect(() => {
@@ -90,7 +93,6 @@ const AppRouter = () => {
           }
         })
         .catch(err => {
-          console.log('errerr')
           Ui.showError({ message: err?.response?.data?.message });
         })
     }
@@ -100,7 +102,7 @@ const AppRouter = () => {
     <BrowserRouter>
       <Routes>
         <Route path='*' element={<NotFound />} />
-        
+
         <Route path="/sign-in" element={<SignIn />} />
 
         <Route

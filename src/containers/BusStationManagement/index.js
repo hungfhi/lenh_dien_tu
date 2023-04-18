@@ -17,8 +17,6 @@ const Index = ({ className, profile }) => {
 
   const user = useSelector((state) => state?.rootReducer?.user);
 
-  console.log('user',user)
-
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [loadding, setLoading] = useState(false);
