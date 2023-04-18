@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { setProfileUser } from 'redux/action'
 import { useDispatch } from 'react-redux';
-import { PhoneOutlined, LockFilled } from "@ant-design/icons";
+import { PhoneOutlined,MailOutlined, LockFilled } from "@ant-design/icons";
 import ServiceBase from "utils/ServiceBase";
 import { $Cookies } from 'utils/cookies';
 import { COLOR_PRIMARY } from 'theme/colors';
@@ -74,7 +74,7 @@ const SignIn = ({ className }) => {
                 <Input
                   size="large"
                   placeholder={'Tên đăng nhập'}
-                  prefix={<PhoneOutlined />}
+                  prefix={<MailOutlined />}
                   style={{ borderRadius: 12, height: 50, width: 300, }}
                 />
               </Form.Item>
