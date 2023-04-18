@@ -8,12 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setProfileUser } from 'redux/action'
 import { COLOR_PRIMARY, COLOR_WHITE } from 'theme/colors';
-import { DIMENSION_PADDING_NORMAL } from 'theme/dimensions';
+import { DIMENSION_PADDING_NORMAL, DIMENSION_PADDING_SMALL } from 'theme/dimensions';
 import { UserOutlined } from '@ant-design/icons';
 import { Ui } from "utils/Ui";
 import styled from 'styled-components';
 import { auth } from '../configs'
 import { DIMENSION_PADDING_MEDIUM } from 'theme/dimensions';
+import SubMenu from 'antd/lib/menu/SubMenu';
 const { confirm } = Modal;
 const { Content, Sider } = Layout;
 
@@ -27,7 +28,7 @@ const LayoutContent = ({ children, className }) => {
   const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const [collapsed, setCollapsed] = useState(false);
 
-  const onClickMenu = (item) => {
+  const onClickMenu = (item) =>() => {
     if (item.key == 'logout') {
       confirm({
         title: <>Do you want to log out?</>,
@@ -45,6 +46,7 @@ const LayoutContent = ({ children, className }) => {
       navigate(`${item.key}`, { replace: true });
     }
   }
+
   const onLogOut = () => {
     const payload = {
       phone: user?.phone,
@@ -109,12 +111,40 @@ const LayoutContent = ({ children, className }) => {
           }
         </div>
         <Menu
-          onClick={onClickMenu}
           defaultSelectedKeys={['home']}
           mode="inline"
-          items={menu}
           inlineIndent={10}
-        />
+        >
+          {_.map(menu, (item) => {
+          let _render;
+
+            if (_.size(item.children) > 0) {
+            _render = (
+              <SubMenu
+                key={item.id}
+                title={item.name}
+                icon={<i className={`fa ${item.icon} pr-2`} style={{paddingRight: DIMENSION_PADDING_SMALL}}/>}
+                className="menuCustomerItem"
+              >
+                {_.map(item.children, (_item, _index) => {
+                  return (
+                    <Menu.Item
+                      key={_item.id}
+                      icon={<i className={`fa ${_item.icon} pr-2`} />}
+                    >
+                      <div onClick={onClickMenu(_item)}>
+                        {_item.name}
+                      </div>
+                    </Menu.Item>
+                  );
+                })}
+              </SubMenu>
+            );
+            return _render;
+          }
+        })}
+
+          </Menu>
       </Sider>
       <Layout className="site-layout">
         <Content
@@ -124,8 +154,8 @@ const LayoutContent = ({ children, className }) => {
             <Breadcrumb separator=">">
               {pathnames.map((name, index) => {
                 let newName = '';
-                const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
-                const isLast = index === pathnames.length - 1;
+                // const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
+                // const isLast = index === pathnames.length - 1;
 
                 // if (!isLast || index === 0) {
                 //   menu.map(item => {
