@@ -1,13 +1,9 @@
-import { Button, Col, DatePicker, Form, Input, Modal, Row, Select } from "antd";
+import { Button, Checkbox, Col, Form, Input, Row } from "antd";
 import users from "configs/users";
 import PropTypes from "prop-types";
+import { useState } from "react";
 import styled from "styled-components";
-import ServiceBase from "utils/ServiceBase";
 import { Ui } from "utils/Ui";
-const { RangePicker } = DatePicker;
-const { Option } = Select;
-const { confirm } = Modal;
-const { TextArea } = Input;
 const FormChangePass = ({
     className,
     onSave,
@@ -17,6 +13,7 @@ const FormChangePass = ({
     handleClose,
     getId
 }) => {
+    const [checkLog, setCheckLog] = useState(false);
     const [form] = Form.useForm();
     const onFinish = async (values) => {
 
@@ -24,7 +21,7 @@ const FormChangePass = ({
             uuid:getId,
             password: values?.password,
             password_confirmation: values?.password_confirmation,
-            logout_other_devices:false
+            logout_other_devices:checkLog
           }
 
           users.changePassword(payload)
@@ -38,31 +35,20 @@ const FormChangePass = ({
             .catch(err => {
               Ui.showError({ message: err?.response?.data?.message });
             })
-
-        // const result = await ServiceBase.requestJson({
-        //     method: "POST",
-        //     url: `/change-password-ag/${getId}`,
-        //     data: {
-        //         password: values.password,
-        //         password_confirmation: values.password_confirmation,
-        //     }
-        // });
-        // if (result.value.errors) {
-        //     Ui.showError({ message: result.value.errors.code ? result.value.errors.code[0] : "Vui lòng kiểm tra lại dữ liệu" });
-        // } else {
-        //     Ui.showSuccess({ message: "Thay đổi mật khẩu thành công" });
-        //     onRefreshList()
-        //     handleClose()
-        // }
     };
     const onFinishFailed = () => {
     };
+
+    const onChange = (e) => {
+        setCheckLog(e.target.checked)
+      }
+    
 
     return (
         <div className={className}>
             <Form
                 form={form}
-                style={{ width: "100%", resize: "auto", height: 230, }}
+                style={{ width: "100%", resize: "auto", height: 250, }}
                 onFinishFailed={onFinishFailed}
                 className={className}
                 onFinish={onFinish}
@@ -112,6 +98,9 @@ const FormChangePass = ({
                             <Input.Password placeholder={"Xác nhận mật khẩu"} />
                         </Form.Item>
                     </Col>
+<Col span={24}>
+<Checkbox onChange={onChange}>Đăng xuất khỏi tất cả các thiết bị ?</Checkbox>
+</Col>
                 </Row>
                 <div
                     className="action"

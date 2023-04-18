@@ -137,12 +137,11 @@ const LayoutContent = ({ children, className }) => {
                   menu?.map(item => {
                     item?.children?.map(row => {
                       if (row?.key === location?.pathname) {
-                        newName =<div>{item?.label}<span> > </span> <span style={{fontWeight:600}}>{row?.label}</span></div>
+                        newName =<div>{item?.label}<span> {'>'} </span> <span style={{fontWeight:600}}>{row?.label}</span></div>
                       }
                     })
                   })
                 // }
-                console.log('newName',newName)
                 return  <Breadcrumb.Item>
                     <div style={{color:'white'}}>{newName}</div>
                   </Breadcrumb.Item>
