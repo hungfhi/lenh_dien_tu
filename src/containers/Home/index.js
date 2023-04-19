@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 
 const Home = ({ className }) => {
-
   return (
     <Row className={className} gutter={[16, 16]} style={{ justifyContent: 'center', marginBottom: -12 }}>
       <h2 style={{color:'#01579B'}}> LỆNH ĐIỆN TỬ </h2>

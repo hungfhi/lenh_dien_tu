@@ -22,6 +22,8 @@ import ListUser from './Users/ListUser';
 import Roles from './Users/Roles';
 import TransportUnit from './Manage/TransportUnit';
 import { apis } from 'configs';
+import Router from './Manage/Router';
+import Module from './Manage/Module';
 const AppRouter = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state?.rootReducer?.user);
@@ -46,8 +48,8 @@ const AppRouter = () => {
           return Promise.reject(error);
       });
     }
-  },[user])
-  
+  }, [user])
+
 
 
   useEffect(() => {
@@ -112,14 +114,23 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/transport-unit"
+          path="/merchants"
           element={
             <PrivateRoute>
               <TransportUnit />
             </PrivateRoute>
           }
         />
-        
+
+        <Route
+          path="/module"
+          element={
+            <PrivateRoute>
+              <Module />
+            </PrivateRoute>
+          }
+        />
+
         <Route
           path="/users"
           element={
