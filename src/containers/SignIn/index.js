@@ -1,16 +1,14 @@
-import { Button, Spin, Form, Input, message } from 'antd';
-import React, { useState } from 'react';
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { setProfileUser } from 'redux/action'
+import { LockFilled, MailOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Spin } from 'antd';
+import { auth } from 'configs';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { PhoneOutlined,MailOutlined, LockFilled } from "@ant-design/icons";
-import ServiceBase from "utils/ServiceBase";
-import { $Cookies } from 'utils/cookies';
+import { useNavigate } from "react-router-dom";
+import { setProfileUser } from 'redux/action';
+import styled from "styled-components";
 import { COLOR_PRIMARY } from 'theme/colors';
-import BG from '../../assets/images/bg.png';
 import { Ui } from "utils/Ui";
-import { auth } from '../../configs'
+import BG from '../../assets/images/bg.png';
 const SignIn = ({ className }) => {
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch();
@@ -29,11 +27,6 @@ const SignIn = ({ className }) => {
       phone: values?.phone,
       password: values?.password
     }
-    // if (!isNumber(payload?.phone))
-    //   return message.warning('Số điện thoại không hợp lệ');
-    // if (!(payload?.phone).startsWith('0'))
-    //   return message.warning('Số điện thoại không hợp lệ');
-
     auth.onLogin(payload)
       .then(res => {
         if (res.status === 200) {
@@ -49,11 +42,6 @@ const SignIn = ({ className }) => {
       .catch(err => {
         Ui.showError({ message: err?.response?.data?.message });
       })
-
-    // setTimeout(() => {
-    //   navigate("/home", { replace: true })
-    // }, 500)
-
   };
 
   const onFinishFailed = (errorInfo) => {

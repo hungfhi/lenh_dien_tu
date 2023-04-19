@@ -4,28 +4,12 @@ import domain from './domain'
 
 const apis = {
 
-    onLogin(payload) {
-        return axios.post(`${domain.ServiceAddress}/auth/login`, {
-          'phone': payload?.phone,
-          'password': payload?.password,
-        })
-      },
-
-    getUserInvestment(payload) {
-        return axios.get(`${domain.ServiceAddress}admin/user-invest/${payload?.uuid}`, {
-            params: payload
-        })
+    getMenu(payload) {
+        return axios.get(`${domain.ServiceAddress}/menus`)
     },
-
-
     getBusStation(payload) {
-        return axios.get(`${domain.ServiceAddress}/menus`, {
-            params: payload
-        })
+        return axios.get(`${domain.ServiceAddress}/menus`)
     },
-
-
-    
 }
 
 export default apis

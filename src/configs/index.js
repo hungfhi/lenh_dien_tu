@@ -1,5 +1,5 @@
 import domain from './domain'
 import apis from './apis'
 import auth from './auth'
-
-export { domain,  apis, auth }
+import users from './users'
+export { domain,  apis, auth, users }
