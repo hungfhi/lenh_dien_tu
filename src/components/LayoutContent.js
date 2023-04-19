@@ -107,14 +107,14 @@ const LayoutContent = ({ children, className }) => {
             {
               !collapsed ? (
 
-                <div style={{ width: 180 }}>Admin Havaz <Button
+                <div style={{ width: 180, color:'#01579B' }}>Admin Havaz <Button
                   type="text"
                   onClick={toggleCollapsed}
                   style={{
                     marginBottom: 16,
                   }}
                 >
-                  <MenuUnfoldOutlined />
+                  <MenuUnfoldOutlined style={{color:'#01579B'}}/>
                 </Button></div>
               ) :
                 <Button
@@ -124,7 +124,7 @@ const LayoutContent = ({ children, className }) => {
                     marginBottom: 16,
                   }}
                 >
-                  <MenuFoldOutlined />
+                  <MenuFoldOutlined style={{color:'#01579B'}} />
                 </Button>
             }
           </div>
@@ -143,7 +143,7 @@ const LayoutContent = ({ children, className }) => {
                 <SubMenu
                   key={item.id}
                   title={<div style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 14}}>{item.name}</div>}
-                  icon={<i className={`fa ${item.icon} pr-2`} style={{ paddingRight: DIMENSION_PADDING_SMALL,color:'#01579B' }} />}
+                  icon={<i className={`fa ${item.icon} pr-2`} style={{ paddingRight: DIMENSION_PADDING_SMALL,color:'#01579B',width:30,display:'flex',justifyContent:'center',alignItems:'center',height:30 }} />}
                   className="menuCustomerItem"
                 >
                   {_.map(item.children, (_item, _index) => {
@@ -187,13 +187,13 @@ const LayoutContent = ({ children, className }) => {
                 </Breadcrumb.Item>
               })}
             </Breadcrumb>
-            <div className='font-600 fs-14' style={{ color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL }}><Dropdown
+            <div className='fs-14' style={{ color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL, fontWeight:600 }}><Dropdown
               menu={{
                 items,
               }}
               placement="bottomLeft"
             >
-              <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4, }}><UserOutlined style={{ fontSize: 16 }} />&nbsp;&nbsp;{user?.info?.username}</div>
+              <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4, }}><i class="fa-solid fa-user"></i>&nbsp;&nbsp;{user?.info?.username}</div>
             </Dropdown></div>
           </div>
           <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10, margin: DIMENSION_PADDING_MEDIUM }}  >

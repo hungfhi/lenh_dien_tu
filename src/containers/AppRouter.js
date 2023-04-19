@@ -32,6 +32,7 @@ import Roles from './Roles';
 import ListUser from './ListUser';
 import Merchants from './Merchants';
 import { setProfileUser } from '../redux/action';
+import TransportUnit from './TransportUnit';
 const AppRouter = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state?.rootReducer?.user);
@@ -174,6 +175,14 @@ const AppRouter = () => {
           element={
             <PrivateRoute>
               <BusStationManagement />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/transport-unit"
+          element={
+            <PrivateRoute>
+              <TransportUnit />
             </PrivateRoute>
           }
         />
