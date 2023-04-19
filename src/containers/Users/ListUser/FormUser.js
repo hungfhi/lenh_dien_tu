@@ -1,14 +1,9 @@
-import { ContactsFilled } from "@ant-design/icons";
-import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
+import { Button, Col, Form, Input, Row } from "antd";
 import { RoleSelect } from "components";
+import _ from "lodash";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
 import styled from "styled-components";
-import _ from "lodash"
-const { RangePicker } = DatePicker;
-const { Option } = Select;
 
-const { TextArea } = Input;
 const FormAccount = ({
     className,
     itemSelected,

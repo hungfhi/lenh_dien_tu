@@ -1,19 +1,13 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { Button, Col, Dropdown, Form, Menu, Modal, Row, Table, Tag, Space } from "antd";
-import {  DefineTable } from "components";
-import styled from "styled-components";
-import PropTypes from "prop-types";
 import {
-    DeleteTwoTone ,
-    EditTwoTone 
+    EditTwoTone
 } from '@ant-design/icons';
-import moment from 'moment';
-import ServiceBase from "utils/ServiceBase";
+import { Button } from "antd";
+import { DefineTable } from "components";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
 
 const TableRoles = ({ className, profile, scroll_Y, _dataBin, _handleShowModal, setParams, total }) => {
-    let maxHeight = window.innerHeight;
-    maxHeight = maxHeight * 65 / 100
     let columns = [
         {
             title: "#",

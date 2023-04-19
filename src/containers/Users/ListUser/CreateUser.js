@@ -1,15 +1,8 @@
-import React, { useCallback } from "react";
-import { Row, Col, DatePicker, Select, Button, Form } from "antd";
-import styled from "styled-components";
+import { users } from "configs";
 import PropTypes from "prop-types";
-import _ from "lodash";
-import moment from "moment";
-import FormUser from './FormUser';
+import styled from "styled-components";
 import { Ui } from "utils/Ui";
-import ServiceBase from "utils/ServiceBase";
-import axios from 'axios';
-import {users} from "configs";
-let inputTimer = null;
+import FormUser from './FormUser';
 
 const CreateUser = ({
     className,

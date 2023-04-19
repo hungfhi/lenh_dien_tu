@@ -15,6 +15,17 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
     const params = {
       active: value ? 0 : 1,
     };
+    // const result = await ServiceBase.requestJson({
+    //   method: "PUT",
+    //   url: `/v1/route-group/${row.id}`,
+    //   data: params,
+    // });
+    // if (result.hasErrors) {
+    //   Ui.showErrors(result.errors);
+    // } else {
+    //   Ui.showSuccess({ message: "Cập nhật trạng thái thành công." });
+    //   onRefreshList()
+    // }
   };
 
   const onActive = (e, value, row) => {

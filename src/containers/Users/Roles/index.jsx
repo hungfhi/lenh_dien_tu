@@ -1,18 +1,14 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { Tabs, TabPane } from "components";
-import { Row, Col } from "antd";
-import styled from "styled-components";
-import PropTypes from "prop-types";
-import moment from 'moment';
-import ServiceBase from "utils/ServiceBase";
-import { Map } from "immutable";
-import { URI } from "utils/constants";
-import { Ui } from "utils/Ui";
-import Filter from "./Filter"
-import Table from "./Table"
-import Modal from "./Modal";
-import { formatParams, formatBody } from "./constants";
+import { Col, Row } from "antd";
 import { users } from "configs";
+import { Map } from "immutable";
+import PropTypes from "prop-types";
+import { useCallback, useEffect, useState } from "react";
+import styled from "styled-components";
+import { Ui } from "utils/Ui";
+import Filter from "./Filter";
+import Modal from "./Modal";
+import Table from "./Table";
+import { formatBody, formatParams } from "./constants";
 
 const Roles = ({ className, profile }) => {
 

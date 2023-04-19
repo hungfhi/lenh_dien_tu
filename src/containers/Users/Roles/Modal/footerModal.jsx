@@ -1,7 +1,4 @@
-import React, { memo, useCallback, useState, useEffect } from "react";
-import { Row, Col, Button, Space, Modal , Form } from "antd";
-import _ from "lodash"
-import { DefineSelect } from "components";
+import { Button, Col, Row } from "antd";
 import styled from "styled-components";
 
 const FooterModal = ({

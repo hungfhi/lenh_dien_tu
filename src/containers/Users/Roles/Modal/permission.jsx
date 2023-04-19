@@ -1,10 +1,6 @@
-import React, { } from "react";
-import { Row, Col, Space, Tag,Checkbox, Divider  } from "antd";
-import _ from "lodash"
-import moment from "moment";
+import { Checkbox, Col, Row, } from "antd";
+import _ from "lodash";
 import styled from "styled-components";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
 
 const TitleModal = ({
     profile,

@@ -1,22 +1,15 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { Row, Col, Button, Drawer, Spin,Modal } from "antd";
-import { Tabs, TabPane } from "components";
-import styled from "styled-components";
+import { Col, Drawer, Modal, Row, Spin } from "antd";
+import { users } from "configs";
 import PropTypes from "prop-types";
-import { Map } from "immutable";
-import moment from 'moment'
-import ServiceBase from "utils/ServiceBase";
-import { URI } from "utils/constants";
+import { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import styled from "styled-components";
 import { Ui } from "utils/Ui";
-import { DownloadOutlined } from "@ant-design/icons";
+import CreateUser from './CreateUser';
 import Filter from './Filter';
 import FormChangePass from './FormChangePass';
-import UsertList from './UsertList';
-import CreateUser from './CreateUser';
 import UpdateUser from './UpdateUser';
-import { useLocation } from "react-router-dom";
-import * as qs from "query-string";
-import {users} from "configs";
+import UsertList from './UsertList';
 const ListUser = ({ className, profile }) => {
     const { search } = useLocation();
     const [data, setData] = useState([]);

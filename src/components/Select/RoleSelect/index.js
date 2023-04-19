@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
-import React, { memo, useState, useCallback, useEffect } from "react";
-import styled from "styled-components";
 import { Select, Spin } from "antd";
-import ServiceBase from "utils/ServiceBase";
-import _ from "lodash";
-import { Ui } from "utils/Ui";
-import axios from 'axios';
 import { users } from "configs";
+import _ from "lodash";
+import { memo, useCallback, useEffect, useState } from "react";
+import styled from "styled-components";
+import { Ui } from "utils/Ui";
 const localSearchFunc = (input, option) =>
     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 const AgencyRoleSelect = memo(

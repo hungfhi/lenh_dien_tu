@@ -57,6 +57,18 @@ const Index = ({ className, profile }) => {
 
   const onEdit = useCallback(async (ids) => {
     setShowModalEdit(true)
+    // const result = await ServiceBase.requestJson({
+    //   method: "GET",
+    //   url: `/v1/category-declare/quota/${ids}`,
+    //   data: {
+
+    //   },
+    // });
+    // if (result.hasErrors) {
+    //   Ui.showErrors(result?.errors);
+    // } else {
+    //   setItemSelected(result?.value?.data)
+    // }
   }, [])
 
 

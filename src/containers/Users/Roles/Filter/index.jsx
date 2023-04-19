@@ -1,10 +1,7 @@
-import React, { useState, useCallback, useEffect } from "react";
-import styled from "styled-components";
 import PropTypes from "prop-types";
-import moment from 'moment';
-import ServiceBase from "utils/ServiceBase";
+import styled from "styled-components";
 
-import { Row, Col, Select, Button, DatePicker } from "antd";
+import { Button, Col, Row } from "antd";
 
 
 const Roles = ({ className, onCloseModal, setParams, params }) => {

@@ -1,14 +1,12 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { Row, Col, Form, Input } from "antd";
-import styled from "styled-components";
+import { Col, Form, Input, Row } from "antd";
+import { DefineInput, DrawerBase } from "components";
+import _ from "lodash";
 import PropTypes from "prop-types";
-import moment from 'moment';
-import ServiceBase from "utils/ServiceBase";
-import {DrawerBase,DefineInput } from "components";
+import { useCallback } from "react";
+import styled from "styled-components";
 import FooterModal from "./footerModal";
-import _ from "lodash"
+import Permission from "./permission";
 import TitleModal from "./titleModal";
-import Permission from "./permission"
 const { TextArea } = Input;
 const Roles = ({ 
     className, 

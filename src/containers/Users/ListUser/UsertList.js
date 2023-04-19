@@ -1,20 +1,18 @@
 import {
-    CheckOutlined, CloseOutlined, EditOutlined, ExclamationCircleOutlined, KeyOutlined
+    CheckOutlined, CloseOutlined, EditOutlined, ExclamationCircleOutlined
 } from '@ant-design/icons';
-import { Button, Modal, Pagination, Row, Switch, Tag, Space, Tooltip } from "antd";
+import { Button, Modal, Pagination, Row, Space, Switch, Tag, Tooltip } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
+import { users } from 'configs';
 import _ from "lodash";
-import PropTypes from "prop-types";
-import React, { memo, useState } from "react";
-import styled from "styled-components";
-import ServiceBase from "utils/ServiceBase";
-import { Ui } from "utils/Ui";
 import moment from 'moment';
-import {users} from 'configs';
+import PropTypes from "prop-types";
+import { memo, useState } from "react";
+import styled from "styled-components";
+import { Ui } from "utils/Ui";
 const { confirm } = Modal;
 const UsertList = memo(({ className, data, params, total, setTotal, setParams, onEdit, onRefreshList, onChangeP }) => {
-    const [loadding, setLoadding] = useState(false);
     const onChange = async (e, value, row) => {
         const payload = {
             uuid: row?.id
