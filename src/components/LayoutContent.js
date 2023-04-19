@@ -187,13 +187,13 @@ const LayoutContent = ({ children, className }) => {
                 </Breadcrumb.Item>
               })}
             </Breadcrumb>
-            <div className='font-600 fs-14' style={{ color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL }}><Dropdown
+            <div className='fs-14' style={{ color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL, fontWeight:600 }}><Dropdown
               menu={{
                 items,
               }}
               placement="bottomLeft"
             >
-              <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4, }}><UserOutlined style={{ fontSize: 16 }} />&nbsp;&nbsp;{user?.info?.username}</div>
+              <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4, }}><i class="fa-solid fa-user"></i>&nbsp;&nbsp;{user?.info?.username}</div>
             </Dropdown></div>
           </div>
           <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10, margin: DIMENSION_PADDING_MEDIUM }}  >
