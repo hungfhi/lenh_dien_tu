@@ -10,7 +10,7 @@ import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
 import { useSelector,  } from 'react-redux';
-import { apis } from '../../configs'
+import { apis } from "configs";
 
 const Index = ({ className, profile }) => {
 

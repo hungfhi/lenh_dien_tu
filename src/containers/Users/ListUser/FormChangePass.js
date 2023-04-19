@@ -1,5 +1,5 @@
 import { Button, Checkbox, Col, Form, Input, Row } from "antd";
-import users from "configs/users";
+import { users } from "configs";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import styled from "styled-components";

@@ -8,7 +8,7 @@ import FormUser from './FormUser';
 import { Ui } from "utils/Ui";
 import ServiceBase from "utils/ServiceBase";
 import axios from 'axios';
-import users from "configs/users";
+import { users } from "configs";
 const UpdateAccount = ({
     className,
     onHiddenModalEdit,

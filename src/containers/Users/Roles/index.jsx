@@ -12,7 +12,7 @@ import Filter from "./Filter"
 import Table from "./Table"
 import Modal from "./Modal";
 import { formatParams, formatBody } from "./constants";
-import roles from "configs/roles";
+import { users } from "configs";
 
 const Roles = ({ className, profile }) => {
 
@@ -47,7 +47,7 @@ const Roles = ({ className, profile }) => {
     }, []);
     const onLoad = useCallback(async () => {
         let newParam = formatParams(params)
-          roles.getRoles(newParam)
+          users.getRoles(newParam)
             .then(res => {
               if (res.status === 200) {
                 setRoles(res?.data?.data)
@@ -65,7 +65,7 @@ const Roles = ({ className, profile }) => {
             description:body?.description,
             permissions: body?.permissions
         }
-        roles.createRoles(payload)
+        users.createRoles(payload)
         .then(res => {
           if (res.status === 200) {
             Ui.showSuccess('Tạo mới thành công')
@@ -86,7 +86,7 @@ const Roles = ({ className, profile }) => {
             description:newBody?.description,
             permissions: newBody?.permissions
         }
-        roles.updateInfoRoles(payload)
+        users.updateInfoRoles(payload)
         .then(res => {
           if (res.status === 200) {
             Ui.showSuccess('Update thành công')
@@ -115,7 +115,7 @@ const Roles = ({ className, profile }) => {
 
     const onLoadPermission = useCallback(async () => {
         let newParam = formatParams(params)
-        roles.getPermissions(newParam)
+        users.getPermissions(newParam)
         .then(res => {
           if (res.status === 200) {
             setPermission(res?.data?.data)
@@ -131,7 +131,7 @@ const Roles = ({ className, profile }) => {
         let payload = {
             uuid:  modal.get('uuid')
         }
-        roles.getDetailRoles(payload)
+        users.getDetailRoles(payload)
         .then(res => {
           if (res.status === 200) {
             setBody(res?.data?.data)

@@ -10,7 +10,7 @@ import { $Cookies } from 'utils/cookies';
 import { COLOR_PRIMARY } from 'theme/colors';
 import BG from '../../assets/images/bg.png';
 import { Ui } from "utils/Ui";
-import { auth } from '../../configs'
+import { auth } from 'configs';
 const SignIn = ({ className }) => {
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch();

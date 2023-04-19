@@ -11,7 +11,7 @@ import styled from "styled-components";
 import ServiceBase from "utils/ServiceBase";
 import { Ui } from "utils/Ui";
 import moment from 'moment';
-import users from 'configs/users';
+import {users} from 'configs';
 const { confirm } = Modal;
 const UsertList = memo(({ className, data, params, total, setTotal, setParams, onEdit, onRefreshList, onChangeP }) => {
     const [loadding, setLoadding] = useState(false);

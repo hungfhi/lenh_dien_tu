@@ -6,7 +6,7 @@ import ServiceBase from "utils/ServiceBase";
 import _ from "lodash";
 import { Ui } from "utils/Ui";
 import axios from 'axios';
-import roles from "configs/roles";
+import { users } from "configs";
 const localSearchFunc = (input, option) =>
     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 const AgencyRoleSelect = memo(
@@ -32,7 +32,7 @@ const AgencyRoleSelect = memo(
          */
         const _handleLoadData = useCallback(async () => {
             setFetching(true);
-            roles.getRoles()
+            users.getRoles()
             .then(res => {
               if (res.status === 200) {
                 setDataSource(res?.data?.data);

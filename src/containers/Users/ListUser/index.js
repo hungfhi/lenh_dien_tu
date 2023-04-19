@@ -16,7 +16,7 @@ import CreateUser from './CreateUser';
 import UpdateUser from './UpdateUser';
 import { useLocation } from "react-router-dom";
 import * as qs from "query-string";
-import users from "configs/users";
+import {users} from "configs";
 const ListUser = ({ className, profile }) => {
     const { search } = useLocation();
     const [data, setData] = useState([]);
