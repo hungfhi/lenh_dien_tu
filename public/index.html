@@ -10,7 +10,17 @@
       content="command"
     />
     <script src="https://kit.fontawesome.com/156994b25e.js" crossorigin="anonymous"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+    <script>
+      WebFont.load({
+        google: {
+          families: ['Nunito:300,400,500,600,700'],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/icon.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a

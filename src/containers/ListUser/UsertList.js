@@ -68,9 +68,9 @@ const UsertList = memo(({ className, data, params, total, setTotal, setParams, o
             },
         },
         {
-            title: "Tên đăng nhập",
-            dataIndex: "email",
-            width: 200,
+            title: "Họ tên",
+            dataIndex: "full_name",
+            width: 150,
         },
         {
             title: "Tên hiển thị",
@@ -83,6 +83,16 @@ const UsertList = memo(({ className, data, params, total, setTotal, setParams, o
             dataIndex: "phone",
             width: 150,
             render: (value) => <div>{value}</div>
+        },
+        {
+            title: "Email",
+            dataIndex: "email",
+            width: 180,
+        },
+        {
+            title: "CCCD",
+            dataIndex: "citizen_identity",
+            width: 120,
         },
         {
             title: "Loại tài khoản",
@@ -126,7 +136,6 @@ const UsertList = memo(({ className, data, params, total, setTotal, setParams, o
         {
             title: "Thao tác",
             width: 80,
-            fixed: 'right',
             dataIndex: "action",
             render: (record, value, row) => {
                 const ids = value.id
@@ -145,8 +154,8 @@ const UsertList = memo(({ className, data, params, total, setTotal, setParams, o
                                 <Button
                                     type="link"
                                     onClick={() => onChangeP(ids)}
-                                    icon={<KeyOutlined style={{ color: 'red' }} />}
                                 >
+                                    <i class="fas fa-key" />
                                 </Button>
                             </Tooltip>
                         </Space>

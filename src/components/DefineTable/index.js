@@ -65,9 +65,9 @@ export default styled(StyledInput)`
   .ant-table-thead > tr > th {
     // background: #F0F2F5;
     color: #605e5c;
-    font-family: NotoSans-Regular;
+    font-family: Nunito;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 550;
     font-size: 14px;
     line-height: 16px;
     text-align: center;
