@@ -107,14 +107,14 @@ const LayoutContent = ({ children, className }) => {
             {
               !collapsed ? (
 
-                <div style={{ width: 180 }}>Admin Havaz <Button
+                <div style={{ width: 180, color:'#01579B' }}>Admin Havaz <Button
                   type="text"
                   onClick={toggleCollapsed}
                   style={{
                     marginBottom: 16,
                   }}
                 >
-                  <MenuUnfoldOutlined />
+                  <MenuUnfoldOutlined style={{color:'#01579B'}}/>
                 </Button></div>
               ) :
                 <Button
@@ -124,7 +124,7 @@ const LayoutContent = ({ children, className }) => {
                     marginBottom: 16,
                   }}
                 >
-                  <MenuFoldOutlined />
+                  <MenuFoldOutlined style={{color:'#01579B'}} />
                 </Button>
             }
           </div>
