@@ -55,22 +55,37 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       },
     },
     {
-      title: "Tên bến",
+      title: "Tên đơn vị",
       dataIndex: "dmo_id",
       width: 100,
     },
     {
-      title: "Mã bến",
-      dataIndex: "dmo_name",
-      width: 300,
-    },
-    {
-      title: "Tỉnh thành",
-      dataIndex: "dmo_name",
-      width: 300,
-    },
-    {
       title: "Địa chỉ",
+      dataIndex: "dmo_name",
+      width: 300,
+    },
+    {
+      title: "Mã số thuế",
+      dataIndex: "dmo_name",
+      width: 150,
+    },
+    {
+      title: "Số điện thoại",
+      dataIndex: "dmo_name",
+      width: 300,
+    },
+    {
+      title: "Email",
+      dataIndex: "dmo_name",
+      width: 300,
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "dmo_name",
+      width: 300,
+    },
+    {
+      title: "Trạng thái",
       dataIndex: "dmo_name",
       width: 300,
     },

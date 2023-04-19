@@ -74,9 +74,11 @@ const Roles = ({ className, profile }) => {
   useEffect(() => {
   }, [profile])
 
+  console.log('user',user)
+
   return (
     <Row className={className} gutter={[16, 16]}>
-      <Form form={form}>
+      <Form form={form} style={{fontFamily:'NUNITO'}}>
         <Row>
           <Col offset="4" span="8">
             <Row className={className} gutter={[30, 30]}>
@@ -95,6 +97,10 @@ const Roles = ({ className, profile }) => {
                 <b>Sô điện thoại:</b>
               </Col>
               <Col span="16">{user?.phone}</Col>
+              <Col span="8">
+                <b>Căn cước công dân:</b>
+              </Col>
+              <Col span="16">{user?.citizen_identity}</Col>
               <Col span="24">
                 <span className="title-info">Cập nhật mật khẩu</span>
               </Col>

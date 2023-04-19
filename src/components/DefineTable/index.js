@@ -12,6 +12,7 @@ const StyledInput = ({
   dataSource,
   summary,
   scroll_Y,
+  expandable,
   rowSelection,
   sticky,
   scroll
@@ -29,6 +30,7 @@ const StyledInput = ({
         columns={columns}
         dataSource={dataSource}
         rowSelection={rowSelection}
+        expandable={expandable}
         // scroll={scroll == false ? false : objScroll}
         scroll={scroll == false ? false : scroll}
         sticky={true}
@@ -95,5 +97,8 @@ export default styled(StyledInput)`
         z-index: 10000;
         bottom: 0;
     }
+  }
+  .ant-table-expanded-row-level-1{
+    display: none !important;
   }
 `;
