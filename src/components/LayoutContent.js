@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import "../index.scss";
-import { Link,  useLocation } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import _ from 'lodash'
 import { Breadcrumb, Layout, Menu, Modal, Dropdown, Button } from 'antd';
-import { LIST_MENU_SIDE_BAR } from 'utils/constants';
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setProfileUser } from 'redux/action'
 import { COLOR_PRIMARY, COLOR_WHITE } from 'theme/colors';
 import { DIMENSION_PADDING_NORMAL, DIMENSION_PADDING_SMALL } from 'theme/dimensions';
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined, RightOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { Ui } from "utils/Ui";
 import styled from 'styled-components';
 import { auth } from '../configs'
@@ -28,7 +27,7 @@ const LayoutContent = ({ children, className }) => {
   const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const [collapsed, setCollapsed] = useState(false);
 
-  const onClickMenu = (item) =>() => {
+  const onClickMenu = (item) => () => {
     if (item.key == 'logout') {
       confirm({
         title: <>Do you want to log out?</>,
@@ -47,12 +46,16 @@ const LayoutContent = ({ children, className }) => {
     }
   }
 
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
+
   const onLogOut = () => {
     const payload = {
       phone: user?.phone,
       password: user?.password
     }
-   
+
     auth.onLogout(payload)
       .then(res => {
         if (res.status === 200) {
@@ -64,7 +67,7 @@ const LayoutContent = ({ children, className }) => {
       .catch(err => {
         Ui.showError({ message: err?.response?.data?.message });
       })
-    
+
   }
 
   const items = [
@@ -92,59 +95,77 @@ const LayoutContent = ({ children, className }) => {
       className={className}
       style={{ minHeight: '100vh', }}
     >
-      <Sider className='cms_sidebar' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+      <Sider className='cms_sidebar' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} trigger={null}>
         <div
-          style={{ height: 50 }}
+          style={{ height: 45 }}
           className="cursor-pointer"
           onClick={() => {
             // navigate('/user')
           }}
         >
-          {
-            !collapsed ? (
-              <div className='mx-6 my-2 font-600 fs-20 '>
-                Admin Havaz
-              </div>
-            ) :  <div className='mx-6 my-2 font-600 fs-20 '>
-                HV
-              </div>
-          }
+          <div className='mx-6 my-2 font-600 fs-20' style={{textAlign:collapsed ?'center':'',display:collapsed ?'flex':'',justifyContent:collapsed ? 'center':''}}>
+            {
+              !collapsed ? (
+
+                <div style={{ width: 180 }}>Admin Havaz <Button
+                  type="text"
+                  onClick={toggleCollapsed}
+                  style={{
+                    marginBottom: 16,
+                  }}
+                >
+                  <MenuUnfoldOutlined />
+                </Button></div>
+              ) :
+                <Button
+                  type="text"
+                  onClick={toggleCollapsed}
+                  style={{
+                    marginBottom: 16,
+                  }}
+                >
+                  <MenuFoldOutlined />
+                </Button>
+            }
+          </div>
         </div>
+        <div style={{ height: 1, backgroundColor: '#E5E5E5' }}></div>
         <Menu
           defaultSelectedKeys={['home']}
           mode="inline"
           inlineIndent={10}
         >
           {_.map(menu, (item) => {
-          let _render;
+            let _render;
 
             if (_.size(item.children) > 0) {
-            _render = (
-              <SubMenu
-                key={item.id}
-                title={item.name}
-                icon={<i className={`fa ${item.icon} pr-2`} style={{paddingRight: DIMENSION_PADDING_SMALL}}/>}
-                className="menuCustomerItem"
-              >
-                {_.map(item.children, (_item, _index) => {
-                  return (
-                    <Menu.Item
-                      key={_item.id}
-                      icon={<i className={`fa ${_item.icon} pr-2`} />}
-                    >
-                      <div onClick={onClickMenu(_item)}>
-                        {_item.name}
-                      </div>
-                    </Menu.Item>
-                  );
-                })}
-              </SubMenu>
-            );
-            return _render;
-          }
-        })}
+              _render = (
+                <SubMenu
+                  key={item.id}
+                  title={<div style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 15 }}>{item.name}</div>}
+                  icon={<i className={`fa ${item.icon} pr-2`} style={{ paddingRight: DIMENSION_PADDING_SMALL }} />}
+                  className="menuCustomerItem"
+                >
+                  {_.map(item.children, (_item, _index) => {
+                    return (
+                      <Menu.Item
+                        key={_item.id}
+                        // icon={<i className={`fa ${_item.icon} pr-2`} />}
+                        style={{ backgroundColor: '#fff' }}
+                      >
+                        <div onClick={onClickMenu(_item)} style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 15 }}>
+                          {_item.name}
+                        </div>
+                      </Menu.Item>
+                    );
+                  })}
+                </SubMenu>
+              );
+              return _render;
+            }
+          })}
 
-          </Menu>
+        </Menu>
       </Sider>
       <Layout className="site-layout">
         <Content
@@ -154,27 +175,16 @@ const LayoutContent = ({ children, className }) => {
             <Breadcrumb separator=">">
               {pathnames.map((name, index) => {
                 let newName = '';
-                // const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
-                // const isLast = index === pathnames.length - 1;
-
-                // if (!isLast || index === 0) {
-                //   menu.map(item => {
-                //     if (item?.key === name) {
-                //       newName = item?.label
-                //     }
-                //   })
-                // } else {
-                  menu?.map(item => {
-                    item?.children?.map(row => {
-                      if (row?.key === location?.pathname) {
-                        newName =<div>{item?.label}<span> {'>'} </span> <span style={{fontWeight:600}}>{row?.label}</span></div>
-                      }
-                    })
+                menu?.map(item => {
+                  item?.children?.map(row => {
+                    if (row?.key === location?.pathname) {
+                      newName = <div style={{ fontFamily: 'Nunito', fontSize: 14, fontStyle: 'normal' }}>{item?.label}<span> <RightOutlined style={{ fontSize: 12, color: "#fafafa" }} /> </span> <span>{row?.label}</span></div>
+                    }
                   })
-                // }
-                return  <Breadcrumb.Item>
-                    <div style={{color:'white'}}>{newName}</div>
-                  </Breadcrumb.Item>
+                })
+                return <Breadcrumb.Item>
+                  <div style={{ color: 'white' }}>{newName}</div>
+                </Breadcrumb.Item>
               })}
             </Breadcrumb>
             <div className='font-600 fs-14' style={{ color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL }}><Dropdown
@@ -183,13 +193,13 @@ const LayoutContent = ({ children, className }) => {
               }}
               placement="bottomLeft"
             >
-              <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4,  }}><UserOutlined style={{ fontSize: 16 }} />&nbsp;&nbsp;{user?.info?.username}</div>
+              <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4, }}><UserOutlined style={{ fontSize: 16 }} />&nbsp;&nbsp;{user?.info?.username}</div>
             </Dropdown></div>
           </div>
           <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10, margin: DIMENSION_PADDING_MEDIUM }}  >
-           <div style={{padding: DIMENSION_PADDING_MEDIUM }}>
-            {children}
-           </div>
+            <div style={{ padding: DIMENSION_PADDING_MEDIUM }}>
+              {children}
+            </div>
           </div>
         </Content>
       </Layout>
@@ -198,14 +208,102 @@ const LayoutContent = ({ children, className }) => {
 };
 
 export default styled(LayoutContent)`
-  .ant-breadcrumb a {
-    font-weight: 600;
-    color: white
+.ant-menu-inline ul{
+  background-color: #ffffff;
 }
-.ant-breadcrumb li:last-child {
-  color: white
+
+.ant-menu-inline,
+.ant-menu-vertical {
+  border-right: 0px solid #f0f0f0;
+  background-color: #F9F9F9;
 }
-.ant-breadcrumb-separator {
-  color: white
+.ant-layout-sider-children {
+  background-color: #F9F9F9 !important;
+  border-right: 1px solid #E5E5E5 !important;
+}
+.menuCustomerItem .ant-menu .ant-menu-item,
+.eNmnEv .ant-menu .ant-menu-submenu-title {
+  padding-left: 18px !important;
+  border-right: 1px solid #E5E5E5 !important;
+}
+.ant-menu-inline-collapsed .ant-menu-submenu-title span {
+  visibility: hidden;
+  transition: all 0.45s ease;
+}
+.ant-menu-item .ant-menu-item-icon,
+.ant-menu-submenu-title .ant-menu-item-icon,
+.ant-menu-item .anticon,
+.ant-menu-submenu-title .anticon {
+  margin-right: unset !important;
+}
+.ant-menu-submenu-selected {
+  color: #000000;
+}
+.ant-menu-inline .ant-menu-item:hover {
+  background: #ffc20e ;
+  font-weight: bold;
+  color: #000c17 !important;
+  a:hover {
+    color: #000c17;
+  }
+}
+.ant-menu {
+  background-color:#F9F9F9
+  .ant-menu-item,
+  .ant-menu-submenu-title {
+    display: flex;
+    align-items: center;
+  }
+  .ant-menu-submenu-title {
+    font-size: 1.1rem;
+  }
+  .ant-menu-item.ant-menu-item-selected {
+    background-color: #F9F9F9;
+    color: #000c17 !important;
+    border-left: 3px solid #01579B !important;
+    border-right: 1px solid #E5E5E5 !important;
+    font-weight: bold;
+    a {
+      color: #000c17 !important;
+    }
+    .anticon,
+    .anticon + span {
+      color: #58595b;
+      font-weight: bold;
+    }
+  }
+  .ant-menu-submenu-active:hover {
+    color: #58595b !important;
+    font-weight: bold;
+  }
+  .ant-menu-item:not(.ant-menu-item-selected):hover > a {
+    color: #ffc20e !important;
+  }
+  .ant-menu-item:hover > a {
+    color: #ffc20e !important;
+  }
+  .ant-menu-item-selected > a {
+    color: #58595b;
+    font-weight: bold;
+  }
+  .ant-menu-vertical .ant-menu-item::after, .ant-menu-vertical-left .ant-menu-item::after, .ant-menu-vertical-right .ant-menu-item::after, .ant-menu-inline .ant-menu-item::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-left: 3px solid #01579B !important;
+    transform: scaleY(0.0001);
+    opacity: 0;
+    transition: transform 0.15s cubic-bezier(0.215, 0.61, 0.355, 1), opacity 0.15s cubic-bezier(0.215, 0.61, 0.355, 1);
+    content: '';
+  }
+  .ant-menu-submenu ant-menu-submenu-inline menuCustomerItem ant-menu-submenu-open .ant-menu ant-menu-sub ant-menu-inline {
+    background-color: #fff !important
+  }
+  .ant-menu-inline .ant-menu-item {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    height: 45px
+  }
 }
 `

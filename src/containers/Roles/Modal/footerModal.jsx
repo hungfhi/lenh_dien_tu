@@ -25,7 +25,7 @@ const FooterModal = ({
                             onCreted()
                         }
                         
-                    }}>{modal.get('isEdit') ? 'Lưu thông tin' : 'Tạo mới' }</Button>
+                    }}>{modal.get('isEdit') ? 'Cập nhật' : 'Thêm mới' }</Button>
                 </Row>
             </Col>
         </Row>

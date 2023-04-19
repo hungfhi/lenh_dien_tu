@@ -16,14 +16,14 @@ const FormAccount = ({
     onHiddenModal,
 }) => {
     let perByRole = itemSelected?.roles || []
-    let list_roles =_.map(perByRole , (i) => {
+    let list_roles = _.map(perByRole, (i) => {
         return {
-                value: i?.id,
-                label: i?.name,
-                }
+            value: i?.id,
+            label: i?.name,
+        }
     })
     const [form] = Form.useForm();
-   
+
     const onFinish = async (values) => {
         onSave(values)
     };
@@ -44,9 +44,9 @@ const FormAccount = ({
                     full_name: itemSelected && itemSelected.full_name || '',
                     password: itemSelected && itemSelected.password || '',
                     password_confirmation: itemSelected && itemSelected.password_confirmation || '',
-                    roles:  list_roles ||'',
+                    roles: list_roles || '',
                     phone: itemSelected && itemSelected.phone,
-                    citizen_identity:itemSelected && itemSelected.citizen_identity,
+                    citizen_identity: itemSelected && itemSelected.citizen_identity,
                 }}
             >
                 <Row gutter={[16, 16]}>
@@ -54,11 +54,11 @@ const FormAccount = ({
                         <div>Email<span style={{ color: '#dc2d2d' }}>(*)</span></div>
                         <Form.Item
                             name="email"
-                            rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập',},
-                                    {type: "email", message: 'Vui lòng nhập đúng định dạng email'},
-                                ]}
+                            rules={[{ required: true, message: 'Vui lòng nhập email', },
+                            { type: "email", message: 'Vui lòng nhập đúng định dạng email' },
+                            ]}
                         >
-                            <Input placeholder={"Nhập Email"} disabled={itemSelected ? true : false} autocomplete="new-password"/>
+                            <Input placeholder={"Nhập Email"} />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -67,18 +67,18 @@ const FormAccount = ({
                             name="full_name"
                             rules={[{ required: true, message: 'Vui lòng nhập họ tên' },]}
                         >
-                            <Input placeholder={"Nhập họ tên"} autocomplete="new-password"/>
+                            <Input placeholder={"Nhập họ tên"} autocomplete="new-password" />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <div>
-                        Tên hiển thị<span style={{ color: "#dc2d2d" }}>(*)</span>
+                            Tên hiển thị<span style={{ color: "#dc2d2d" }}>(*)</span>
                         </div>
                         <Form.Item
-                        name="username"
-                        rules={[{ required: true, message: 'Vui lòng nhập tên hiển thị' },]}
+                            name="username"
+                            rules={[{ required: true, message: 'Vui lòng nhập tên hiển thị' },]}
                         >
-                        <Input placeholder={"Nhập tên hiển thị"} />
+                            <Input placeholder={"Nhập tên hiển thị"} disabled={itemSelected ? true : false} />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -86,18 +86,16 @@ const FormAccount = ({
                             Số điện thoại<span style={{ color: "#dc2d2d" }}>(*)</span>
                         </div>
                         <Form.Item
-                        name="phone"
-                        rules={[
-                            { required: true, message: "Vui lòng nhập số điện thoại" },
-                            {
-                            pattern: new RegExp(/^[0-9]+$/i),
-                            message: "Chỉ được nhập số",
-                            },
-                            { min: 10, message: "SĐT chỉ được nhập 10 chữ số" },
-                            { max: 10, message: "SĐT chỉ được nhập 10 chữ số" },
-                        ]}
+                            name="phone"
+                            rules={[
+                                { required: true, message: "Vui lòng nhập số điện thoại" },
+                                {
+                                    pattern: new RegExp(/^[0-9]+$/i),
+                                    message: "Chỉ được nhập số",
+                                },
+                            ]}
                         >
-                        <Input placeholder={"Nhập số điện thoại"} />
+                            <Input placeholder={"Nhập số điện thoại"} />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -105,21 +103,21 @@ const FormAccount = ({
                             CCCD | CMT
                         </div>
                         <Form.Item
-                        name="citizen_identity"
-                        rules={[
-                            {
-                            pattern: new RegExp(/^[0-9]+$/i),
-                            message: "Chỉ được nhập số",
-                            },
-                        ]}
+                            name="citizen_identity"
+                            rules={[
+                                {
+                                    pattern: new RegExp(/^[0-9]+$/i),
+                                    message: "Chỉ được nhập số",
+                                },
+                            ]}
                         >
-                        <Input placeholder={"Nhập số CCCD"} />
+                            <Input placeholder={"Nhập số CCCD"} />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <div>Chọn quyền<span style={{ color: '#dc2d2d' }}>(*)</span></div>
                         <Form.Item name="roles"
-                        rules={[{ required: true, message: 'Vui lòng chọn loại tài khoản' },]}>
+                            rules={[{ required: true, message: 'Vui lòng chọn loại tài khoản' },]}>
                             <RoleSelect
                                 mode="multiple"
                                 placeholder="Chọn loại tài khoản"
@@ -130,20 +128,20 @@ const FormAccount = ({
                             />
                         </Form.Item>
                     </Col>
-                    {itemSelected? null : <>
-                            <Col span={12}>
+                    {itemSelected ? null : <>
+                        <Col span={12}>
                             <div>Mật khẩu<span style={{ color: '#dc2d2d' }}>(*)</span></div>
                             <Form.Item
                                 name="password"
                                 rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' },
-                                        { min: 8, message: "Mật khẩu phải từ 8 kí tự trở lên" },
-                                        {
-                                        pattern: new RegExp(/^[a-zA0-9.-]+$/i),
-                                        message: "Chỉ được nhập các kí tự là số hoặc chữ",
-                                        },
-                                        ]}
+                                { min: 8, message: "Mật khẩu phải từ 8 kí tự trở lên" },
+                                {
+                                    pattern: new RegExp(/^[a-zA0-9.-]+$/i),
+                                    message: "Chỉ được nhập các kí tự là số hoặc chữ",
+                                },
+                                ]}
                             >
-                                <Input.Password placeholder={"Nhập mật khẩu"} autocomplete="new-password"/>
+                                <Input.Password placeholder={"Nhập mật khẩu"} autocomplete="new-password" />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -153,22 +151,22 @@ const FormAccount = ({
                                 dependencies={['password']}
                                 hasFeedback
                                 rules={[
-                                {
-                                    required: true,
-                                    message: 'Hãy xác nhận lại mật khẩu!',
-                                },
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                    if (!value || getFieldValue('password') === value) {
-                                        return Promise.resolve();
-                                    }
-
-                                    return Promise.reject(new Error('Mật khẩu bạn đã nhập không khớp!!'));
+                                    {
+                                        required: true,
+                                        message: 'Hãy xác nhận lại mật khẩu!',
                                     },
-                                }),
+                                    ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                            if (!value || getFieldValue('password') === value) {
+                                                return Promise.resolve();
+                                            }
+
+                                            return Promise.reject(new Error('Mật khẩu bạn đã nhập không khớp!!'));
+                                        },
+                                    }),
                                 ]}
                             >
-                                <Input.Password  placeholder={"Xác nhận mật khẩu"}  />
+                                <Input.Password placeholder={"Xác nhận mật khẩu"} />
                             </Form.Item>
                         </Col>
                     </>
@@ -191,9 +189,9 @@ const FormAccount = ({
                     </Button>
                     <Button
                         htmlType="submit"
-                        style={{ height: 35, float: "right",backgroundColor:'#01579B',color:'#fff' }}
+                        style={{ height: 35, float: "right", backgroundColor: '#01579B', color: '#fff' }}
                     >
-                        {itemSelected ? "Cập nhật" : "Lưu"}
+                        {itemSelected ? "Cập nhật" : "Thêm mới"}
                     </Button>
                 </div>
             </Form>
