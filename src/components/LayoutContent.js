@@ -142,8 +142,8 @@ const LayoutContent = ({ children, className }) => {
               _render = (
                 <SubMenu
                   key={item.id}
-                  title={<div style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 15 }}>{item.name}</div>}
-                  icon={<i className={`fa ${item.icon} pr-2`} style={{ paddingRight: DIMENSION_PADDING_SMALL }} />}
+                  title={<div style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 14}}>{item.name}</div>}
+                  icon={<i className={`fa ${item.icon} pr-2`} style={{ paddingRight: DIMENSION_PADDING_SMALL,color:'#01579B' }} />}
                   className="menuCustomerItem"
                 >
                   {_.map(item.children, (_item, _index) => {
@@ -153,7 +153,7 @@ const LayoutContent = ({ children, className }) => {
                         // icon={<i className={`fa ${_item.icon} pr-2`} />}
                         style={{ backgroundColor: '#fff' }}
                       >
-                        <div onClick={onClickMenu(_item)} style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 15 }}>
+                        <div onClick={onClickMenu(_item)} style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 14 }}>
                           {_item.name}
                         </div>
                       </Menu.Item>
@@ -304,6 +304,9 @@ export default styled(LayoutContent)`
     margin-top: 0px !important;
     margin-bottom: 0px !important;
     height: 45px
+  }
+  .ant-menu-submenu-arrow {
+    color: #01579B !important;
   }
 }
 `
