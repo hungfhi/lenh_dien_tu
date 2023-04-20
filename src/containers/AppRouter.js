@@ -24,6 +24,9 @@ import TransportUnit from './Manage/TransportUnit';
 import { apis } from 'configs';
 import Router from './Manage/Router';
 import Module from './Manage/Module';
+import Personnel from './Category/Personnel';
+import Vehicle from './Category/Vehicle';
+import ShippingRoute from './Category/ShippingRoute';
 const AppRouter = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state?.rootReducer?.user);
@@ -89,7 +92,7 @@ const AppRouter = () => {
           Ui.showError({ message: err?.response?.data?.message });
         })
     }
-  }, [user,load])
+  }, [user, load])
 
   return (
     <BrowserRouter>
@@ -148,6 +151,31 @@ const AppRouter = () => {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/personnel"
+          element={
+            <PrivateRoute>
+              <Personnel />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/vehicle"
+          element={
+            <PrivateRoute>
+              <Vehicle />
+            </PrivateRoute>
+          }
+        />
+         <Route
+          path="/shipping-route"
+          element={
+            <PrivateRoute>
+              <ShippingRoute />
+            </PrivateRoute>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
   );

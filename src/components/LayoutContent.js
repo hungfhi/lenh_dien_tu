@@ -143,7 +143,7 @@ const LayoutContent = ({ children, className }) => {
                 <SubMenu
                   key={item.id}
                   title={<div style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 14}}>{item.name}</div>}
-                  icon={<i className={`fa ${item.icon} pr-2`} style={{ paddingRight: DIMENSION_PADDING_SMALL,color:'#01579B',width:30,display:'flex',justifyContent:'center',alignItems:'center',height:30 }} />}
+                  icon={<i className={`fa ${item.icon} pr-2`} style={{ paddingRight: DIMENSION_PADDING_SMALL,color:'#01579B',display:'flex',justifyContent:'center',alignItems:'center',fontSize:20 }} />}
                   className="menuCustomerItem"
                 >
                   {_.map(item.children, (_item, _index) => {
@@ -153,7 +153,7 @@ const LayoutContent = ({ children, className }) => {
                         // icon={<i className={`fa ${_item.icon} pr-2`} />}
                         style={{ backgroundColor: '#fff' }}
                       >
-                        <div onClick={onClickMenu(_item)} style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 14 }}>
+                        <div onClick={onClickMenu(_item)} style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 14,paddingLeft:20 }}>
                           {_item.name}
                         </div>
                       </Menu.Item>

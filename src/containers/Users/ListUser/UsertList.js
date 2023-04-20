@@ -115,49 +115,44 @@ const UsertList = memo(({ className, data, params, total, setTotal, setParams, o
             )
         },
         {
-            title: "Trạng thái kích hoạt",
+            title: "Trạng thái",
             dataIndex: "is_active",
             render: (value, row) => {
                 return (
                     <div style={{ textAlign: 'center' }}>
                         <Switch
-                            checkedChildren={<CheckOutlined />}
-                            unCheckedChildren={<CloseOutlined />}
                             onChange={(e) => onActive(e, value?.id, row)}
                             checked={value?.id == 1 ? true : false}
+                            size='small'
                         />
                     </div>
                 )
             },
-            width: 150,
+            width: 120,
         },
         {
             title: "Thao tác",
-            width: 80,
+            width: 100,
             dataIndex: "action",
             render: (record, value, row) => {
                 const ids = value.id
                 const values = value.status
                 return (
-                    <div style={{ textAlign: 'center' }}>
-                        <Space>
-                            <Tooltip placement="topLeft" title="Sửa">
-                                <Button
-                                    type="link"
-                                    icon={<EditOutlined />}
-                                    onClick={() => onEdit(ids)}
-                                />
-                            </Tooltip>
-                            <Tooltip placement="topLeft" title="Đổi mật khẩu">
-                                <Button
-                                    type="link"
-                                    onClick={() => onChangeP(ids)}
-                                >
-                                    <i class="fas fa-key" />
-                                </Button>
-                            </Tooltip>
-                        </Space>
-
+                    <div style={{ textAlign: 'center',display:'flex' }}>
+                        <Button
+                            type="link"
+                            onClick={() => onEdit(ids)}
+                        >
+                            <i class="fa-regular fa-pen-to-square" style={{ color: '#01579B', fontSize: 20 }}></i>
+                        </Button>
+                        <Tooltip placement="topLeft" title="Đổi mật khẩu">
+                            <Button
+                                type="link"
+                                onClick={() => onChangeP(ids)}
+                            >
+                                <i class="fas fa-key" style={{ color: '#01579B', fontSize: 20 }} />
+                            </Button>
+                        </Tooltip>
                     </div>
                 )
             }
