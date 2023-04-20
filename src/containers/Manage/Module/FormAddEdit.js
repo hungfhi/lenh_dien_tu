@@ -15,7 +15,6 @@ const FormAddEdit = ({
 }) => {
     const [moduleList, setModuleList] = useState([]);
 
-
     const getListErrors = useCallback(async () => {
         const payload = {
             is_full: 1
@@ -30,7 +29,7 @@ const FormAddEdit = ({
                             id: items.id,
                             title: items.name,
                             parent_id: items.parent_id,
-                            disabled: itemSelected?.id === items.id || (itemSelected && items?.parent_id===itemSelected?.parent_id)  ? true : false,
+                            disabled: itemSelected?.id === items.id || (itemSelected && items?.parent_id===itemSelected?.parent_id && itemSelected?.children?.length!==0 )  ? true : false,
                             children: _.map(items?.children, (item) => {
                                 return {
                                     value: item.id,
@@ -51,8 +50,6 @@ const FormAddEdit = ({
                 Ui.showError({ message: err?.response?.data?.message });
             })
     }, []);
-
-    console.log('itemSelecteditemSelected',itemSelected)
 
     useEffect(() => {
         getListErrors();

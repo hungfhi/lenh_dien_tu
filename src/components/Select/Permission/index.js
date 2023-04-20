@@ -53,8 +53,6 @@ const Permission = memo(
                             });
 
                         })
-                        console.log('dataSet',dataSet)
-                        
                         setDataSource(dataSet);
                     }
                 })

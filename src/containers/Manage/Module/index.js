@@ -47,7 +47,6 @@ const Index = ({ className, profile }) => {
               path: items.path,
               permission_slug:items.permission_slug,
               children: _.map(items?.children, (item) => {
-                console.log('item.children.length',item.children.length)
                 return {
                   key: item.id,
                   icon: item.icon,
@@ -65,7 +64,6 @@ const Index = ({ className, profile }) => {
 
           })
           setData(dataSet)
-          console.log("daaaaa")
         }
       })
       .catch(err => {
