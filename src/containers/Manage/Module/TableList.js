@@ -129,10 +129,9 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
         return (
           <div style={{ textAlign: 'center' }}>
             <Switch
-              checkedChildren={<CheckOutlined />}
-              unCheckedChildren={<CloseOutlined />}
               onChange={(e) => onActive(e, value, row)}
               checked={value}
+              size='small'
             />
           </div>
         )

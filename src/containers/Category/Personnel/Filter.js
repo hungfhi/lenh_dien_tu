@@ -3,7 +3,7 @@ import { Row, Col, DatePicker, Select, Button, Input, Spin } from "antd";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import _ from "lodash";
-import { Module, TuyenSelect } from "components";
+import { TuyenSelect } from "components";
 import moment from "moment";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -31,17 +31,13 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
     <div className={className}>
       <Row gutter={[8, 8]}>
         <Col span={4}>
-          <Module
-            placeholder="Chọn tên module"
+          <Input
             allowClear
-            loadOnMount
-            onChange={(data) => {
-              setParams((prevState) => {
-                let nextState = { ...prevState };
-                nextState.id = data ? data.value : null;
-                return nextState;
-              });
-            }} />
+            placeholder={"Filter text"}
+            onChange={(e) => {
+              _changeQuery({ name: "name", value: e.target.value });
+            }}
+          />
         </Col>
         <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>
           <Button className="btn-add" onClick={() => setShowModal(true)} > Thêm mới</Button>
