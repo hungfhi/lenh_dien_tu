@@ -65,7 +65,6 @@ const FormAddEdit = ({
     const onFinishFailed = () => {
     };
 
-    console.log('itemSelected', itemSelected)
     return (
         <div className={className}>
             <Form
