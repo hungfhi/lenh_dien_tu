@@ -18,7 +18,7 @@ const FormAddEdit = ({
 
     const getListErrors = useCallback(async () => {
         const payload = {
-            is_full : 1
+            is_full: 1
         }
         manage.getModule(payload)
             .then(res => {
@@ -30,14 +30,14 @@ const FormAddEdit = ({
                             id: items.id,
                             title: items.name,
                             parent_id: items.parent_id,
-                            disabled: itemSelected?.id ===items.id ? true : false,
+                            // disabled: itemSelected?.id === items.id ? true : false,
                             children: _.map(items?.children, (item) => {
                                 return {
                                     value: item.id,
                                     id: item.id,
                                     title: item.name,
                                     parent_id: item.parent_id,
-                                    disabled: itemSelected?.id ===item?.id ? true : false,
+                                    // disabled: itemSelected ? true : false,
                                     children: item.children.length !== 0 ? item.children : null
                                 }
                             })
@@ -60,11 +60,11 @@ const FormAddEdit = ({
 
     const [form] = Form.useForm();
     const onFinish = async (values) => {
-        console.log('values',values)
         onSave(values)
     };
     const onFinishFailed = () => {
     };
+
     return (
         <div className={className}>
             <Form
@@ -74,9 +74,9 @@ const FormAddEdit = ({
                 name="control-hooks"
                 initialValues={{
                     name: itemSelected && itemSelected.name || '',
-                    order_number: itemSelected && itemSelected?.order_number  ==0 ? 0: parseInt(itemSelected?.order_number) || undefined,
+                    order_number: itemSelected && itemSelected?.order_number == 0 ? 0 : parseInt(itemSelected?.order_number) || undefined,
                     icon: itemSelected && itemSelected.icon || '',
-                    parent_id: itemSelected && itemSelected.parent_id || undefined,
+                    parent_id: itemSelected && itemSelected?.parent_id == 0 ? 0 : parseInt(itemSelected?.parent_id) || undefined,
                     path: itemSelected && itemSelected.path || '',
                     permission_slug: itemSelected && itemSelected.permission_slug || undefined,
                 }}
@@ -94,11 +94,12 @@ const FormAddEdit = ({
 
                     </Col>
                     <Col>
+                        <div>Menu cha</div>
                         <Form.Item
                             name="parent_id"
                         >
                             <TreeSelect
-                                allowClear={true}
+                                allowClear
                                 placeholder={"Chọn menu cha"}
                                 showSearch
                                 style={{ width: '100%' }}
