@@ -30,14 +30,14 @@ const FormAddEdit = ({
                             id: items.id,
                             title: items.name,
                             parent_id: items.parent_id,
-                            // disabled: itemSelected?.id === items.id ? true : false,
+                            disabled: itemSelected?.id === items.id || (itemSelected && items?.parent_id===itemSelected?.parent_id)  ? true : false,
                             children: _.map(items?.children, (item) => {
                                 return {
                                     value: item.id,
                                     id: item.id,
                                     title: item.name,
                                     parent_id: item.parent_id,
-                                    // disabled: itemSelected ? true : false,
+                                    disabled: true,
                                     children: item.children.length !== 0 ? item.children : null
                                 }
                             })
@@ -51,6 +51,8 @@ const FormAddEdit = ({
                 Ui.showError({ message: err?.response?.data?.message });
             })
     }, []);
+
+    console.log('itemSelecteditemSelected',itemSelected)
 
     useEffect(() => {
         getListErrors();
