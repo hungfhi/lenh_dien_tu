@@ -10,8 +10,10 @@ import Filter from './Filter';
 import TableList from './TableList';
 import Update from './Update';
 import _ from 'lodash'
+import { useDispatch, useSelector } from 'react-redux';
+import { setLoad } from "redux/action";
 const Index = ({ className, profile }) => {
-
+  const dispatch = useDispatch()
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [loadding, setLoading] = useState(false);
@@ -26,7 +28,10 @@ const Index = ({ className, profile }) => {
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-    manage.getModule()
+    const payload = {
+      is_full : 1
+  }
+    manage.getModule(payload)
       .then(res => {
         if (res.status === 200) {
           const dataSet = []
@@ -40,6 +45,7 @@ const Index = ({ className, profile }) => {
               order_number: items.order_number,
               parent_id: items.parent_id,
               path: items.path,
+              permission_slug:items.permission_slug,
               children: _.map(items?.children, (item) => {
                 return {
                   key: item.id,
@@ -50,6 +56,7 @@ const Index = ({ className, profile }) => {
                   order_number: item.order_number,
                   parent_id: item.parent_id,
                   path: item.path,
+                  permission_slug: item.permission_slug,
                   children: item.children.length !== 0 ? item.children : null
                 }
               })
@@ -78,7 +85,6 @@ const Index = ({ className, profile }) => {
   });
 
   const onEdit = useCallback(async (row) => {
-    console.log('row',row)
     setShowModalEdit(true)
     setItemSelected(row)
   }, [])
@@ -92,6 +98,7 @@ const Index = ({ className, profile }) => {
         if (res.status === 200) {
           Ui.showSuccess({ message: "Xoá module thành công" });
           onRefreshList()
+          dispatch(setLoad(true));
         }
       })
       .catch(err => {
@@ -130,7 +137,7 @@ const Index = ({ className, profile }) => {
       <Drawer
         destroyOnClose
         width={"40%"}
-        title="Thêm mới"
+        title="Thêm mới module"
         placement="right"
         closable={true}
         onClose={onHiddenModal}
@@ -144,7 +151,7 @@ const Index = ({ className, profile }) => {
       <Drawer
         destroyOnClose
         width={"40%"}
-        title="Cập nhật"
+        title="Cập nhật module"
         placement="right"
         closable={true}
         onClose={onHiddenModalEdit}
