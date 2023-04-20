@@ -22,14 +22,12 @@ const manage = {
 
 
     //module
-    getModule() {
-        return axios.get(`${domain.ServiceAddress}/menus`)
+    getModule(payload) {
+        return axios.get(`${domain.ServiceAddress}/menus?${qs.stringify(payload)}`)
       },
-    getDetailRoles(payload) {
-        return axios.get(`${domain.ServiceAddress}/roles/${payload?.uuid}`)
-    },
-    createRoles(payload) {
-        return axios.post(`${domain.ServiceAddress}/roles`,payload)
+    
+    createModule(payload) {
+        return axios.post(`${domain.ServiceAddress}/menus`,payload)
     },
     updateModule(payload) {
         return axios.put(`${domain.ServiceAddress}/menus/${payload?.uuid}`,payload)

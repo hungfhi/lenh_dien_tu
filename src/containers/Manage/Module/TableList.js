@@ -160,6 +160,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
               onConfirm={() => onConfirm(ids)}
               onCancel={cancel}
               okText="Xoá"
+              placement="topLeft"
               cancelText="Huỷ"
             >
               <a>
@@ -195,6 +196,9 @@ TableList.propTypes = {
   className: PropTypes.any,
 };
 export default styled(TableList)`
+.ant-popover-inner-content {
+  width: 230px !important;
+}
 .ant-table-row-expand-icon-cell {
   position: relative;
   .ant-table-row-collapsed:after {
@@ -205,7 +209,6 @@ export default styled(TableList)`
     text-align: center;
     text-transform: none;
     text-rendering: auto;
-
     right: 16px;
     top: 0;
     display: inline-block;
@@ -230,5 +233,6 @@ export default styled(TableList)`
     transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
     zoom: 1;
   }
+  
   
 `;

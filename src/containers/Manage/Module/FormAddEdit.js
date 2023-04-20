@@ -1,19 +1,66 @@
-import { Button, Col, Form, Input, Row,InputNumber } from "antd";
+import { Button, Col, Form, Input, Row, InputNumber, TreeSelect } from "antd";
+import { Module, Permission } from "components";
+import manage from "configs/manage";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
-
+import _ from "lodash";
+import { Ui } from "utils/Ui";
 const { TextArea } = Input;
-const FormAddEdit = ({ 
-        className,
-        itemSelected,
-        onSave,
-        onHiddenModal,
-    }) => {
-   
+const FormAddEdit = ({
+    className,
+    itemSelected,
+    onSave,
+    onHiddenModal,
+}) => {
+    const [moduleList, setModuleList] = useState([]);
+
+
+    const getListErrors = useCallback(async () => {
+        const payload = {
+            is_full : 1
+        }
+        manage.getModule(payload)
+            .then(res => {
+                if (res.status === 200) {
+                    const dataSet = []
+                    _.map(res?.data?.data, (items) => {
+                        dataSet.push({
+                            value: items.id,
+                            id: items.id,
+                            title: items.name,
+                            parent_id: items.parent_id,
+                            disabled: itemSelected?.id ===items.id ? true : false,
+                            children: _.map(items?.children, (item) => {
+                                return {
+                                    value: item.id,
+                                    id: item.id,
+                                    title: item.name,
+                                    parent_id: item.parent_id,
+                                    disabled: itemSelected?.id ===item?.id ? true : false,
+                                    children: item.children.length !== 0 ? item.children : null
+                                }
+                            })
+                        });
+
+                    })
+                    setModuleList(dataSet);
+                }
+            })
+            .catch(err => {
+                Ui.showError({ message: err?.response?.data?.message });
+            })
+    }, []);
+
+    useEffect(() => {
+        getListErrors();
+    }, [getListErrors]);
+
+
 
     const [form] = Form.useForm();
     const onFinish = async (values) => {
+        console.log('values',values)
         onSave(values)
     };
     const onFinishFailed = () => {
@@ -27,10 +74,11 @@ const FormAddEdit = ({
                 name="control-hooks"
                 initialValues={{
                     name: itemSelected && itemSelected.name || '',
-                    order_number: itemSelected && itemSelected.order_number || '',
+                    order_number: itemSelected && itemSelected?.order_number  ==0 ? 0: parseInt(itemSelected?.order_number) || undefined,
                     icon: itemSelected && itemSelected.icon || '',
-                    parent_id: itemSelected && itemSelected.parent_id || '',
+                    parent_id: itemSelected && itemSelected.parent_id || undefined,
                     path: itemSelected && itemSelected.path || '',
+                    permission_slug: itemSelected && itemSelected.permission_slug || undefined,
                 }}
                 form={form}
             >
@@ -41,19 +89,26 @@ const FormAddEdit = ({
                             name="name"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input  placeholder={""} />
+                            <Input placeholder={"Tên module"} />
                         </Form.Item>
 
                     </Col>
-                    <Col span={24}>
-                        <div>Menu cha<span style={{ color: '#dc2d2d' }}>*</span></div>
+                    <Col>
                         <Form.Item
                             name="parent_id"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input  placeholder={""} />
+                            <TreeSelect
+                                allowClear={true}
+                                placeholder={"Chọn menu cha"}
+                                showSearch
+                                style={{ width: '100%' }}
+                                filterOption={(input, option) =>
+                                    option.children.toString().toLowerCase().indexOf(input.toLowerCase()) > 0
+                                }
+                                treeData={moduleList}
+                            >
+                            </TreeSelect>
                         </Form.Item>
-
                     </Col>
                     <Col span={24}>
                         <div>Thư mục<span style={{ color: '#dc2d2d' }}>*</span></div>
@@ -61,7 +116,7 @@ const FormAddEdit = ({
                             name="path"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input  placeholder={""} />
+                            <Input placeholder={"Thư mục"} />
                         </Form.Item>
 
                     </Col>
@@ -71,29 +126,26 @@ const FormAddEdit = ({
                             name="icon"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input  placeholder={""} />
+                            <Input placeholder={"Icon"} />
                         </Form.Item>
 
                     </Col>
                     <Col span={24}>
-                        <div>Thứ tự hiển thị<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <div>Thứ tự hiển thị</div>
                         <Form.Item
                             name="order_number"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input  placeholder={""} />
+                            <InputNumber style={{ width: '100%' }} placeholder={"Thứ tự hiển thị"} />
                         </Form.Item>
 
                     </Col>
                     <Col span={24}>
-                        <div>Quyền sử dụng<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <div>Quyền sử dụng</div>
                         <Form.Item
                             name="permission_slug"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input  placeholder={""} />
+                            <Permission placeholder={"Chọn quyền sử dụng"} allowClear />
                         </Form.Item>
-
                     </Col>
                 </>
                 <div
@@ -124,7 +176,7 @@ const FormAddEdit = ({
     );
 };
 FormAddEdit.propTypes = {
-  className: PropTypes.any,
+    className: PropTypes.any,
 };
 export default styled(FormAddEdit)`
   .btn-add {

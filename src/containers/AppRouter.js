@@ -16,7 +16,7 @@ import Home from './Home'
 import NotFound from './NotFound'
 import Account from './Account';
 import { Ui } from 'utils/Ui';
-import { setMenu } from 'redux/action';
+import { setLoad, setMenu } from 'redux/action';
 import { setProfileUser } from '../redux/action';
 import ListUser from './Users/ListUser';
 import Roles from './Users/Roles';
@@ -27,7 +27,7 @@ import Module from './Manage/Module';
 const AppRouter = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state?.rootReducer?.user);
-
+  const load = useSelector((state) => state?.rootReducer?.load);
   useEffect(() => {
     if (user) {
       axios.defaults.headers = {
@@ -82,13 +82,14 @@ const AppRouter = () => {
             })
 
             dispatch(setMenu(convertMenu));
+            dispatch(setLoad(false));
           }
         })
         .catch(err => {
           Ui.showError({ message: err?.response?.data?.message });
         })
     }
-  }, [user])
+  }, [user,load])
 
   return (
     <BrowserRouter>
