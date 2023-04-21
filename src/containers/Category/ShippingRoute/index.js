@@ -88,7 +88,7 @@ const Index = ({ className, profile }) => {
       </Col>
       <Drawer
         destroyOnClose
-        width={"40%"}
+        width={"80%"}
         title="Thêm mới"
         placement="right"
         closable={true}
@@ -102,7 +102,7 @@ const Index = ({ className, profile }) => {
       </Drawer>
       <Drawer
         destroyOnClose
-        width={"40%"}
+        width={"80%"}
         title="Cập nhật"
         placement="right"
         closable={true}

@@ -32,24 +32,43 @@ const FormAddEdit = ({
                 form={form}
             >
                 <Row gutter={[16, 16]}>
-                    <Col span={24}>
-                        <div>Tên<span style={{ color: '#dc2d2d' }}>*</span></div>
+                    <Col span={12}>
+                        <div>Tuyến<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="dmo_name"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input  placeholder={""} />
+                            <Input placeholder={""} />
                         </Form.Item>
 
                     </Col>
-                    <Col span={24}>
-                        <div>Mô tả</div>
+                    <Col span={12}>
+                        <div>Cự ly</div>
                         <Form.Item
                             name="dmo_intro"
                         >
-                            <TextArea rows={4} placeholder="Nhập mô tả"/>
-
+                            <Input placeholder={""} />
                         </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <div>Đơn giá vận chuyển</div>
+                        <Form.Item
+                            name="dmo_intro"
+                        >
+                            <Input placeholder={""} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                    </Col>
+                    <Col span={12}>
+                        <div>Đơn giá vận chuyển</div>
+                        <Form.Item
+                            name="dmo_intro"
+                        >
+                            <Input placeholder={""} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
                     </Col>
                     
                 </Row>
