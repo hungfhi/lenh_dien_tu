@@ -67,7 +67,7 @@ const TableRoles = ({
         bordered
         columns={columns}
         dataSource={_dataBin}
-        scroll={{ x: "100%" }}
+        scroll={{ y: "calc(100vh - 330px)" }}
         rowKey="tableRole"
         pagination={false}
       />
