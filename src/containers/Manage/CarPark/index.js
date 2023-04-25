@@ -100,8 +100,8 @@ const Index = ({ className, profile }) => {
       </Col>
       <Drawer
         destroyOnClose
-        width={"60%"}
-        title="Thêm mới tuyến"
+        width={"40%"}
+        title="Thêm mới bến xe"
         placement="right"
         closable={true}
         onClose={onHiddenModal}
@@ -114,8 +114,8 @@ const Index = ({ className, profile }) => {
       </Drawer>
       <Drawer
         destroyOnClose
-        width={"60%"}
-        title="Cập nhật tuyến"
+        width={"40%"}
+        title="Cập nhật bến xe"
         placement="right"
         closable={true}
         onClose={onHiddenModalEdit}
