@@ -3,4 +3,8 @@ import apis from './apis'
 import auth from './auth'
 import users from './users'
 import category from './category'
-export { domain,  apis, auth, users, category }
+import command from './command'
+import report from './report'
+import plan from './plan'
+import manage from './manage'
+export { domain,  apis, auth, users, category, manage,plan, command, report }
