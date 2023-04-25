@@ -1,18 +1,15 @@
-import React, { useCallback, useState } from "react";
-import { Row, Col, DatePicker, Select, Button, Input, Spin } from "antd";
+import React, { useCallback } from "react";
+import { Row, Col, Select, Button, Input } from "antd";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import _ from "lodash";
-import { TuyenSelect } from "components";
-import moment from "moment";
-const { RangePicker } = DatePicker;
-const { Option } = Select;
+
 
 let inputTimer = null;
 
 const Filter = ({ className, setParams, params, setShowModal, operator }) => {
   const _changeQuery = useCallback(
     (payload) => {
+      console.log('payload',payload)
       if (inputTimer) {
         clearTimeout(inputTimer);
       }
@@ -27,17 +24,67 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
     [setParams]
   );
 
+  const onChangeStatus = (value) => {
+    console.log('huhu',value)
+    if(value !== undefined) 
+      _changeQuery({ name: "is_active", value: value?1: 0 });
+      else 
+      _changeQuery({ name: "is_active", value: 1 });
+  }
+
+  
+
   return (
     <div className={className}>
       <Row gutter={[8, 8]}>
         <Col span={4}>
+          <div>Biển kiểm soát</div>
           <Input
             allowClear
-            placeholder={"Filter text"}
+            placeholder={"Biển kiểm soát"}
             onChange={(e) => {
-              _changeQuery({ name: "name", value: e.target.value });
+              _changeQuery({ name: "license_plate", value: e.target.value });
             }}
           />
+        </Col>
+        <Col span={4}>
+          <div>Số điện thoại</div>
+          <Input
+            allowClear
+            placeholder={"Số điện thoại"}
+            onChange={(e) => {
+              _changeQuery({ name: "registration_number", value: e.target.value });
+            }}
+          />
+        </Col>
+        <Col span={4}>
+          <div>Trạng thái</div>
+          <Select
+            placeholder="Trạng thái"
+            optionFilterProp="children"
+            allowClear
+            style={{width:'100%'}}
+            onChange={onChangeStatus}
+       
+            options={[
+              {
+                value: true,
+                label: 'Hoạt động',
+              },
+              {
+                value: false,
+                label: 'Không hoạt động',
+              },
+              
+          ]}
+            />
+          {/* <Input
+            allowClear
+            placeholder={"Trạng thái"}
+            onChange={(e) => {
+              _changeQuery({ name: "is_active", value: e.target.value });
+            }}
+          /> */}
         </Col>
         <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>
           <Button className="btn-add" onClick={() => setShowModal(true)} > Thêm mới</Button>

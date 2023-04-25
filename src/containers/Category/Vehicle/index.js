@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Row, Spin, message } from "antd";
+import {  Col, Drawer, Row, Spin, message } from "antd";
 import PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
@@ -7,38 +7,59 @@ import Filter from './Filter';
 import Create from './Create';
 import TableList from './TableList';
 import Update from './Update';
-import _ from "lodash"
-import { useSelector,  } from 'react-redux';
-import { apis } from "configs";
+import { category } from "configs";
 
 const Index = ({ className, profile }) => {
 
-
-  const user = useSelector((state) => state?.rootReducer?.user);
-
-  const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
+  const [data, setData] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loadding, setLoading] = useState(false);
   const [isShowModal, setShowModal] = useState(false);
   const [itemSelected, setItemSelected] = useState(null);
   const [isShowModalEdit, setShowModalEdit] = useState(false)
   const [params, setParams] = useState({
     page: 1,
-    size: 20,
-    name: "",
+    size: 20
   });
 
-  const getDataTable = useCallback(async () => {
-    setLoading(true);
-      apis.getBusStation(data)
+  const getListProduct = useCallback(async () => {
+   
+      category.getProduct()
           .then(res => {
               if (res.status === 200) {
-                Ui.showSuccess({ message: "Thành công" });
+                const newProducts = []
+                res?.data?.data.map(item => {
+                  newProducts.push({
+                    ...item,
+                    value: item?.id,
+                    label: item?.name,
+                  })
+                })
+                setProducts(newProducts)
+                setTotal(res?.data?.meta?.total)
               }
           })
           .catch(err => {
               if (err.response?.status === 422 && err.response?.data?.errors) {
                   message.warn(err.response.data?.errors[0].msg)
+                  message.error('Error!')
+              }
+          })
+   
+  }, []);
+
+  const getDataTable = useCallback(async () => {
+    setLoading(true);
+      category.getVehicle(params)
+          .then(res => {
+              if (res.status === 200) {
+                setData(res?.data?.data)
+              }
+          })
+          .catch(err => {
+              if (err.response?.status === 422 && err.response?.data?.errors) {
+                  message.warn(err.response.data?.errors[0]?.msg)
                   message.error('Error!')
               }
           })
@@ -55,13 +76,19 @@ const Index = ({ className, profile }) => {
     setShowModalEdit(false);
   });
 
-  const onEdit = useCallback(async (ids) => {
+  const onEdit = useCallback(async (row) => {
     setShowModalEdit(true)
+     setItemSelected(row);
   }, [])
+
+    useEffect(() => {
+    getListProduct();
+  }, []);
 
 
   useEffect(() => {
     getDataTable();
+   
   }, [getDataTable]);
 
   const onRefreshList = () => {
@@ -81,8 +108,10 @@ const Index = ({ className, profile }) => {
             loadding={loadding}
             data={data}
             onEdit={onEdit}
+            total={total}
             onRefreshList={onRefreshList}
             setParams={setParams}
+            setTotal={setTotal}
           />
         </Spin>
       </Col>
@@ -98,6 +127,7 @@ const Index = ({ className, profile }) => {
         <Create
           onRefreshList={onRefreshList}
           onHiddenModal={onHiddenModal}
+          products={products}
         />
       </Drawer>
       <Drawer

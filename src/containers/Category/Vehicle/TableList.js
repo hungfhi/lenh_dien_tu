@@ -5,11 +5,12 @@ import { DefineTable } from "components";
 import PropTypes from "prop-types";
 import React, { memo } from "react";
 import styled from "styled-components";
+import { COLOR_GREEN, COLOR_RED } from 'theme/colors';
 import { Ui } from "utils/Ui";
 
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit,  onRefreshList }) => {
+const TableList = memo(({ className, data, params, setParams, onEdit,  onRefreshList, setTotal,total }) => {
 
   const onChange = async (e, value, row) => {
     const params = {
@@ -55,44 +56,53 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       },
     },
     {
-      title: "Tên đơn vị",
-      dataIndex: "dmo_id",
-      width: 100,
-    },
-    {
-      title: "Địa chỉ",
-      dataIndex: "dmo_name",
-      width: 300,
-    },
-    {
-      title: "Mã số thuế",
-      dataIndex: "dmo_name",
+      title: "Biển kiểm soát",
+      dataIndex: "license_plate",
       width: 150,
     },
     {
-      title: "Số điện thoại",
-      dataIndex: "dmo_name",
-      width: 300,
+      title: "Đơn vị vận tải",
+      dataIndex: "product",
+      width: 200,
+      render: (text, record, row) => {
+        return (
+          <div style={{ textAlign: 'center', }}>
+            {text?.name}
+          </div>
+        )
+      }
     },
     {
-      title: "Email",
-      dataIndex: "dmo_name",
-      width: 300,
+      title: "Số chỗ",
+      dataIndex: "number_seat",
+      width: 100,
+    },
+    {
+      title: "Hạn bảo hiểm",
+      dataIndex: "insurance_expired_date",
+      width: 150,
+    },
+    {
+      title: "Hạn đăng kiểm",
+      dataIndex: "registration_expired_date",
+      width: 150,
+    },
+    {
+      title: "Số đăng ký xe",
+      dataIndex: "registration_number",
+      width: 150,
     },
     {
       title: "Trạng thái",
-      dataIndex: "dmo_name",
-      width: 300,
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "dmo_name",
-      width: 300,
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "dmo_name",
-      width: 300,
+      dataIndex: "is_active",
+      width: 150,
+      render: (text, record, row) => {
+        return (
+          <div style={{ textAlign: 'center', color: text?.value ===1? COLOR_GREEN:COLOR_RED }}>
+            {text?.name}
+          </div>
+        )
+      }
     },
     {
       title: "Thao tác",
@@ -107,7 +117,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
               <Button
                 type="link"
                 icon={<EditOutlined />}
-                onClick={() => onEdit(ids)}
+                onClick={() => onEdit(record)}
               />
             </Tooltip>
           </div>
