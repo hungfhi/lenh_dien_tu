@@ -8,15 +8,28 @@ import Create from './Create';
 import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
-import { useSelector,  } from 'react-redux';
+import { useSelector, } from 'react-redux';
 import { apis } from "configs";
+
+const data = [
+  {
+    id: '1',
+    name: 'hungf',
+    date: 20 - 12 - 2012
+  },
+  {
+    id: '2',
+    name: 'mai',
+    date: 16 - 11 - 2012
+  },
+]
 
 const Index = ({ className, profile }) => {
 
 
   const user = useSelector((state) => state?.rootReducer?.user);
 
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [loadding, setLoading] = useState(false);
   const [isShowModal, setShowModal] = useState(false);
@@ -30,18 +43,18 @@ const Index = ({ className, profile }) => {
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-      apis.getBusStation(data)
-          .then(res => {
-              if (res.status === 200) {
-                Ui.showSuccess({ message: "Thành công" });
-              }
-          })
-          .catch(err => {
-              if (err.response?.status === 422 && err.response?.data?.errors) {
-                  message.warn(err.response.data?.errors[0].msg)
-                  message.error('Error!')
-              }
-          })
+    apis.getBusStation(data)
+      .then(res => {
+        if (res.status === 200) {
+          Ui.showSuccess({ message: "Thành công" });
+        }
+      })
+      .catch(err => {
+        if (err.response?.status === 422 && err.response?.data?.errors) {
+          message.warn(err.response.data?.errors[0].msg)
+          message.error('Error!')
+        }
+      })
     await setLoading(false);
   }, [params]);
 
@@ -100,8 +113,8 @@ const Index = ({ className, profile }) => {
       </Col>
       <Drawer
         destroyOnClose
-        width={"60%"}
-        title="Thêm mới tuyến"
+        width={"90%"}
+        title="Thêm mới hợp đồng"
         placement="right"
         closable={true}
         onClose={onHiddenModal}
@@ -114,8 +127,8 @@ const Index = ({ className, profile }) => {
       </Drawer>
       <Drawer
         destroyOnClose
-        width={"60%"}
-        title="Cập nhật tuyến"
+        width={"90%"}
+        title="Cập nhật hợp đồng"
         placement="right"
         closable={true}
         onClose={onHiddenModalEdit}
