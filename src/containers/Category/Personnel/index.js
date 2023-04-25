@@ -9,7 +9,7 @@ import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
 import { useSelector, } from 'react-redux';
-import { apis, categories } from "configs";
+import {  category } from "configs";
 
 const Personnel = ({ className, profile }) => {
 
@@ -30,8 +30,8 @@ const Personnel = ({ className, profile }) => {
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-    categories.getPersonnels(params).then(res => {
-      console.log(res);
+    category.getPersons(params).then(res => {
+     
       setData(res?.data?.data);
     }).catch(err => {
       if (err.response?.status === 422 && err.response?.data?.errors) {
@@ -56,7 +56,7 @@ const Personnel = ({ className, profile }) => {
         const payload = {
             uuid:ids
         }
-        categories.getDetailPersonnel(payload)
+        category.getDetailPersons(payload)
         .then(res => {
           if (res.status === 200) {
             setItemSelected(res?.data?.data)
