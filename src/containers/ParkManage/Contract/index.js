@@ -9,14 +9,27 @@ import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
 import { useSelector, } from 'react-redux';
-import { apis, categories } from "configs";
+import { apis } from "configs";
 
-const Personnel = ({ className, profile }) => {
+const data = [
+  {
+    id: '1',
+    name: 'hungf',
+    date: 20 - 12 - 2012
+  },
+  {
+    id: '2',
+    name: 'mai',
+    date: 16 - 11 - 2012
+  },
+]
+
+const Index = ({ className, profile }) => {
 
 
   const user = useSelector((state) => state?.rootReducer?.user);
 
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [loadding, setLoading] = useState(false);
   const [isShowModal, setShowModal] = useState(false);
@@ -25,19 +38,23 @@ const Personnel = ({ className, profile }) => {
   const [params, setParams] = useState({
     page: 1,
     size: 20,
-    // name: "",
+    name: "",
   });
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-    categories.getPersonnels(params).then(res => {
-      console.log(res);
-      setData(res?.data?.data);
-    }).catch(err => {
-      if (err.response?.status === 422 && err.response?.data?.errors) {
-        Ui.showErrors('Có lỗi xảy ra');
-      }
-    })
+    apis.getBusStation(data)
+      .then(res => {
+        if (res.status === 200) {
+          Ui.showSuccess({ message: "Thành công" });
+        }
+      })
+      .catch(err => {
+        if (err.response?.status === 422 && err.response?.data?.errors) {
+          message.warn(err.response.data?.errors[0].msg)
+          message.error('Error!')
+        }
+      })
     await setLoading(false);
   }, [params]);
 
@@ -52,19 +69,19 @@ const Personnel = ({ className, profile }) => {
   });
 
   const onEdit = useCallback(async (ids) => {
-    setShowModalEdit(true);
-        const payload = {
-            uuid:ids
-        }
-        categories.getDetailPersonnel(payload)
-        .then(res => {
-          if (res.status === 200) {
-            setItemSelected(res?.data?.data)
-          }
-        })
-        .catch(err => {
-          Ui.showError({ message: err?.response?.data?.message });
-        })
+    setShowModalEdit(true)
+    // const result = await ServiceBase.requestJson({
+    //   method: "GET",
+    //   url: `/v1/category-declare/quota/${ids}`,
+    //   data: {
+
+    //   },
+    // });
+    // if (result.hasErrors) {
+    //   Ui.showErrors(result?.errors);
+    // } else {
+    //   setItemSelected(result?.value?.data)
+    // }
   }, [])
 
 
@@ -96,8 +113,8 @@ const Personnel = ({ className, profile }) => {
       </Col>
       <Drawer
         destroyOnClose
-        width={"80%"}
-        title="Thêm mới"
+        width={"90%"}
+        title="Thêm mới hợp đồng"
         placement="right"
         closable={true}
         onClose={onHiddenModal}
@@ -110,8 +127,8 @@ const Personnel = ({ className, profile }) => {
       </Drawer>
       <Drawer
         destroyOnClose
-        width={"80%"}
-        title="Cập nhật"
+        width={"90%"}
+        title="Cập nhật hợp đồng"
         placement="right"
         closable={true}
         onClose={onHiddenModalEdit}
@@ -131,8 +148,8 @@ const Personnel = ({ className, profile }) => {
   );
 };
 
-Personnel.propTypes = {
+Index.propTypes = {
   className: PropTypes.any,
 };
-export default styled(Personnel)`
+export default styled(Index)`
  `;

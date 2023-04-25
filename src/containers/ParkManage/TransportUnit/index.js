@@ -8,10 +8,10 @@ import Create from './Create';
 import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
-import { useSelector, } from 'react-redux';
-import { apis, categories } from "configs";
+import { useSelector,  } from 'react-redux';
+import { apis } from "configs";
 
-const Personnel = ({ className, profile }) => {
+const Index = ({ className, profile }) => {
 
 
   const user = useSelector((state) => state?.rootReducer?.user);
@@ -25,19 +25,23 @@ const Personnel = ({ className, profile }) => {
   const [params, setParams] = useState({
     page: 1,
     size: 20,
-    // name: "",
+    name: "",
   });
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-    categories.getPersonnels(params).then(res => {
-      console.log(res);
-      setData(res?.data?.data);
-    }).catch(err => {
-      if (err.response?.status === 422 && err.response?.data?.errors) {
-        Ui.showErrors('Có lỗi xảy ra');
-      }
-    })
+      apis.getBusStation(data)
+          .then(res => {
+              if (res.status === 200) {
+                Ui.showSuccess({ message: "Thành công" });
+              }
+          })
+          .catch(err => {
+              if (err.response?.status === 422 && err.response?.data?.errors) {
+                  message.warn(err.response.data?.errors[0].msg)
+                  message.error('Error!')
+              }
+          })
     await setLoading(false);
   }, [params]);
 
@@ -52,19 +56,7 @@ const Personnel = ({ className, profile }) => {
   });
 
   const onEdit = useCallback(async (ids) => {
-    setShowModalEdit(true);
-        const payload = {
-            uuid:ids
-        }
-        categories.getDetailPersonnel(payload)
-        .then(res => {
-          if (res.status === 200) {
-            setItemSelected(res?.data?.data)
-          }
-        })
-        .catch(err => {
-          Ui.showError({ message: err?.response?.data?.message });
-        })
+    setShowModalEdit(true)
   }, [])
 
 
@@ -96,7 +88,7 @@ const Personnel = ({ className, profile }) => {
       </Col>
       <Drawer
         destroyOnClose
-        width={"80%"}
+        width={"40%"}
         title="Thêm mới"
         placement="right"
         closable={true}
@@ -110,7 +102,7 @@ const Personnel = ({ className, profile }) => {
       </Drawer>
       <Drawer
         destroyOnClose
-        width={"80%"}
+        width={"40%"}
         title="Cập nhật"
         placement="right"
         closable={true}
@@ -131,8 +123,8 @@ const Personnel = ({ className, profile }) => {
   );
 };
 
-Personnel.propTypes = {
+Index.propTypes = {
   className: PropTypes.any,
 };
-export default styled(Personnel)`
+export default styled(Index)`
  `;

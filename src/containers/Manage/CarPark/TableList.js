@@ -1,8 +1,7 @@
 import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { Button, Modal, Pagination, Row, Tooltip } from "antd";
+import { Button, Modal, Pagination, Row, Switch, Tooltip } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
-import moment from "moment";
 import PropTypes from "prop-types";
 import React, { memo } from "react";
 import styled from "styled-components";
@@ -10,12 +9,23 @@ import { Ui } from "utils/Ui";
 
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit,  onRefreshList }) => {
+const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList }) => {
 
   const onChange = async (e, value, row) => {
     const params = {
       active: value ? 0 : 1,
     };
+    // const result = await ServiceBase.requestJson({
+    //   method: "PUT",
+    //   url: `/v1/route-group/${row.id}`,
+    //   data: params,
+    // });
+    // if (result.hasErrors) {
+    //   Ui.showErrors(result.errors);
+    // } else {
+    //   Ui.showSuccess({ message: "Cập nhật trạng thái thành công." });
+    //   onRefreshList()
+    // }
   };
 
   const onActive = (e, value, row) => {
@@ -38,6 +48,22 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
     });
   };
 
+  const datas = [
+    {
+      key: "1",
+      date: "2020-10-04T22:00:00.000Z",
+      period: "period 1",
+      section: "A",
+      subject: "english"
+    },
+    {
+      key: "2",
+      date: "2020-10-04T21:00:00.000Z",
+      period: "period 2",
+      section: "B",
+      subject: "Science"
+    }
+  ];
 
 
 
@@ -56,83 +82,92 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       },
     },
     {
-      title: "Họ tên",
-      dataIndex: "name",
+      title: "Tên bến",
+      dataIndex: "dmo_id",
       width: 200,
-      render: (text, record) => {
-        return record?.user?.full_name;
-      }
     },
     {
-      title: "Căn cước công dân",
-      dataIndex: "citizen_identity",
-      width: 150,
-    },
-    {
-      title: "Chức vụ",
+      title: "Mã bến",
       dataIndex: "dmo_name",
-      width: 150,
-      render: (text, record) => {
-        return record?.position?.name;
-      }
-    },
-    {
-      title: "Số GPLX",
-      dataIndex: "driving_license",
       width: 100,
     },
     {
-      title: "Hạng GPLX",
+      title: "Tỉnh thành",
       dataIndex: "dmo_name",
-      width: 80,
-      render: (text, record) => {
-        return record?.driving_license_rank_id?.name;
-      }
+      width: 200,
     },
     {
-      title: "Hạn GPLX",
-      dataIndex: "driving_license_expire_date",
-      width: 100,
-      render: (text, record) => {
-        return moment(text).format('DD/MM/YYYY');
-      }
-    },
-    {
-      title: "Số điện thoại",
-      dataIndex: "phone",
-      width: 100,
+      title: "Địa chỉ",
+      dataIndex: "dmo_name",
+      width: 300,
     },
     {
       title: "Trạng thái",
       dataIndex: "dmo_name",
-      align: 'center',
       width: 100,
-      render: (text, record) => {
-        return record?.user?.is_active?.id == 1 && <span style={{ color: '#00A991' }}>Active</span>;
-      }
     },
-    {
-      title: "Thao tác",
-      width: 80,
-      dataIndex: "active",
-      fixed: "right",
-      render: (text, record, row) => {
-        const ids = record?.id
-        return (
-          <div style={{ textAlign: 'center' }}>
-            <Tooltip placement="topLeft">
-              <Button
-                style={{ width: '100%' }}
-                type="link"
-                icon={<EditOutlined />}
-                onClick={() => onEdit(ids)}
-              />
-            </Tooltip>
-          </div>
-        )
-      }
-    }
+    // {
+    //   title: "Thao tác",
+    //   width: 80,
+    //   dataIndex: "active",
+    //   fixed: "right",
+    //   render: (text, record, row) => {
+    //     const ids = record.dmo_id
+    //     return (
+    //       <div style={{ textAlign: 'center' }}>
+    //         <Tooltip placement="topLeft">
+    //           <Button
+    //             type="link"
+    //             icon={<EditOutlined />}
+    //             onClick={() => onEdit(ids)}
+    //           />
+    //         </Tooltip>
+    //       </div>
+    //     )
+    //   }
+    // }
   ];
+
+
+
+  const generateRender = (row) => {
+    return (row) => <div style={{ textAlign: 'center' }}><Switch
+      onChange={(e) => onActive(row)}
+      checked={row}
+      size='small'
+    /></div>
+  };
+  datas.map((row) => {
+    let period = {};
+    period["title"] = row.period;
+    period["width"] = 80;
+    period["key"] = row.period;
+    period["render"] = generateRender(row);
+    columns.push(period);
+  });
+
+  const action = {
+    title: "Thao tác",
+    dataIndex: "action",
+    width: 80,
+    render: (record) => {
+      return (
+        <div style={{textAlign:'center'}}>
+          <Tooltip placement="topLeft">
+            <Button
+              type="link"
+              onClick={() => onEdit(record)}
+            >
+              <i class="fa-regular fa-pen-to-square" style={{ color: '#01579B', fontSize: 20 }}></i>
+            </Button>
+          </Tooltip>
+        </div>
+
+      )
+    },
+  };
+  columns.push(action);
+
 
   // const renderContent = () => {
   //   return (
@@ -166,7 +201,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
     <div className={className}>
       <DefineTable
         columns={columns}
-        dataSource={data}
+        dataSource={datas}
         scroll={{ y: "calc(100vh - 330px)" }}
         pagination={false}
       />

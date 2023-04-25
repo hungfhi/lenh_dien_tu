@@ -40,7 +40,7 @@ const Roles = ({ className, profile }) => {
             description: "",
             permissions: [],
         })
-    }, []);
+    }, []); 
     const onLoad = useCallback(async () => {
         let newParam = formatParams(params)
           users.getRoles(newParam)
@@ -139,7 +139,6 @@ const Roles = ({ className, profile }) => {
         })
     }, [modal]);
     useEffect(() => {
-    
         onLoad()
     }, [params])
     useEffect(() => {

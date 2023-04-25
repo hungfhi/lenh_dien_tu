@@ -2,7 +2,6 @@ import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { Button, Modal, Pagination, Row, Tooltip } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
-import moment from "moment";
 import PropTypes from "prop-types";
 import React, { memo } from "react";
 import styled from "styled-components";
@@ -16,6 +15,17 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
     const params = {
       active: value ? 0 : 1,
     };
+    // const result = await ServiceBase.requestJson({
+    //   method: "PUT",
+    //   url: `/v1/route-group/${row.id}`,
+    //   data: params,
+    // });
+    // if (result.hasErrors) {
+    //   Ui.showErrors(result.errors);
+    // } else {
+    //   Ui.showSuccess({ message: "Cập nhật trạng thái thành công." });
+    //   onRefreshList()
+    // }
   };
 
   const onActive = (e, value, row) => {
@@ -56,60 +66,29 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       },
     },
     {
-      title: "Họ tên",
-      dataIndex: "name",
-      width: 200,
-      render: (text, record) => {
-        return record?.user?.full_name;
-      }
+      title: "Tên bến",
+      dataIndex: "dmo_id",
+      width: 100,
     },
     {
-      title: "Căn cước công dân",
-      dataIndex: "citizen_identity",
-      width: 150,
-    },
-    {
-      title: "Chức vụ",
+      title: "Mã bến",
       dataIndex: "dmo_name",
-      width: 150,
-      render: (text, record) => {
-        return record?.position?.name;
-      }
+      width: 300,
     },
     {
-      title: "Số GPLX",
-      dataIndex: "driving_license",
-      width: 100,
-    },
-    {
-      title: "Hạng GPLX",
+      title: "Tỉnh thành",
       dataIndex: "dmo_name",
-      width: 80,
-      render: (text, record) => {
-        return record?.driving_license_rank_id?.name;
-      }
+      width: 300,
     },
     {
-      title: "Hạn GPLX",
-      dataIndex: "driving_license_expire_date",
-      width: 100,
-      render: (text, record) => {
-        return moment(text).format('DD/MM/YYYY');
-      }
-    },
-    {
-      title: "Số điện thoại",
-      dataIndex: "phone",
-      width: 100,
+      title: "Địa chỉ",
+      dataIndex: "dmo_name",
+      width: 300,
     },
     {
       title: "Trạng thái",
       dataIndex: "dmo_name",
-      align: 'center',
-      width: 100,
-      render: (text, record) => {
-        return record?.user?.is_active?.id == 1 && <span style={{ color: '#00A991' }}>Active</span>;
-      }
+      width: 300,
     },
     {
       title: "Thao tác",
@@ -117,12 +96,11 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       dataIndex: "active",
       fixed: "right",
       render: (text, record, row) => {
-        const ids = record?.id
+        const ids = record.dmo_id
         return (
           <div style={{ textAlign: 'center' }}>
             <Tooltip placement="topLeft">
               <Button
-                style={{ width: '100%' }}
                 type="link"
                 icon={<EditOutlined />}
                 onClick={() => onEdit(ids)}

@@ -31,51 +31,14 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
     <div className={className}>
       <Row gutter={[8, 8]}>
         <Col span={4}>
-          <div>Tên nhân sự</div>
           <Input
             allowClear
-            placeholder={"Nhập tên nhân sự"}
+            placeholder={"Filter text"}
             onChange={(e) => {
               _changeQuery({ name: "name", value: e.target.value });
             }}
           />
         </Col>
-        <Col span={4}>
-          <div>Số điện thoại</div>
-          <Input
-            allowClear
-            placeholder={"Nhập SĐT"}
-            onChange={(e) => {
-              _changeQuery({ name: "name", value: e.target.value });
-            }}
-          />
-        </Col>
-        <Col span={4}>
-          <div>Chức vụ</div>
-          <Select
-            style={{ width: '100%' }}
-            placeholder={'Chọn chức vụ'}
-            onChange={(e) => {
-              _changeQuery({ name: "name", value: e.target.value });
-            }}
-          >
-            <Select.Option></Select.Option>
-          </Select>
-        </Col>
-        <Col span={4}>
-          <div>Trạng thái</div>
-          <Select
-            style={{ width: '100%' }}
-
-            placeholder={'Chọn trạng thái'}
-            onChange={(e) => {
-              _changeQuery({ name: "name", value: e.target.value });
-            }}
-          >
-            <Select.Option></Select.Option>
-          </Select>
-        </Col>
-
         <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>
           <Button className="btn-add" onClick={() => setShowModal(true)} > Thêm mới</Button>
         </Col>

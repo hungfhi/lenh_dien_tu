@@ -2,7 +2,6 @@ import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { Button, Modal, Pagination, Row, Tooltip } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
-import moment from "moment";
 import PropTypes from "prop-types";
 import React, { memo } from "react";
 import styled from "styled-components";
@@ -56,60 +55,44 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       },
     },
     {
-      title: "Họ tên",
-      dataIndex: "name",
-      width: 200,
-      render: (text, record) => {
-        return record?.user?.full_name;
-      }
-    },
-    {
-      title: "Căn cước công dân",
-      dataIndex: "citizen_identity",
-      width: 150,
-    },
-    {
-      title: "Chức vụ",
-      dataIndex: "dmo_name",
-      width: 150,
-      render: (text, record) => {
-        return record?.position?.name;
-      }
-    },
-    {
-      title: "Số GPLX",
-      dataIndex: "driving_license",
+      title: "Tên đơn vị",
+      dataIndex: "dmo_id",
       width: 100,
     },
     {
-      title: "Hạng GPLX",
+      title: "Địa chỉ",
       dataIndex: "dmo_name",
-      width: 80,
-      render: (text, record) => {
-        return record?.driving_license_rank_id?.name;
-      }
+      width: 300,
     },
     {
-      title: "Hạn GPLX",
-      dataIndex: "driving_license_expire_date",
-      width: 100,
-      render: (text, record) => {
-        return moment(text).format('DD/MM/YYYY');
-      }
+      title: "Mã số thuế",
+      dataIndex: "dmo_name",
+      width: 150,
     },
     {
       title: "Số điện thoại",
-      dataIndex: "phone",
-      width: 100,
+      dataIndex: "dmo_name",
+      width: 300,
+    },
+    {
+      title: "Email",
+      dataIndex: "dmo_name",
+      width: 300,
     },
     {
       title: "Trạng thái",
       dataIndex: "dmo_name",
-      align: 'center',
-      width: 100,
-      render: (text, record) => {
-        return record?.user?.is_active?.id == 1 && <span style={{ color: '#00A991' }}>Active</span>;
-      }
+      width: 300,
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "dmo_name",
+      width: 300,
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "dmo_name",
+      width: 300,
     },
     {
       title: "Thao tác",
@@ -117,12 +100,11 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       dataIndex: "active",
       fixed: "right",
       render: (text, record, row) => {
-        const ids = record?.id
+        const ids = record.dmo_id
         return (
           <div style={{ textAlign: 'center' }}>
             <Tooltip placement="topLeft">
               <Button
-                style={{ width: '100%' }}
                 type="link"
                 icon={<EditOutlined />}
                 onClick={() => onEdit(ids)}

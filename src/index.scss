@@ -318,6 +318,31 @@ input[type=number] {
 }
 
 .ant-switch-checked {
-  background-color: #00A991 !important;
+  background-color: #01579B !important;
+}
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #000000 !important;
+  font-weight: 500;
+  font-family: Nunito;
+}
+.ant-tabs-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 0;
+  font-size: 14px;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  width: 180px;
+  height: 40px;
+  justify-content: center;
+  background: #F5F5F5 !important;
+}
+.ant-tabs-tab + .ant-tabs-tab {
+  margin: 0 !important;
+}
+.ant-tabs-tab-active {
+  background: #fff !important;
 }
 

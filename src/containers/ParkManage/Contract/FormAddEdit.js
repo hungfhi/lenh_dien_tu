@@ -1,7 +1,8 @@
-import { Button, Col, Form, Input, Row, InputNumber, Select, DatePicker, Switch } from "antd";
+import { Button, Col, Form, Input, Row, InputNumber, Switch, DatePicker, Checkbox } from "antd";
 import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
+import TabTable from "./TabTable";
 
 const { TextArea } = Input;
 const FormAddEdit = ({
@@ -10,7 +11,9 @@ const FormAddEdit = ({
     onSave,
     onHiddenModal,
 }) => {
-
+    const onChange = (checked) => {
+        console.log(`switch to ${checked}`);
+    };
 
     const [form] = Form.useForm();
     const onFinish = async (values) => {
@@ -31,9 +34,9 @@ const FormAddEdit = ({
                 }}
                 form={form}
             >
-                <Row gutter={[40, 0]}>
-                    <Col style={{ margin: 0 }} span={24}>
-                        <div>Tên <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                <Row gutter={[8, 0]}>
+                    <Col span={24}>
+                        <div>Tên bến<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="dmo_name"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
@@ -43,25 +46,17 @@ const FormAddEdit = ({
 
                     </Col>
                     <Col span={12}>
-                        <div>Mã nhân viên <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <div>Số hợp đồng<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="dmo_name"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
                             <Input placeholder={""} />
                         </Form.Item>
+
                     </Col>
                     <Col span={12}>
-                        <div>Số điện thoại <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
-                        <Form.Item
-                            name="dmo_name"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                            <Input placeholder={""} />
-                        </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                        <div>Căn cước công dân <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <div>Mã hợp đồng<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="dmo_name"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
@@ -71,85 +66,72 @@ const FormAddEdit = ({
 
                     </Col>
                     <Col span={24}>
-                        <div>Chức vụ <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <div>Đơn vị vận tải<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="dmo_name"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                            <Select>
-                                <Select.Option>
-                                    Admin
-                                </Select.Option>
-                                <Select.Option>
-                                    Manager
-                                </Select.Option>
-                            </Select>
-                        </Form.Item>
-
-                    </Col>
-                    <Col span={24}>
-                        <div>Số GPLX</div>
-                        <Form.Item
-                            name="dmo_name"
-                            // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
                             <Input placeholder={""} />
                         </Form.Item>
 
                     </Col>
-
-                    <Col span={12}>
-                        <div>Hạng GPLX</div>
-                        <Form.Item
-                            name="dmo_name"
-                            // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                            <Select>
-                                <Select.Option>
-                                    Admin
-                                </Select.Option>
-                                <Select.Option>
-                                    Manager
-                                </Select.Option>
-                            </Select>
+                    <Col span={24}>
+                        <div>Địa chỉ</div>
+                        <Form.Item name="dmo_name">
+                            <Input placeholder={""} />
                         </Form.Item>
 
                     </Col>
                     <Col span={12}>
-                        <div>Hạn GPLX</div>
+                        <div>Mã số thuế<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="dmo_name"
-                            // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Input placeholder={""} />
+                        </Form.Item>
+
+                    </Col>
+                    <Col span={12}>
+                        <div>Email<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <Form.Item
+                            name="dmo_name"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Input placeholder={""} />
+                        </Form.Item>
+
+                    </Col>
+                    <Col span={12}>
+                        <div>Ngày bắt đầu<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                        <Form.Item
+                            name="suc_time_bat_dau"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <DatePicker style={{ width: "100%" }} format="DD-MM-YYYY" allowClear={false} />
+                        </Form.Item>
+
+                    </Col>
+                    <Col span={12}>
+                        <div>Ngày kết thúc<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                        <Form.Item
+                            name="suc_time_xong"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
                             <DatePicker
+                                allowClear={false}
                                 style={{ width: '100%' }}
-                                placeholder="Hạn GPLX"
-                                format={'DD/MM/YYYY'}
+                                format={'DD-MM-YYYY'}
                             />
                         </Form.Item>
-
                     </Col>
-                    <Col span={12}>
-                        <div>Tên tài khoản <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
-                        <Form.Item
-                            name="dmo_name"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                            <Input placeholder={""} />
-                        </Form.Item>
+                    <Col span={24}>
+                        <span style={{ fontWeight: 600 }}>Giá lưu đêm được ký thu trọn gói &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Checkbox defaultChecked style={{ color: '#01579B' }} onChange={onChange} size="small" /></span>
                     </Col>
-                    <Col span={12}>
-                        <div>Mật khẩu <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
-                        <Form.Item
-                            name="dmo_name"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                            <Input placeholder={""} />
-                        </Form.Item>
-                    </Col>
-                    <Col style={{ display: 'flex', justifyContent: '' }} span={24}>
-                        <div>Trạng thái hoạt động <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
-                        <Switch style={{ marginLeft: 50 }} defaultChecked/>
+                    <br />
+                    <br />
+                    <Col span={24}>
+                        <TabTable />
                     </Col>
                 </Row>
                 <div
@@ -167,13 +149,19 @@ const FormAddEdit = ({
                     <Button type="danger" style={{ height: 35 }} onClick={onHiddenModal}>
                         Thoát
                     </Button>
+                    
                     <Button
                         htmlType="submit"
-                        type="primary"
-                        style={{ height: 35, float: "right" }}
+                        style={{ height: 35, float: "right", backgroundColor: '#01579B', color: '#fff',marginLeft:20 }}
                     >
                         {itemSelected ? "Cập nhật" : "Thêm mới"}
                     </Button>
+                    <Button
+                        style={{ height: 35, float: "right", backgroundColor: '#00A991', color: '#fff' }}
+                    >
+                        Lịch sử
+                    </Button>
+                    
                 </div>
             </Form>
         </div>
