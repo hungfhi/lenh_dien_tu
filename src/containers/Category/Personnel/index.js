@@ -11,7 +11,7 @@ import _ from "lodash"
 import { useSelector, } from 'react-redux';
 import { apis, categories } from "configs";
 
-const Index = ({ className, profile }) => {
+const Personnel = ({ className, profile }) => {
 
 
   const user = useSelector((state) => state?.rootReducer?.user);
@@ -131,8 +131,8 @@ const Index = ({ className, profile }) => {
   );
 };
 
-Index.propTypes = {
+Personnel.propTypes = {
   className: PropTypes.any,
 };
-export default styled(Index)`
+export default styled(Personnel)`
  `;
