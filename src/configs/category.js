@@ -18,7 +18,13 @@ const category = {
     },  
     getProduct(payload) {
         return axios.get(`${domain.ServiceAddress}/product`)
-    },  
+    },
+    getPersons(payload) {
+        return axios.get(`${domain.ServiceAddress}/staffs?${qs.stringify(payload)}`);
+    },
+    getDetailPersons(payload) {
+        return axios.get(`${domain.ServiceAddress}/staffs/${payload?.uuid}`);
+    }
 
 }
 
