@@ -8,8 +8,8 @@ import Create from './Create';
 import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
-import { useSelector,  } from 'react-redux';
-import { apis } from "configs";
+import { useSelector, } from 'react-redux';
+import { apis, categories } from "configs";
 
 const Index = ({ className, profile }) => {
 
@@ -25,23 +25,19 @@ const Index = ({ className, profile }) => {
   const [params, setParams] = useState({
     page: 1,
     size: 20,
-    name: "",
+    // name: "",
   });
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-      apis.getBusStation(data)
-          .then(res => {
-              if (res.status === 200) {
-                Ui.showSuccess({ message: "Thành công" });
-              }
-          })
-          .catch(err => {
-              if (err.response?.status === 422 && err.response?.data?.errors) {
-                  message.warn(err.response.data?.errors[0].msg)
-                  message.error('Error!')
-              }
-          })
+    categories.getPersonnels(params).then(res => {
+      console.log(res);
+      setData(res?.data?.data);
+    }).catch(err => {
+      if (err.response?.status === 422 && err.response?.data?.errors) {
+        Ui.showErrors('Có lỗi xảy ra');
+      }
+    })
     await setLoading(false);
   }, [params]);
 
@@ -56,7 +52,19 @@ const Index = ({ className, profile }) => {
   });
 
   const onEdit = useCallback(async (ids) => {
-    setShowModalEdit(true)
+    setShowModalEdit(true);
+        const payload = {
+            uuid:ids
+        }
+        categories.getDetailPersonnel(payload)
+        .then(res => {
+          if (res.status === 200) {
+            setItemSelected(res?.data?.data)
+          }
+        })
+        .catch(err => {
+          Ui.showError({ message: err?.response?.data?.message });
+        })
   }, [])
 
 
@@ -88,7 +96,7 @@ const Index = ({ className, profile }) => {
       </Col>
       <Drawer
         destroyOnClose
-        width={"40%"}
+        width={"80%"}
         title="Thêm mới"
         placement="right"
         closable={true}
@@ -102,7 +110,7 @@ const Index = ({ className, profile }) => {
       </Drawer>
       <Drawer
         destroyOnClose
-        width={"40%"}
+        width={"80%"}
         title="Cập nhật"
         placement="right"
         closable={true}

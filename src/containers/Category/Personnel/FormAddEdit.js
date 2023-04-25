@@ -1,16 +1,16 @@
-import { Button, Col, Form, Input, Row,InputNumber } from "antd";
+import { Button, Col, Form, Input, Row, InputNumber, Select, DatePicker, Switch } from "antd";
 import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
 
 const { TextArea } = Input;
-const FormAddEdit = ({ 
-        className,
-        itemSelected,
-        onSave,
-        onHiddenModal,
-    }) => {
-   
+const FormAddEdit = ({
+    className,
+    itemSelected,
+    onSave,
+    onHiddenModal,
+}) => {
+
 
     const [form] = Form.useForm();
     const onFinish = async (values) => {
@@ -31,27 +31,126 @@ const FormAddEdit = ({
                 }}
                 form={form}
             >
-                <Row gutter={[16, 16]}>
-                    <Col span={24}>
-                        <div>Tên<span style={{ color: '#dc2d2d' }}>*</span></div>
+                <Row gutter={[40, 0]}>
+                    <Col style={{ margin: 0 }} span={24}>
+                        <div>Tên <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
                             name="dmo_name"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input  placeholder={""} />
+                            <Input placeholder={""} />
+                        </Form.Item>
+
+                    </Col>
+                    <Col span={12}>
+                        <div>Mã nhân viên <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <Form.Item
+                            name="dmo_name"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Input placeholder={""} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <div>Số điện thoại <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <Form.Item
+                            name="dmo_name"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Input placeholder={""} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                        <div>Căn cước công dân <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <Form.Item
+                            name="dmo_name"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Input placeholder={""} />
                         </Form.Item>
 
                     </Col>
                     <Col span={24}>
-                        <div>Mô tả</div>
+                        <div>Chức vụ <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
-                            name="dmo_intro"
+                            name="dmo_name"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <TextArea rows={4} placeholder="Nhập mô tả"/>
+                            <Select>
+                                <Select.Option>
+                                    Admin
+                                </Select.Option>
+                                <Select.Option>
+                                    Manager
+                                </Select.Option>
+                            </Select>
+                        </Form.Item>
 
+                    </Col>
+                    <Col span={24}>
+                        <div>Số GPLX</div>
+                        <Form.Item
+                            name="dmo_name"
+                            // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Input placeholder={""} />
+                        </Form.Item>
+
+                    </Col>
+
+                    <Col span={12}>
+                        <div>Hạng GPLX</div>
+                        <Form.Item
+                            name="dmo_name"
+                            // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Select>
+                                <Select.Option>
+                                    Admin
+                                </Select.Option>
+                                <Select.Option>
+                                    Manager
+                                </Select.Option>
+                            </Select>
+                        </Form.Item>
+
+                    </Col>
+                    <Col span={12}>
+                        <div>Hạn GPLX</div>
+                        <Form.Item
+                            name="dmo_name"
+                            // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <DatePicker
+                                style={{ width: '100%' }}
+                                placeholder="Hạn GPLX"
+                                format={'DD/MM/YYYY'}
+                            />
+                        </Form.Item>
+
+                    </Col>
+                    <Col span={12}>
+                        <div>Tên tài khoản <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <Form.Item
+                            name="dmo_name"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Input placeholder={""} />
                         </Form.Item>
                     </Col>
-                    
+                    <Col span={12}>
+                        <div>Mật khẩu <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <Form.Item
+                            name="dmo_name"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Input placeholder={""} />
+                        </Form.Item>
+                    </Col>
+                    <Col style={{ display: 'flex', justifyContent: '' }} span={24}>
+                        <div>Trạng thái hoạt động <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <Switch style={{ marginLeft: 50 }} defaultChecked/>
+                    </Col>
                 </Row>
                 <div
                     className="action"
@@ -81,7 +180,7 @@ const FormAddEdit = ({
     );
 };
 FormAddEdit.propTypes = {
-  className: PropTypes.any,
+    className: PropTypes.any,
 };
 export default styled(FormAddEdit)`
   .btn-add {
