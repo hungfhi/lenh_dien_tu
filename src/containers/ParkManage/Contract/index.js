@@ -152,4 +152,5 @@ Index.propTypes = {
   className: PropTypes.any,
 };
 export default styled(Index)`
+
  `;

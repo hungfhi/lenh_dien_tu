@@ -1,5 +1,5 @@
 import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { Button, Modal, Pagination, Row, Checkbox, Tooltip,  } from "antd";
+import { Button, Modal, Pagination, Row, Checkbox, Tooltip, } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
 import PropTypes from "prop-types";
@@ -227,7 +227,8 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
       <DefineTable
         columns={columns}
         dataSource={data}
-        scroll={{ y: "calc(100vh - 330px)" }}
+        scroll={{ x: '100%' }}
+        rowKey="code_111"
         pagination={false}
       />
       {/* {renderContent()} */}

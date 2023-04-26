@@ -147,8 +147,9 @@ const OTPList = memo(({ className, data, params, total, setParams, setTotal }) =
       <DefineTable
         columns={columns}
         dataSource={data}
+        rowKey="id"
         pagination={false}
-        scroll={{ y: "calc(100vh - 330px)" }}
+        scroll={{ x: "calc(700px + 50%)" }}
       />
       {/* {renderContent()} */}
 

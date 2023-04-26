@@ -31,8 +31,8 @@ const StyledInput = ({
         dataSource={dataSource}
         rowSelection={rowSelection}
         expandable={expandable}
-        // scroll={scroll == false ? false : objScroll}
-        scroll={scroll == false ? false : scroll}
+        scroll={scroll == false ? false : objScroll}
+        // scroll={scroll == false ? false : scroll}
         sticky={true}
         // rowKey={() => {
         //   return new Date().getTime()
@@ -50,7 +50,7 @@ StyledInput.propTypes = {
 };
 export default styled(StyledInput)`
   .ant-row-end {
-    // display: none
+    display: none
   }
   .ant-table-ping-right:not(.ant-table-has-fix-right)
     .ant-table-container::after {
@@ -71,7 +71,7 @@ export default styled(StyledInput)`
     font-style: normal;
     font-weight: 550;
     font-size: 14px;
-    line-height: 16px;
+    line-height: 25px;
     text-align: center;
     // text-transform: uppercase;
     padding-top: 5px !important;
