@@ -122,14 +122,13 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       dataIndex: "active",
       fixed: "right",
       render: (text, record, row) => {
-        const ids = record.dmo_id
         return (
           <div style={{ textAlign: 'center' }}>
             <Tooltip placement="topLeft">
               <Button
                 type="link"
                 icon={<EditOutlined />}
-                onClick={() => onEdit(ids)}
+                onClick={() => onEdit(record)}
               />
             </Tooltip>
           </div>

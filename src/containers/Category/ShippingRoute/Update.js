@@ -10,7 +10,9 @@ const UpdateDinhMuc = ({
     className, 
     onHiddenModalEdit,
     onRefreshList,
-    itemSelected
+    itemSelected,
+    stations,
+    province
   }) => {
     const onSave = useCallback(async (values) => {
     })
@@ -20,6 +22,8 @@ const UpdateDinhMuc = ({
           itemSelected={itemSelected}
           onSave={onSave}
           onHiddenModal={onHiddenModalEdit}
+          stations={stations}
+          province={province}
         />
     </div>
   );

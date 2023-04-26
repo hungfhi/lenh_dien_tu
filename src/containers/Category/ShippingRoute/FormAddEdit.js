@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row,InputNumber, Switch } from "antd";
+import { Button, Col, Form, Input, Row,InputNumber, Switch, Select } from "antd";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import styled from "styled-components";
@@ -10,6 +10,8 @@ const FormAddEdit = ({
         itemSelected,
         onSave,
         onHiddenModal,
+        stations,
+        province
     }) => {
    
     const [isActive, setActive] = useState(true)
@@ -26,6 +28,7 @@ const FormAddEdit = ({
         console.log(!value)
     }
     
+    console.log('itemSelected',itemSelected)
     return (
         <div className={className}>
             <Form
@@ -34,8 +37,13 @@ const FormAddEdit = ({
                 onFinish={onFinish}
                 name="control-hooks"
                 initialValues={{
-                    dmo_name: itemSelected && itemSelected.dmo_name || '',
-                    dmo_intro: itemSelected && itemSelected.dmo_intro || '',
+                    "route_code": itemSelected && itemSelected.id || '',
+                    "start_province_id": itemSelected && itemSelected.start_province?.id || '',
+                    "end_province_id": itemSelected && itemSelected.end_province?.id || '',
+                    "start_station_id": itemSelected && itemSelected.start_station?.id || '',
+                    "end_station_id": itemSelected && itemSelected.end_station?.id || '',
+                    "name": itemSelected && itemSelected.name || '',
+                    "is_active": itemSelected && itemSelected.is_active?.value ===1?true: false || true,
                 }}
                 form={form}
             >
@@ -43,46 +51,90 @@ const FormAddEdit = ({
                     <Col span={12}>
                         <div>Tỉnh đi<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
-                            name="dmo_name"
+                            name="start_province_id"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input placeholder={""} />
+                            <Select
+                                showSearch
+                                placeholder="Chọn tỉnh đi"
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                }
+                                options={province}
+                            />
                         </Form.Item>
 
                     </Col>
                     <Col span={12}>
-                        <div>Bến đi</div>
+                        <div>Bến đi <span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
-                            name="dmo_intro"
+                            name="start_station_id"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input placeholder={""} />
+                            <Select
+                                showSearch
+                                placeholder="Chọn bến đi"
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                }
+                                options={stations}
+                            />
                         </Form.Item>
                     </Col>
                      <Col span={12}>
                         <div>Tỉnh đến<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
-                            name="dmo_name"
+                            name="end_province_id"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input placeholder={""} />
+                            <Select
+                                showSearch
+                                placeholder="Chọn tỉnh đến"
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                }
+                                options={province}
+                            />
                         </Form.Item>
 
                     </Col>
                     <Col span={12}>
-                        <div>Bến đến</div>
+                        <div>Bến đến <span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
-                            name="dmo_intro"
+                            name="end_station_id"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input placeholder={""} />
+                            <Select
+                                showSearch
+                                placeholder="Chọn bến đến"
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                }
+                                options={stations}
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <div>Mã tuyến<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
-                            name="dmo_name"
+                            name="route_code"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input placeholder={""} />
+                            <Input placeholder={"Nhập mã tuyến"} />
+                        </Form.Item>
+
+                    </Col>
+                     <Col span={12}>
+                        <div>Tên tuyến<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <Form.Item
+                            name="name"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Input placeholder={"Nhập tên tuyến"} />
                         </Form.Item>
 
                     </Col>
