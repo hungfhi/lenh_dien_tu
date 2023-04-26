@@ -9,7 +9,7 @@ import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
 import { useSelector,  } from 'react-redux';
-import { apis } from "configs";
+import { category } from "configs";
 
 const Index = ({ className, profile }) => {
 
@@ -30,10 +30,12 @@ const Index = ({ className, profile }) => {
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-      apis.getBusStation(data)
+      category.getRoute(params)
           .then(res => {
               if (res.status === 200) {
-                Ui.showSuccess({ message: "Thành công" });
+                console.log('res?.data?.data',res?.data?.data)
+                setData(res?.data?.data)
+                setTotal(res?.data?.meta?.total)
               }
           })
           .catch(err => {
@@ -81,6 +83,7 @@ const Index = ({ className, profile }) => {
             loadding={loadding}
             data={data}
             onEdit={onEdit}
+            total={total}
             onRefreshList={onRefreshList}
             setParams={setParams}
           />

@@ -25,7 +25,7 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
   );
 
   const onChangeStatus = (value) => {
-    console.log('huhu',value)
+  
     if(value !== undefined) 
       _changeQuery({ name: "is_active", value: value?1: 0 });
       else 
