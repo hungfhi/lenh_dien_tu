@@ -1,7 +1,8 @@
-import { Button, Col, Form, Input, Row,InputNumber } from "antd";
+import { Button, Col, Form, Input, Row,InputNumber, Switch } from "antd";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { DIMENSION_PADDING_NORMAL, DIMENSION_PADDING_SMALL } from 'theme/dimensions';
 
 const { TextArea } = Input;
 const FormAddEdit = ({ 
@@ -11,13 +12,20 @@ const FormAddEdit = ({
         onHiddenModal,
     }) => {
    
-
+    const [isActive, setActive] = useState(true)
+    
     const [form] = Form.useForm();
     const onFinish = async (values) => {
         onSave(values)
     };
     const onFinishFailed = () => {
     };
+
+    const onActive =(value)=>{
+        setActive(!value)
+        console.log(!value)
+    }
+    
     return (
         <div className={className}>
             <Form
@@ -33,7 +41,7 @@ const FormAddEdit = ({
             >
                 <Row gutter={[16, 16]}>
                     <Col span={12}>
-                        <div>Tuyến<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <div>Tỉnh đi<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="dmo_name"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
@@ -43,7 +51,25 @@ const FormAddEdit = ({
 
                     </Col>
                     <Col span={12}>
-                        <div>Cự ly</div>
+                        <div>Bến đi</div>
+                        <Form.Item
+                            name="dmo_intro"
+                        >
+                            <Input placeholder={""} />
+                        </Form.Item>
+                    </Col>
+                     <Col span={12}>
+                        <div>Tỉnh đến<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <Form.Item
+                            name="dmo_name"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Input placeholder={""} />
+                        </Form.Item>
+
+                    </Col>
+                    <Col span={12}>
+                        <div>Bến đến</div>
                         <Form.Item
                             name="dmo_intro"
                         >
@@ -51,24 +77,30 @@ const FormAddEdit = ({
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <div>Đơn giá vận chuyển</div>
+                        <div>Mã tuyến<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
-                            name="dmo_intro"
+                            name="dmo_name"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
                             <Input placeholder={""} />
                         </Form.Item>
+
                     </Col>
-                    <Col span={12}>
-                    </Col>
-                    <Col span={12}>
-                        <div>Đơn giá vận chuyển</div>
+                     <Col span={24}>
+                       
+                       <Row>
+                         <div style={{paddingTop: DIMENSION_PADDING_SMALL/2, paddingRight: DIMENSION_PADDING_NORMAL}}>Trạng thái hoạt động<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
-                            name="dmo_intro"
+                            name="is_active"
+                            rules={[{ required: false, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input placeholder={""} />
+                             <Switch
+                                onChange={(e) => onActive(e)}
+                                size='small'
+                                defaultChecked={isActive}
+                                />
                         </Form.Item>
-                    </Col>
-                    <Col span={12}>
+                       </Row>
                     </Col>
                     
                 </Row>
