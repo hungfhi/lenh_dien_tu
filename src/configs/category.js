@@ -24,7 +24,22 @@ const category = {
     },
     getDetailPersons(payload) {
         return axios.get(`${domain.ServiceAddress}/staffs/${payload?.uuid}`);
-    }
+    },
+    getRoute(payload) {
+        return axios.get(`${domain.ServiceAddress}/routes`);
+    },
+    createRoute(payload) {
+        return axios.post(`${domain.ServiceAddress}/routes`, payload);
+    },
+    getDetailRoute(payload) {
+        return axios.get(`${domain.ServiceAddress}/routes/${payload?.id}`);
+    },
+    updateRoute(payload) {
+        return axios.put(`${domain.ServiceAddress}/routes/${payload?.id}`, payload);
+    },
+    deleteRoute(payload) {
+        return axios.put(`${domain.ServiceAddress}/routes/${payload?.id}`);
+    },
 
 }
 

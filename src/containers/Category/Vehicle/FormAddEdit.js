@@ -129,7 +129,7 @@ const FormAddEdit = ({
                             name="insurance_expired_date"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                             <DatePicker format='DD-MM-YYYY' onChange={onChangeDateInsurance} />
+                             <DatePicker style={{width:'100%'}} format='DD-MM-YYYY' onChange={onChangeDateInsurance} />
                         </Form.Item>
 
                     </Col>
@@ -140,14 +140,14 @@ const FormAddEdit = ({
                             name="registration_expired_date"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                             <DatePicker format='DD-MM-YYYY' onChange={onChangeDateRegistration} />
+                             <DatePicker style={{width:'100%'}} format='DD-MM-YYYY' onChange={onChangeDateRegistration} />
                         </Form.Item>
 
                     </Col>
 
                     <Row>
                        
-                        <div style={{...styles.txtTitle, paddingTop: DIMENSION_PADDING_SMALL, paddingRight: DIMENSION_PADDING_NORMAL}}>Trạng thái hoạt động<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <div style={{...styles.txtTitle, paddingTop: DIMENSION_PADDING_SMALL/2, paddingRight: DIMENSION_PADDING_NORMAL}}>Trạng thái hoạt động<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="is_active"
                             rules={[{ required: false, message: 'Vui lòng nhập dữ liệu' }]}
@@ -193,8 +193,7 @@ FormAddEdit.propTypes = {
 
 const styles = {
     txtTitle:{
-        fontWeight: 'bold',
-        fontSize: 12
+       
     }
 }
 export default styled(FormAddEdit)`
