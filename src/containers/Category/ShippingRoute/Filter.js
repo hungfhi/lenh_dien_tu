@@ -6,10 +6,9 @@ import PropTypes from "prop-types";
 
 let inputTimer = null;
 
-const Filter = ({ className, setParams, params, setShowModal, operator }) => {
+const Filter = ({ className, setParams, params, setShowModal, operator, stations, allRoute }) => {
   const _changeQuery = useCallback(
     (payload) => {
-      console.log('payload',payload)
       if (inputTimer) {
         clearTimeout(inputTimer);
       }
@@ -32,6 +31,30 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
       _changeQuery({ name: "is_active", value: 1 });
   }
 
+  const onChangeRoute = (value) => {
+    if(value !== undefined) 
+      _changeQuery({ name: "route_id", value: value });
+      else 
+      _changeQuery({ name: "route_id", value: '' });
+  }
+
+
+  const onChangeStartStation = (value) => {
+    if(value !== undefined) 
+      _changeQuery({ name: "station_start_id", value: value });
+      else 
+      _changeQuery({ name: "station_start_id", value: '' });
+  }
+
+
+  const onChangeEndStation = (value) => {
+    if(value !== undefined) 
+      _changeQuery({ name: "station_end_id", value: value });
+      else 
+      _changeQuery({ name: "station_end_id", value: '' });
+  }
+
+
   
 
   return (
@@ -39,12 +62,13 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
       <Row gutter={[8, 8]}>
         <Col span={4}>
           <div>Tuyến</div>
-          <Input
+          <Select
+            placeholder="Tuyến"
+            optionFilterProp="children"
             allowClear
-            placeholder={"Biển kiểm soát"}
-            onChange={(e) => {
-              _changeQuery({ name: "license_plate", value: e.target.value });
-            }}
+            style={{width:'100%'}}
+            onChange={onChangeRoute}
+            options={allRoute}
           />
         </Col>
       
@@ -67,27 +91,31 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
                 label: 'Không hoạt động',
               },
               
-          ]}
-            />
+            ]}
+          />
         </Col>
           <Col span={4}>
           <div>Bến đi</div>
-          <Input
+          <Select
+            placeholder="Bến đi"
+            optionFilterProp="children"
             allowClear
-            placeholder={"Số điện thoại"}
-            onChange={(e) => {
-              _changeQuery({ name: "registration_number", value: e.target.value });
-            }}
+            style={{width:'100%'}}
+            onChange={onChangeStartStation}
+       
+            options={stations}
           />
         </Col>
           <Col span={4}>
           <div>Bến đến</div>
-          <Input
+          <Select
+            placeholder="Bến đến"
+            optionFilterProp="children"
             allowClear
-            placeholder={"Số điện thoại"}
-            onChange={(e) => {
-              _changeQuery({ name: "registration_number", value: e.target.value });
-            }}
+            style={{width:'100%'}}
+            onChange={onChangeEndStation}
+       
+            options={stations}
           />
         </Col>
         <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>

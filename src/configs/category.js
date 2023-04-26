@@ -26,7 +26,7 @@ const category = {
         return axios.get(`${domain.ServiceAddress}/staffs/${payload?.uuid}`);
     },
     getRoute(payload) {
-        return axios.get(`${domain.ServiceAddress}/routes`);
+        return axios.get(`${domain.ServiceAddress}/routes?${qs.stringify(payload)}`);
     },
     createRoute(payload) {
         return axios.post(`${domain.ServiceAddress}/routes`, payload);
@@ -39,6 +39,9 @@ const category = {
     },
     deleteRoute(payload) {
         return axios.put(`${domain.ServiceAddress}/routes/${payload?.id}`);
+    },
+    getStation(payload) {
+        return axios.get(`${domain.ServiceAddress}/stations`);
     },
 
 }
