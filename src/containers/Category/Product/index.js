@@ -8,6 +8,7 @@ import Filter from './Filter';
 import TableList from './TableList';
 import Create from './Create';
 import Update from './Update';
+import _ from "lodash"
 
 const Product = ({ className }) => {
 
