@@ -12,10 +12,10 @@ const category = {
     },
     getDetailVehicle(payload) {
         return axios.get(`${domain.ServiceAddress}/vehicle/${payload?.id}`)
-    },  
+    },
     updateVehicle(payload) {
-        return axios.put(`${domain.ServiceAddress}/vehicle/${payload?.id}`,payload)
-    },  
+        return axios.put(`${domain.ServiceAddress}/vehicle/${payload?.id}`, payload)
+    },
     getProduct(payload) {
         return axios.get(`${domain.ServiceAddress}/product`)
     },
@@ -24,8 +24,19 @@ const category = {
     },
     getDetailPersons(payload) {
         return axios.get(`${domain.ServiceAddress}/staffs/${payload?.uuid}`);
+    },
+    createPerson(payload) {
+        return axios.post(`${domain.ServiceAddress}/staffs`, payload);
+    },
+    updatePerson(id, payload) {
+        return axios.put(`${domain.ServiceAddress}/staffs/${id}`, payload);
+    },
+    getDrivingLicenseRank() {
+        return axios.get(`${domain.ServiceAddress}/staffs/driving-license-rank`);
+    },
+    getPositions() {
+        return axios.get(`${domain.ServiceAddress}/positions`);
     }
-
 }
 
 export default category
