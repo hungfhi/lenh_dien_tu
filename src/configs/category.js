@@ -17,7 +17,7 @@ const category = {
         return axios.put(`${domain.ServiceAddress}/vehicle/${payload?.id}`, payload)
     },
     getProduct(payload) {
-        return axios.get(`${domain.ServiceAddress}/product`)
+        return axios.get(`${domain.ServiceAddress}/product?${qs.stringify(payload)}`);
     },
     getPersons(payload) {
         return axios.get(`${domain.ServiceAddress}/staffs?${qs.stringify(payload)}`);
@@ -55,7 +55,15 @@ const category = {
     getStation(payload) {
         return axios.get(`${domain.ServiceAddress}/stations`);
     },
-
+    getDetailProduct(payload) {
+        return axios.get(`${domain.ServiceAddress}/product/${payload?.uuid}`);
+    },
+    updateProduct(id, payload) {
+        return axios.put(`${domain.ServiceAddress}/product/${id}`, payload);
+    },
+    createProduct(payload) {
+        return axios.post(`${domain.ServiceAddress}/product`, payload);
+    }
 }
 
 export default category

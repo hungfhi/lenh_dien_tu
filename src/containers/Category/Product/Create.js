@@ -20,24 +20,9 @@ const Create = ({
   const onSave = async (values) => {
     const payload = {
       ...values,
-      first_name: values?.first_name,
-      last_name: values?.last_name,
-      staff_code: values?.staff_code,
-      phone: values?.phone,
-      citizen_identity: values?.citizen_identity,
-      position: values?.position,
-      driving_license: values?.driving_license,
-      driving_license_rank_id: values?.driving_license_rank_id,
-      driving_license_expire_date: moment(values.driving_license_expire_date).format('YYYY-MM-DD'),
-      status: values?.status ? 1 : 0,
-      gender: values?.gender,
-      date_of_birth: moment(values?.date_of_birth).format('YYYY-MM-DD'),
-      address: values?.address,
-      modelable_id: values?.modelable_id || 1,
-      modelable_type: values?.modelable_type || '',
-      email: '',
+      name: values?.name
     };
-    category.createPerson(payload).then(res => {
+    category.createProduct(payload).then(res => {
       if (res.status === 200) {
         Ui.showSuccess({ message: "Thành công" });
         onRefreshList()
