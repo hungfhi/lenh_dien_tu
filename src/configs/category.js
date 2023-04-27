@@ -65,10 +65,10 @@ const category = {
         return axios.post(`${domain.ServiceAddress}/product`, payload);
     },
     getProvinceCity(payload) {
-        return axios.get(`${domain.ServiceAddress}/provinces?${qs.stringify(payload)}`);
+        return axios.get(`${domain.ServiceAddress}/administrative/provinces?${qs.stringify(payload)}`);
     },
     getDistrict(payload) {
-        return axios.get(`${domain.ServiceAddress}/district?${qs.stringify(payload)}`);
+        return axios.get(`${domain.ServiceAddress}/administrative/districts?${qs.stringify(payload)}`);
     }
 }
 
