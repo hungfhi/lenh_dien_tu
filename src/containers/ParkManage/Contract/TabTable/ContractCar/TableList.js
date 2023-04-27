@@ -1,37 +1,52 @@
-import { Checkbox, Dropdown, Pagination, Row, Space, Menu } from "antd";
+import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import { Button, Modal, Pagination, Row, Checkbox, Tooltip,  } from "antd";
 import "antd/dist/antd.css";
+import { DefineTable } from "components";
 import PropTypes from "prop-types";
-import moment from 'moment';
-import React, { memo, useState } from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
-import { DefinePagination, DefineTable } from "components";
-const OTPList = memo(({ className, data, params, total, setParams, setTotal }) => {
+import { Ui } from "utils/Ui";
 
+const { confirm } = Modal;
 
+const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList }) => {
 
-  const menu = (
-    <Menu
-      items={[
-        {
-          key: '1',
-          label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com" style={{ color: '#01579B', textAlign: 'center', display: 'flex', justifyContent: 'center', fontWeight: 600 }}>
-              Duyệt
-            </a>
-          ),
-        },
-        {
-          key: '1',
-          label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com" style={{ color: '#01579B', textAlign: 'center', display: 'flex', justifyContent: 'center', fontWeight: 600 }}>
-              Xem hoá đơn
-            </a>
-          ),
-        },
-      ]}
-    />
-  );
+  const onChange = async (e, value, row) => {
+    const params = {
+      active: value ? 0 : 1,
+    };
+    // const result = await ServiceBase.requestJson({
+    //   method: "PUT",
+    //   url: `/v1/route-group/${row.id}`,
+    //   data: params,
+    // });
+    // if (result.hasErrors) {
+    //   Ui.showErrors(result.errors);
+    // } else {
+    //   Ui.showSuccess({ message: "Cập nhật trạng thái thành công." });
+    //   onRefreshList()
+    // }
+  };
 
+  const onActive = (e, value, row) => {
+    let name = ''
+    if (e == false) {
+      name = 'Bạn muốn bỏ active nhóm tuyến này không?'
+    } else {
+      name = 'Bạn muốn active nhóm tuyến này không?'
+    }
+    confirm({
+      title: `Thông báo`,
+      icon: <ExclamationCircleOutlined />,
+      content: `${name}`,
+      okText: "Có",
+      cancelText: "Không",
+      onOk() {
+        onChange(e, value, row);
+      },
+      onCancel() { },
+    });
+  };
 
 
   const columns = [
@@ -49,71 +64,136 @@ const OTPList = memo(({ className, data, params, total, setParams, setTotal }) =
       },
     },
     {
-      title: "Mã tuyến",
-      dataIndex: "phone",
-      width: 200,
+      title: "Mã HĐ",
+      dataIndex: "dmo_id",
+      width: 100,
     },
     {
-      title: "Tên tuyến",
-      dataIndex: "content",
-      width: 200,
+      title: "Số HĐ",
+      dataIndex: "dmo_name",
+      width: 100,
     },
     {
-      title: "Biển kiểm soát",
-      dataIndex: "otp",
-      width: 110,
+      title: "Tên hợp đồng",
+      dataIndex: "dmo_name",
+      width: 200,
     },
     {
       title: "Thời hạn",
-      dataIndex: "otp",
-      width: 110,
+      dataIndex: "dmo_name",
+      width: 200,
     },
     {
-      title: "Số chuyến",
-      dataIndex: "otp",
-      width: 110,
+      title: "Tên khách hàng",
+      dataIndex: "dmo_name",
+      width: 150,
     },
     {
-      title: "Sô ghế",
-      dataIndex: "otp",
-      width: 110,
+      title: "Bến MĐ",
+      dataIndex: "is_active",
+      width: 80,
+      render: (value, row) => {
+        return (
+          <div style={{ textAlign: 'center' }}>
+            <Checkbox
+              onChange={(e) => onActive(e, value, row)}
+              checked={value}
+              size='small'
+            />
+          </div>
+        )
+      },
     },
     {
-      title: "Giá dịch vụ",
-      dataIndex: "otp",
-      width: 110,
+      title: "Bến GL",
+      dataIndex: "is_active",
+      width: 80,
+      render: (value, row) => {
+        return (
+          <div style={{ textAlign: 'center' }}>
+            <Checkbox
+              onChange={(e) => onActive(e, value, row)}
+              checked={value}
+              size='small'
+            />
+          </div>
+        )
+      },
     },
     {
-      title: "Trạng thái",
-      dataIndex: "otp",
-      width: 110,
+      title: "Bến GB",
+      dataIndex: "is_active",
+      width: 80,
+      render: (value, row) => {
+        return (
+          <div style={{ textAlign: 'center' }}>
+            <Checkbox
+              onChange={(e) => onActive(e, value, row)}
+              checked={value}
+              size='small'
+            />
+          </div>
+        )
+      },
     },
     {
-      title: "Trả sau",
-      dataIndex: "otp",
-      width: 110,
-      render: () => {
-        return <div style={{textAlign:'center' }}>
-          <Checkbox></Checkbox>
-        </div>
-      }
+      title: "Lưu đêm",
+      dataIndex: "is_active",
+      width: 80,
+      render: (value, row) => {
+        return (
+          <div style={{ textAlign: 'center' }}>
+            <Checkbox
+              onChange={(e) => onActive(e, value, row)}
+              checked={value}
+              size='small'
+            />
+          </div>
+        )
+      },
+    },
+    {
+      title: "Active",
+      dataIndex: "is_active",
+      width: 80,
+      render: (value, row) => {
+        return (
+          <div style={{ textAlign: 'center' }}>
+            <Checkbox
+              onChange={(e) => onActive(e, value, row)}
+              checked={value}
+              size='small'
+            />
+          </div>
+        )
+      },
+    },
+    {
+      title: "Địa chỉ",
+      dataIndex: "dmo_name",
+      width: 250,
     },
     {
       title: "Thao tác",
-      dataIndex: "otp",
-      width: 110,
-      render: () => {
-        return <div style={{ textAlign: 'center', justifyContent: 'center', }}>
-          <Dropdown overlay={menu} >
-            <a>
-              <i class="fa-solid fa-ellipsis"></i>
-            </a>
-          </Dropdown>
-        </div>
+      width: 80,
+      dataIndex: "active",
+      fixed: "right",
+      render: (text, record, row) => {
+        const ids = record.dmo_id
+        return (
+          <div style={{ textAlign: 'center' }}>
+            <Tooltip placement="topLeft">
+              <Button
+                type="link"
+                icon={<EditOutlined />}
+                onClick={() => onEdit(ids)}
+              />
+            </Tooltip>
+          </div>
+        )
       }
-    },
+    }
   ];
-
   // const renderContent = () => {
   //   return (
   //     <Row justify="end" style={{ marginBottom: 5, marginTop: 5 }}>
@@ -147,44 +227,17 @@ const OTPList = memo(({ className, data, params, total, setParams, setTotal }) =
       <DefineTable
         columns={columns}
         dataSource={data}
-        pagination={false}
         scroll={{ y: "calc(100vh - 330px)" }}
+        pagination={false}
       />
       {/* {renderContent()} */}
 
     </div >
   );
 });
-OTPList.propTypes = {
+TableList.propTypes = {
   className: PropTypes.any,
 };
-export default styled(OTPList)`
-// .ant-table-thead > tr > th {
-//   background-color: rgba(233,195,43);
-//   padding-top: 5px !important;
-//   padding-bottom: 5px !important;
-//   padding-left: 5px !important;
-//   padding-right: 5px !important;
-// }
-  .ant-table-thead > tr > th {
-    border-top: 1px solid rgb(130 126 126 / 12%) !important;
-  }
-  .ant-table-cell {
-  border-left: 1px solid rgb(130 126 126 / 12%) !important;
-  }
-  .fix_drawer{
-    padding-left : 100px
-  }
-  .ant-table-summary {
-    font-weight: bold;
-    text-align: right;
-    .ant-table-cell {
-        background-color: rgb(242,243,248);
-        position: sticky;
-        z-index: 10000;
-        bottom: 0;
-    }
-  }
-  
+export default styled(TableList)`
   
 `;

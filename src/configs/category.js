@@ -36,7 +36,26 @@ const category = {
     },
     getPositions() {
         return axios.get(`${domain.ServiceAddress}/positions`);
-    }
+    },
+    getRoute(payload) {
+        return axios.get(`${domain.ServiceAddress}/routes?${qs.stringify(payload)}`);
+    },
+    createRoute(payload) {
+        return axios.post(`${domain.ServiceAddress}/routes`, payload);
+    },
+    getDetailRoute(payload) {
+        return axios.get(`${domain.ServiceAddress}/routes/${payload?.id}`);
+    },
+    updateRoute(payload) {
+        return axios.put(`${domain.ServiceAddress}/routes/${payload?.id}`, payload);
+    },
+    deleteRoute(payload) {
+        return axios.put(`${domain.ServiceAddress}/routes/${payload?.id}`);
+    },
+    getStation(payload) {
+        return axios.get(`${domain.ServiceAddress}/stations`);
+    },
+
 }
 
 export default category

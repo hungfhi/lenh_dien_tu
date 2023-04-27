@@ -5,11 +5,12 @@ import { DefineTable } from "components";
 import PropTypes from "prop-types";
 import React, { memo } from "react";
 import styled from "styled-components";
+import { COLOR_GREEN, COLOR_RED } from 'theme/colors';
 import { Ui } from "utils/Ui";
 
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit,  onRefreshList }) => {
+const TableList = memo(({ className, data, params, setParams, onEdit,  onRefreshList, setTotal,total }) => {
 
   const onChange = async (e, value, row) => {
     const params = {
@@ -55,59 +56,79 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       },
     },
     {
-      title: "Tên đơn vị",
-      dataIndex: "dmo_id",
+      title: "Mã tuyến",
+      dataIndex: "route_code",
       width: 100,
+      render: (text, record, row) => {
+        return (
+          <div  style={{ textAlign: 'center' }}>
+            {text}
+          </div>
+        )
+      }
     },
     {
-      title: "Địa chỉ",
-      dataIndex: "dmo_name",
+      title: "Tên tuyến",
+      dataIndex: "name",
       width: 300,
+      render: (text, record, row) => {
+        return (
+          <div  style={{ textAlign: 'center' }}>
+            {text}
+          </div>
+        )
+      }
     },
     {
-      title: "Mã số thuế",
-      dataIndex: "dmo_name",
+      title: "Bến đi",
+      dataIndex: "start_station",
       width: 150,
+       render: (text, record, row) => {
+        return (
+          <div  style={{ textAlign: 'center' }}>
+            {text?.name}
+          </div>
+        )
+      }
     },
     {
-      title: "Số điện thoại",
-      dataIndex: "dmo_name",
-      width: 300,
-    },
-    {
-      title: "Email",
-      dataIndex: "dmo_name",
-      width: 300,
+      title: "Bến đến",
+      dataIndex: "end_station",
+      width: 150,
+      render: (text, record, row) => {
+        return (
+          <div  style={{ textAlign: 'center' }}>
+            {text?.name}
+          </div>
+        )
+      }
     },
     {
       title: "Trạng thái",
-      dataIndex: "dmo_name",
-      width: 300,
+      dataIndex: "is_active",
+      width: 150,
+      render: (text, record, row) => {
+        return (
+          <div style={{ textAlign: 'center', color: text ===1? COLOR_GREEN:COLOR_RED }}>
+            {text===1 ? 'Active': 'Disable'}
+          </div>
+        )
+      }
     },
-    {
-      title: "Trạng thái",
-      dataIndex: "dmo_name",
-      width: 300,
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "dmo_name",
-      width: 300,
-    },
+    
     {
       title: "Thao tác",
       width: 80,
       dataIndex: "active",
       fixed: "right",
       render: (text, record, row) => {
-        const ids = record.dmo_id
         return (
           <div style={{ textAlign: 'center' }}>
             <Tooltip placement="topLeft">
               <Button
                 type="link"
                 icon={<EditOutlined />}
-                onClick={() => onEdit(ids)}
+                onClick={() => onEdit(record)}
               />
             </Tooltip>
           </div>

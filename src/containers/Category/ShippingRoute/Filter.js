@@ -1,16 +1,12 @@
-import React, { useCallback, useState } from "react";
-import { Row, Col, DatePicker, Select, Button, Input, Spin } from "antd";
+import React, { useCallback } from "react";
+import { Row, Col, Select, Button, Input } from "antd";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import _ from "lodash";
-import { TuyenSelect } from "components";
-import moment from "moment";
-const { RangePicker } = DatePicker;
-const { Option } = Select;
+
 
 let inputTimer = null;
 
-const Filter = ({ className, setParams, params, setShowModal, operator }) => {
+const Filter = ({ className, setParams, params, setShowModal, operator, stations, allRoute }) => {
   const _changeQuery = useCallback(
     (payload) => {
       if (inputTimer) {
@@ -27,16 +23,99 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
     [setParams]
   );
 
+  const onChangeStatus = (value) => {
+    
+    if(value !== undefined) 
+      _changeQuery({ name: "is_active", value: value?1: 0 });
+      else 
+      _changeQuery({ name: "is_active", value: 1 });
+  }
+
+  const onChangeRoute = (value) => {
+    if(value !== undefined) 
+      _changeQuery({ name: "route_id", value: value });
+      else 
+      _changeQuery({ name: "route_id", value: '' });
+  }
+
+
+  const onChangeStartStation = (value) => {
+    if(value !== undefined) 
+      _changeQuery({ name: "station_start_id", value: value });
+      else 
+      _changeQuery({ name: "station_start_id", value: '' });
+  }
+
+
+  const onChangeEndStation = (value) => {
+    if(value !== undefined) 
+      _changeQuery({ name: "station_end_id", value: value });
+      else 
+      _changeQuery({ name: "station_end_id", value: '' });
+  }
+
+
+  
+
   return (
     <div className={className}>
       <Row gutter={[8, 8]}>
         <Col span={4}>
-          <Input
+          <div>Tuyến</div>
+          <Select
+            placeholder="Tuyến"
+            optionFilterProp="children"
             allowClear
-            placeholder={"Filter text"}
-            onChange={(e) => {
-              _changeQuery({ name: "name", value: e.target.value });
-            }}
+            style={{width:'100%'}}
+            onChange={onChangeRoute}
+            options={allRoute}
+          />
+        </Col>
+      
+        <Col span={4}>
+          <div>Trạng thái</div>
+          <Select
+            placeholder="Trạng thái"
+            optionFilterProp="children"
+            allowClear
+            style={{width:'100%'}}
+            onChange={onChangeStatus}
+       
+            options={[
+              {
+                value: true,
+                label: 'Hoạt động',
+              },
+              {
+                value: false,
+                label: 'Không hoạt động',
+              },
+              
+            ]}
+          />
+        </Col>
+          <Col span={4}>
+          <div>Bến đi</div>
+          <Select
+            placeholder="Bến đi"
+            optionFilterProp="children"
+            allowClear
+            style={{width:'100%'}}
+            onChange={onChangeStartStation}
+       
+            options={stations}
+          />
+        </Col>
+          <Col span={4}>
+          <div>Bến đến</div>
+          <Select
+            placeholder="Bến đến"
+            optionFilterProp="children"
+            allowClear
+            style={{width:'100%'}}
+            onChange={onChangeEndStation}
+       
+            options={stations}
           />
         </Col>
         <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>
