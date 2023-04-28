@@ -37,12 +37,13 @@ const Personnel = ({ className, profile }) => {
     category.getPersons(params).then(res => {
      
       setData(res?.data?.data);
+      setLoading(false);
     }).catch(err => {
       if (err.response?.status === 422 && err.response?.data?.errors) {
         Ui.showErrors('Có lỗi xảy ra');
       }
     });
-    await setLoading(false);
+    // await setLoading(false);
   }, [params]);
   const onHiddenModal = useCallback(() => {
     setShowModal(false);

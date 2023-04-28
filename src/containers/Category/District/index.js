@@ -11,11 +11,12 @@ import _ from "lodash"
 const District = ({className}) => {
 
     const [listDistrict, setListDistrict] = useState([]);
+    const [total, setTotal] = useState(0);
     const [params, setParams] = useState({
         page: 1,
         size: 20,
         name: '',
-        limit: 60
+        limit: 20
     });
     const [loading, setLoading] = useState(false);
 
@@ -25,11 +26,13 @@ const District = ({className}) => {
             if (res.status === 200) {
                 console.log(res);
                 setListDistrict(res?.data?.data);
+                setTotal(res?.meta?.total);
+                setLoading(false);
             }
         }).catch(err => {
             Ui.showError({ message: 'Có lỗi xảy ra' });
         })
-        await setLoading(false);
+        // await setLoading(false);
     }, [params]);
 
     useEffect(() => {
@@ -48,7 +51,7 @@ const District = ({className}) => {
                         // loadding={loadding}
                         data={listDistrict}
                         // onEdit={onEdit}
-                        // total={total}
+                        total={total}
                         // onRefreshList={onRefreshList}
                         setParams={setParams}
                     // setTotal={setTotal}

@@ -23,13 +23,14 @@ const ProvinceCity = ({className}) => {
         setLoading(true);
         category.getProvinceCity(params).then(res => {
             if (res.status === 200) {
-                console.log(res);
+                // console.log(res);
                 setListProvinceCity(res?.data?.data);
+                setLoading(false);
             }
         }).catch(err => {
             Ui.showError({ message: 'Có lỗi xảy ra' });
         })
-        await setLoading(false);
+        // await setLoading(false);
     }, [params]);
 
     useEffect(() => {
