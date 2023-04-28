@@ -24,98 +24,50 @@ const Filter = ({ className, setParams, params, setShowModal, operator, stations
   );
 
   const onChangeStatus = (value) => {
-    
-    if(value !== undefined) 
-      _changeQuery({ name: "is_active", value: value?1: 0 });
-      else 
+
+    if (value !== undefined)
+      _changeQuery({ name: "is_active", value: value ? 1 : 0 });
+    else
       _changeQuery({ name: "is_active", value: 1 });
   }
 
   const onChangeRoute = (value) => {
-    if(value !== undefined) 
+    if (value !== undefined)
       _changeQuery({ name: "route_id", value: value });
-      else 
+    else
       _changeQuery({ name: "route_id", value: '' });
   }
 
 
   const onChangeStartStation = (value) => {
-    if(value !== undefined) 
+    if (value !== undefined)
       _changeQuery({ name: "station_start_id", value: value });
-      else 
+    else
       _changeQuery({ name: "station_start_id", value: '' });
   }
 
 
   const onChangeEndStation = (value) => {
-    if(value !== undefined) 
+    if (value !== undefined)
       _changeQuery({ name: "station_end_id", value: value });
-      else 
+    else
       _changeQuery({ name: "station_end_id", value: '' });
   }
 
 
-  
+
 
   return (
     <div className={className}>
       <Row gutter={[8, 8]}>
         <Col span={4}>
-          <div>Tuyến</div>
-          <Select
-            placeholder="Tuyến"
-            optionFilterProp="children"
+          <div>Tên loại xe</div>
+          <Input
             allowClear
-            style={{width:'100%'}}
-            onChange={onChangeRoute}
-            options={allRoute}
-          />
-        </Col>
-      
-        <Col span={4}>
-          <div>Trạng thái</div>
-          <Select
-            placeholder="Trạng thái"
-            optionFilterProp="children"
-            allowClear
-            style={{width:'100%'}}
-            onChange={onChangeStatus}
-       
-            options={[
-              {
-                value: true,
-                label: 'Hoạt động',
-              },
-              {
-                value: false,
-                label: 'Không hoạt động',
-              },
-              
-            ]}
-          />
-        </Col>
-          <Col span={4}>
-          <div>Bến đi</div>
-          <Select
-            placeholder="Bến đi"
-            optionFilterProp="children"
-            allowClear
-            style={{width:'100%'}}
-            onChange={onChangeStartStation}
-       
-            options={stations}
-          />
-        </Col>
-          <Col span={4}>
-          <div>Bến đến</div>
-          <Select
-            placeholder="Bến đến"
-            optionFilterProp="children"
-            allowClear
-            style={{width:'100%'}}
-            onChange={onChangeEndStation}
-       
-            options={stations}
+            placeholder={"Nhập tên loại xe"}
+            onChange={(e) => {
+              _changeQuery({ name: "name", value: e.target.value });
+            }}
           />
         </Col>
         <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>

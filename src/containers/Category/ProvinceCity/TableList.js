@@ -2,15 +2,16 @@ import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { Button, Modal, Pagination, Row, Tooltip } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
+import moment from "moment";
 import PropTypes from "prop-types";
 import React, { memo } from "react";
 import styled from "styled-components";
-import { COLOR_GREEN, COLOR_RED } from 'theme/colors';
+import { COLOR_GREEN, COLOR_RED } from "theme/colors";
 import { Ui } from "utils/Ui";
 
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit,  onRefreshList, setTotal,total }) => {
+const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList }) => {
 
   const onChange = async (e, value, row) => {
     const params = {
@@ -38,9 +39,6 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
     });
   };
 
-
-
-
   const columns = [
     {
       title: "#",
@@ -56,85 +54,21 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       },
     },
     {
-      title: "Mã tuyến",
-      dataIndex: "route_code",
-      width: 100,
-      render: (text, record, row) => {
-        return (
-          <div  style={{ textAlign: 'center' }}>
-            {text}
-          </div>
-        )
-      }
+      title: "Mã vùng",
+      dataIndex: "code",
+      width: 150,
     },
     {
-      title: "Tên tuyến",
+      title: "Tên tỉnh/ thành phố",
       dataIndex: "name",
+      width: 500,
+    },
+    {
+      title: "Slug",
+      dataIndex: "slug",
       width: 300,
-      render: (text, record, row) => {
-        return (
-          <div  style={{ textAlign: 'center' }}>
-            {text}
-          </div>
-        )
-      }
-    },
-    {
-      title: "Bến đi",
-      dataIndex: "start_station",
-      width: 150,
-       render: (text, record, row) => {
-        return (
-          <div  style={{ textAlign: 'center' }}>
-            {text?.name}
-          </div>
-        )
-      }
-    },
-    {
-      title: "Bến đến",
-      dataIndex: "end_station",
-      width: 150,
-      render: (text, record, row) => {
-        return (
-          <div  style={{ textAlign: 'center' }}>
-            {text?.name}
-          </div>
-        )
-      }
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "is_active",
-      width: 150,
-      render: (text, record, row) => {
-        return (
-          <div style={{ textAlign: 'center', color: text ===1? COLOR_GREEN:COLOR_RED }}>
-            {text===1 ? 'Active': 'Disable'}
-          </div>
-        )
-      }
     },
     
-    {
-      title: "Thao tác",
-      width: 80,
-      dataIndex: "active",
-      fixed: "right",
-      render: (text, record, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            <Tooltip placement="topLeft">
-              <Button
-                type="link"
-                icon={<EditOutlined />}
-                onClick={() => onEdit(record)}
-              />
-            </Tooltip>
-          </div>
-        )
-      }
-    }
   ];
 
   // const renderContent = () => {

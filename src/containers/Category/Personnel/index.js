@@ -18,14 +18,18 @@ const Personnel = ({ className, profile }) => {
 
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
-  const [loadding, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isShowModal, setShowModal] = useState(false);
   const [itemSelected, setItemSelected] = useState(null);
   const [isShowModalEdit, setShowModalEdit] = useState(false)
   const [params, setParams] = useState({
     page: 1,
     size: 20,
-    // name: "",
+    name: "",
+    phone: '',
+    status: '',
+    position_id: '',
+    per_page: null
   });
 
   const getDataTable = useCallback(async () => {
@@ -33,15 +37,14 @@ const Personnel = ({ className, profile }) => {
     category.getPersons(params).then(res => {
      
       setData(res?.data?.data);
+      setLoading(false);
     }).catch(err => {
       if (err.response?.status === 422 && err.response?.data?.errors) {
         Ui.showErrors('Có lỗi xảy ra');
       }
-    })
-    await setLoading(false);
+    });
+    // await setLoading(false);
   }, [params]);
-
-
   const onHiddenModal = useCallback(() => {
     setShowModal(false);
   });
@@ -83,10 +86,9 @@ const Personnel = ({ className, profile }) => {
         <Filter params={params} setParams={setParams} setShowModal={setShowModal} />
       </Col>
       <Col xs={24}>
-        <Spin spinning={loadding}>
+        <Spin spinning={loading}>
           <TableList
             params={params}
-            loadding={loadding}
             data={data}
             onEdit={onEdit}
             onRefreshList={onRefreshList}

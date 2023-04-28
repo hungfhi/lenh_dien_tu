@@ -29,6 +29,9 @@ import Vehicle from './Category/Vehicle';
 import ShippingRoute from './Category/ShippingRoute';
 import CarPark from './Manage/CarPark';
 import Contract from './ParkManage/Contract';
+import Product from './Category/Product';
+import ProvinceCity from './Category/ProvinceCity';
+import District from './Category/District';
 const AppRouter = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state?.rootReducer?.user);
@@ -190,6 +193,30 @@ const AppRouter = () => {
           element={
             <PrivateRoute>
               <Contract />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/product"
+          element={
+            <PrivateRoute>
+              <Product />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/province-city"
+          element={
+            <PrivateRoute>
+              <ProvinceCity />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/district"
+          element={
+            <PrivateRoute>
+              <District />
             </PrivateRoute>
           }
         />

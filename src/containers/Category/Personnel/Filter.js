@@ -1,16 +1,34 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Row, Col, DatePicker, Select, Button, Input, Spin } from "antd";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import { TuyenSelect } from "components";
 import moment from "moment";
+import { category } from "configs";
+import { Ui } from "utils/Ui";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 let inputTimer = null;
 
 const Filter = ({ className, setParams, params, setShowModal, operator }) => {
+
+  const [listPositions, setListPositions] = useState([]);
+  const getListPotisions = useCallback(async () => {
+    category.getPositions().then(res => {
+      setListPositions(res?.data?.data);
+    }).catch(err => {
+      if (err.response?.status === 422 && err.response?.data?.errors) {
+        Ui.showErrors('Có lỗi xảy ra');
+      }
+    })
+  }, []);
+
+  useEffect(() => {
+    getListPotisions();
+  }, []);
+
   const _changeQuery = useCallback(
     (payload) => {
       if (inputTimer) {
@@ -46,7 +64,7 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
             allowClear
             placeholder={"Nhập SĐT"}
             onChange={(e) => {
-              _changeQuery({ name: "name", value: e.target.value });
+              _changeQuery({ name: "phone", value: e.target.value });
             }}
           />
         </Col>
@@ -55,24 +73,29 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
           <Select
             style={{ width: '100%' }}
             placeholder={'Chọn chức vụ'}
+            allowClear={true}
             onChange={(e) => {
-              _changeQuery({ name: "name", value: e.target.value });
+              _changeQuery({ name: "position_id", value: e });
             }}
           >
-            <Select.Option></Select.Option>
+            {listPositions && listPositions.map((item, index) => {
+
+              return <Select.Option value={item?.id}>{item?.name}</Select.Option>
+            })}
           </Select>
         </Col>
         <Col span={4}>
           <div>Trạng thái</div>
           <Select
             style={{ width: '100%' }}
-
+            allowClear={true}
             placeholder={'Chọn trạng thái'}
             onChange={(e) => {
-              _changeQuery({ name: "name", value: e.target.value });
+              _changeQuery({ name: "status", value: e });
             }}
           >
-            <Select.Option></Select.Option>
+            <Select.Option value={0}>Đã bị khóa</Select.Option>
+            <Select.Option value={1}>Đang hoạt động</Select.Option>
           </Select>
         </Col>
 

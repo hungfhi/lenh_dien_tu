@@ -6,11 +6,12 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import React, { memo } from "react";
 import styled from "styled-components";
+import { COLOR_GREEN, COLOR_RED } from "theme/colors";
 import { Ui } from "utils/Ui";
 
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit,  onRefreshList }) => {
+const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList }) => {
 
   const onChange = async (e, value, row) => {
     const params = {
@@ -38,9 +39,6 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
     });
   };
 
-
-
-
   const columns = [
     {
       title: "#",
@@ -60,7 +58,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       dataIndex: "name",
       width: 200,
       render: (text, record) => {
-        return record?.user?.full_name;
+        return <div>{record?.first_name} {record?.last_name}</div>;
       }
     },
     {
@@ -106,9 +104,9 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       title: "Trạng thái",
       dataIndex: "dmo_name",
       align: 'center',
-      width: 100,
+      width: 120,
       render: (text, record) => {
-        return record?.user?.is_active?.id == 1 && <span style={{ color: '#00A991' }}>Active</span>;
+        return <span style={{ color: record?.status?.id == 1 ? COLOR_GREEN : COLOR_RED }}>{record?.status?.name}</span>;
       }
     },
     {
