@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../index.scss";
 import { Link, useLocation } from "react-router-dom"
 import _ from 'lodash'
-import { Breadcrumb, Layout, Menu, Modal, Dropdown, Button } from 'antd';
+import { Breadcrumb, Layout, Menu, Modal, Dropdown, Button, Select, Form, Row, Col, Spin } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setProfileUser } from 'redux/action'
@@ -11,21 +11,31 @@ import { DIMENSION_PADDING_NORMAL, DIMENSION_PADDING_SMALL } from 'theme/dimensi
 import { UserOutlined, RightOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { Ui } from "utils/Ui";
 import styled from 'styled-components';
-import { auth } from '../configs'
+import { auth, users } from '../configs'
 import { DIMENSION_PADDING_MEDIUM } from 'theme/dimensions';
 import SubMenu from 'antd/lib/menu/SubMenu';
 const { confirm } = Modal;
 const { Content, Sider } = Layout;
 
-const LayoutContent = ({ children, className }) => {
+const LayoutContent = ({ children, className, typeSearch = "local", }) => {
+  const [form] = Form.useForm();
   const location = useLocation()
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state?.rootReducer?.user);
   const menu = useSelector((state) => state?.rootReducer?.menu);
   const pathnames = location?.pathname.split("/").filter((item) => item);
-  const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
   const [collapsed, setCollapsed] = useState(false);
+  const [dataCurrent, setDataCurrent] = useState([]);
+  const [itemSelected, setItemSelected] = useState(undefined);
+  const [mechants, setMechants] = useState([]);
+  const [models, setModels] = useState([]);
+  const [stations, setStations] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fetching, setFetching] = useState(false);
+  const localSearchFunc = (input, option) =>
+    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 
   const onClickMenu = (item) => () => {
     if (item.key == 'logout') {
@@ -70,6 +80,79 @@ const LayoutContent = ({ children, className }) => {
 
   }
 
+
+
+  const transportUnit = () => {
+    const payload = {
+      phone: user?.phone,
+      password: user?.password
+    }
+
+    users.getTransportUnit(payload)
+      .then(res => {
+        if (res.status === 200) {
+          setItemSelected(res?.data?.data?.current_merchant?.merchant_used?.id)
+          setMechants(res?.data?.data?.available_merchants)
+          setDataCurrent(res?.data?.data?.current_merchant)
+        }
+      })
+      .catch(err => {
+        // Ui.showError({ message: err?.response?.data?.message });
+      })
+  }
+
+  const onChangeInit = (value) => {
+    setModels(value?.models)
+    setStations(value?.stations)
+  }
+
+
+  useEffect(() => {
+    if (user) {
+      transportUnit();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (itemSelected && isModalOpen) {
+      onChangeInit(mechants.find(item => item.id === itemSelected))
+    }
+  }, [itemSelected, isModalOpen]);
+
+
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const onFinish = async (values) => {
+    const payload = {
+      merchant_id: values?.merchant,
+      model_id: values?.model,
+      station_id: values?.station
+    }
+
+    users.onTransportUnit(payload)
+      .then(res => {
+        if (res.status === 200) {
+          Ui.showSuccess({ message: "Thay đổi nhà xe thành công" });
+          setIsModalOpen(false);
+        }
+      })
+      .catch(err => {
+        Ui.showError({ message: err?.response?.data?.message });
+      })
+  };
+  const onFinishFailed = () => {
+  };
+
+
   const items = [
     {
       key: '1',
@@ -89,13 +172,12 @@ const LayoutContent = ({ children, className }) => {
     },
   ];
 
-
   return (
     <Layout
       className={className}
       style={{ minHeight: '100vh', }}
     >
-      <Sider className='cms_sidebar' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} trigger={null}>
+      <Sider className='cms_sidebar' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} trigger={null} >
         <div
           style={{ height: 45 }}
           className="cursor-pointer"
@@ -103,18 +185,18 @@ const LayoutContent = ({ children, className }) => {
             // navigate('/user')
           }}
         >
-          <div className='mx-6 my-2 font-600 fs-20' style={{textAlign:collapsed ?'center':'',display:collapsed ?'flex':'',justifyContent:collapsed ? 'center':''}}>
+          <div className='mx-6 my-2 font-600 fs-20' style={{ textAlign: collapsed ? 'center' : '', display: collapsed ? 'flex' : '', justifyContent: collapsed ? 'center' : '' }}>
             {
               !collapsed ? (
 
-                <div style={{ width: 180, color:'#01579B' }}>Admin Havaz <Button
+                <div style={{ width: 180, color: '#01579B' }}>Admin Havaz <Button
                   type="text"
                   onClick={toggleCollapsed}
                   style={{
                     marginBottom: 16,
                   }}
                 >
-                  <MenuUnfoldOutlined style={{color:'#01579B'}}/>
+                  <MenuUnfoldOutlined style={{ color: '#01579B' }} />
                 </Button></div>
               ) :
                 <Button
@@ -124,7 +206,7 @@ const LayoutContent = ({ children, className }) => {
                     marginBottom: 16,
                   }}
                 >
-                  <MenuFoldOutlined style={{color:'#01579B'}} />
+                  <MenuFoldOutlined style={{ color: '#01579B' }} />
                 </Button>
             }
           </div>
@@ -142,8 +224,8 @@ const LayoutContent = ({ children, className }) => {
               _render = (
                 <SubMenu
                   key={item.id}
-                  title={<div style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 14}}>{item.name}</div>}
-                  icon={<i className={`fa ${item.icon} pr-2`} style={{ paddingRight: DIMENSION_PADDING_SMALL,color:'#01579B',display:'flex',justifyContent:'center',alignItems:'center',fontSize:14 }} />}
+                  title={<div style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 14 }}>{item.name}</div>}
+                  icon={<i className={`fa ${item.icon} pr-2`} style={{ paddingRight: DIMENSION_PADDING_SMALL, color: '#01579B', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: 14 }} />}
                   className="menuCustomerItem"
                 >
                   {_.map(item.children, (_item, _index) => {
@@ -153,7 +235,7 @@ const LayoutContent = ({ children, className }) => {
                         // icon={<i className={`fa ${_item.icon} pr-2`} />}
                         style={{ backgroundColor: '#fff' }}
                       >
-                        <div onClick={onClickMenu(_item)} style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 14,paddingLeft:20 }}>
+                        <div onClick={onClickMenu(_item)} style={{ color: '#01579B', fontFamily: 'Nunito', fontWeight: 700, fontSize: 14, paddingLeft: 20 }}>
                           {_item.name}
                         </div>
                       </Menu.Item>
@@ -187,14 +269,134 @@ const LayoutContent = ({ children, className }) => {
                 </Breadcrumb.Item>
               })}
             </Breadcrumb>
-            <div className='fs-14' style={{ color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL, fontWeight:600 }}><Dropdown
-              menu={{
-                items,
-              }}
-              placement="bottomLeft"
-            >
-              <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4, }}><i class="fa-solid fa-user"></i>&nbsp;&nbsp;{user?.info?.username}</div>
-            </Dropdown></div>
+            <div className='fs-14' style={{ color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL, fontWeight: 600, display: 'flex' }}>
+              {mechants.length !== 0 ? <Button type="dashed" onClick={showModal} >
+                Đổi nhà xe
+              </Button>  : ''}
+
+              <Modal title="Thay đổi nhà xe" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ height: 320 }}>
+                <Form
+                  onFinishFailed={onFinishFailed}
+                  className={className}
+                  onFinish={onFinish}
+                  name="control-hooks"
+                  initialValues={{
+                    merchant: dataCurrent && dataCurrent.merchant_used?.id || '',
+                    model: dataCurrent && dataCurrent.model_used?.id || '',
+                    station: dataCurrent && dataCurrent.station_used || '',
+                  }}
+                  form={form}
+                >
+                  <Row>
+                    <Col span={24}>
+                      <div>Nhà xe<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                      <Form.Item
+                        name="merchant"
+                        rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="Nhà xe"
+                          showSearch
+                          className={className}
+                          loading={fetching}
+                          filterOption={typeSearch === "local" ? localSearchFunc : false}
+                          notFoundContent={fetching ? <Spin size="small" /> : "Không có dữ liệu"}
+                          onSelect={(e, value) => {
+                            onChangeInit(value)
+                            setItemSelected(value?.value)
+                            form.setFieldsValue({
+                              model: '',
+                              station: ''
+                            })
+                          }}
+                        >
+                          {_.map(mechants, (item, itemId) => (
+                            <Select.Option stations={item?.stations} models={item?.models} key={itemId} value={item.id}>
+                              {item.name}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                      <div>Bến xe<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                      <Form.Item
+                        name="model"
+                        rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="Bến xe"
+                          showSearch
+                          className={className}
+                          filterOption={typeSearch === "local" ? localSearchFunc : false}
+                        >
+                          {_.map(models, (item, itemId) => (
+                            <Select.Option stations={item?.stations} models={item?.models} key={itemId} value={item.id}>
+                              {item.name}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                      <div>Nhà xe<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                      <Form.Item
+                        name="station"
+                        rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="Bến xe"
+                          showSearch
+                          className={className}
+                          filterOption={typeSearch === "local" ? localSearchFunc : false}
+                        >
+                          {_.map(stations, (item, itemId) => (
+                            <Select.Option key={itemId} value={item.id}>
+                              {item.name}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <div
+                    className="action"
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      bottom: 0,
+                      width: "100%",
+                      padding: "10px 20px",
+                      background: "#fff",
+                      textAlign: "left",
+                    }}
+                  >
+                    <Button type="danger" style={{ height: 35 }} onClick={handleCancel}>
+                      Thoát
+                    </Button>
+                    <Button
+                      htmlType="submit"
+                      type="primary"
+                      style={{ height: 35, float: "right" }}
+                    >
+                      {itemSelected ? "Cập nhật" : "Lưu"}
+                    </Button>
+                  </div>
+                </Form>
+              </Modal>
+              &nbsp;&nbsp;
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                placement="bottomLeft"
+              >
+                <div style={{ cursor: 'pointer', padding: "4px 4px", borderRadius: 4, }}><i class="fa-solid fa-user"></i>&nbsp;&nbsp;{user?.info?.username}</div>
+              </Dropdown>
+            </div>
           </div>
           <div className="site-layout-background" style={{ minHeight: '90%', borderRadius: 10, margin: DIMENSION_PADDING_MEDIUM }}  >
             <div style={{ padding: DIMENSION_PADDING_MEDIUM }}>
@@ -210,6 +412,10 @@ const LayoutContent = ({ children, className }) => {
 export default styled(LayoutContent)`
 .ant-menu-inline ul{
   background-color: #ffffff;
+}
+
+.ant-modal-content {
+  height: 350px !important;
 }
 
 .ant-menu-inline,
@@ -308,5 +514,6 @@ export default styled(LayoutContent)`
   .ant-menu-submenu-arrow {
     color: #01579B !important;
   }
+  
 }
 `

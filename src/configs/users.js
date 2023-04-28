@@ -39,7 +39,15 @@ const users = {
     },
     getPermissions(payload) {
         return axios.get(`${domain.ServiceAddress}/permissions?${qs.stringify(payload)}`)
-      },
+    },
+
+    getTransportUnit(payload){
+        return axios.get(`${domain.ServiceAddress}/users/get-current-merchant?${qs.stringify(payload)}`)
+    },
+
+    onTransportUnit(payload){
+        return axios.post(`${domain.ServiceAddress}/users/set-current-merchant`,payload)
+    }
 
 
 

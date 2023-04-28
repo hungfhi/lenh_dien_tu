@@ -1,243 +1,268 @@
-import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { Button, Modal, Pagination, Row, Checkbox, Tooltip,  } from "antd";
-import "antd/dist/antd.css";
+import {
+  Dropdown,
+  Form,
+  Modal,
+  Menu
+} from "antd";
 import { DefineTable } from "components";
-import PropTypes from "prop-types";
-import React, { memo } from "react";
+import moment from "moment";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import { Ui } from "utils/Ui";
 
+import {
+  ExclamationCircleOutlined
+} from "@ant-design/icons";
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList }) => {
+let time;
+let format = "DD-MM-YYYY";
 
-  const onChange = async (e, value, row) => {
-    const params = {
-      active: value ? 0 : 1,
+const Social = ({ profile, className, idTabs, showModal,data, user_id }) => {
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+
+  const [isEdit, setIsEdit] = useState(false);
+  const loadApi = useCallback(async () => {
+    setLoading(true);
+  }, []);
+  useEffect(() => {
+    clearTimeout(time);
+    time = setTimeout(loadApi, 800);
+  }, [idTabs]);
+  // create
+  const createRote = useCallback(async (param) => {
+    
+  }, []);
+  // update
+  const updateRote = useCallback(async (param) => {
+  }, []);
+
+
+  const menu = (
+    <Menu
+      items={[
+        {
+          key: '1',
+          label: (
+            <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com" style={{ color: '#01579B', textAlign: 'center', display: 'flex', justifyContent: 'center', fontWeight: 600 }}>
+              Duyệt
+            </a>
+          ),
+        },
+        {
+          key: '1',
+          label: (
+            <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com" style={{ color: '#01579B', textAlign: 'center', display: 'flex', justifyContent: 'center', fontWeight: 600 }}>
+              Xem hoá đơn
+            </a>
+          ),
+        },
+      ]}
+    />
+  );
+
+
+  const onFinish = (value) => {
+    let param = {
+      ...value,
+      date: value.date && moment(value.date).format("YYYY-MM-DD"),
+      start_date: value.start_date && moment(value.start_date).format("YYYY-MM-DD"),
+      end_date: value.end_date && moment(value.end_date).format("YYYY-MM-DD"),
+      user_id: isEdit == false ? user_id : undefined,
+      id: isEdit ? form.getFieldValue()?.id : undefined,
     };
-    // const result = await ServiceBase.requestJson({
-    //   method: "PUT",
-    //   url: `/v1/route-group/${row.id}`,
-    //   data: params,
-    // });
-    // if (result.hasErrors) {
-    //   Ui.showErrors(result.errors);
-    // } else {
-    //   Ui.showSuccess({ message: "Cập nhật trạng thái thành công." });
-    //   onRefreshList()
-    // }
-  };
-
-  const onActive = (e, value, row) => {
-    let name = ''
-    if (e == false) {
-      name = 'Bạn muốn bỏ active nhóm tuyến này không?'
+ 
+    if (isEdit) {
+      updateRote(param);
     } else {
-      name = 'Bạn muốn active nhóm tuyến này không?'
+      createRote(param);
     }
-    confirm({
-      title: `Thông báo`,
-      icon: <ExclamationCircleOutlined />,
-      content: `${name}`,
-      okText: "Có",
-      cancelText: "Không",
-      onOk() {
-        onChange(e, value, row);
-      },
-      onCancel() { },
-    });
   };
 
-
-  const columns = [
+  let columns = [
     {
-      title: "#",
-      dataIndex: "index",
-      width: 60,
+      title: () => (
+        <>
+          <div style={{ textAlign: "center" }}>#</div>
+        </>
+      ),
+      width: 50,
+      dataIndex: "node_code",
       fixed: "left",
-      align: 'center',
-      render: (value, row, index) => {
-        const stringIndex = `${((params.page - 1) * params.size + index)}`;
-        return (
-          <h5 style={{ textAlign: 'center' }}>{params.page === 1 ? index + 1 : parseInt(stringIndex) + 1}</h5>
-        );
+      render: (text, record, index) => (
+        <>
+          <div>{index + 1}</div>
+        </>
+      ),
+    },
+
+    {
+      title: () => (
+        <>
+          <div style={{ textAlign: "center" }}>Mã tuyến</div>
+        </>
+      ),
+      width: 100,
+      dataIndex: "status",
+      render: (text, record, index) => {
+        return {
+          children: <div>{text}</div>,
+        };
       },
     },
     {
-      title: "Mã HĐ",
-      dataIndex: "dmo_id",
-      width: 100,
-    },
-    {
-      title: "Số HĐ",
-      dataIndex: "dmo_name",
-      width: 100,
-    },
-    {
-      title: "Tên hợp đồng",
-      dataIndex: "dmo_name",
+      title: () => (
+        <>
+          <div style={{ textAlign: "center" }}>Tên tuyến</div>
+        </>
+      ),
+      dataIndex: "date",
       width: 200,
+
+      render: (text, record, index) => {
+        return {
+          children: <div>{text}</div>,
+        };
+      },
+    },
+
+    {
+      title: "BKS",
+      dataIndex: "start_date",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text}</div>,
+        };
+      },
     },
     {
       title: "Thời hạn",
-      dataIndex: "dmo_name",
-      width: 200,
-    },
-    {
-      title: "Tên khách hàng",
-      dataIndex: "dmo_name",
-      width: 150,
-    },
-    {
-      title: "Bến MĐ",
-      dataIndex: "is_active",
-      width: 80,
-      render: (value, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            <Checkbox
-              onChange={(e) => onActive(e, value, row)}
-              checked={value}
-              size='small'
-            />
-          </div>
-        )
+      dataIndex: "end_date",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text}</div>,
+        };
       },
     },
     {
-      title: "Bến GL",
-      dataIndex: "is_active",
-      width: 80,
-      render: (value, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            <Checkbox
-              onChange={(e) => onActive(e, value, row)}
-              checked={value}
-              size='small'
-            />
-          </div>
-        )
+      title: "Số chuyến",
+      dataIndex: "subsidy_form",
+      width: 100,
+      align: "center",
+      render: (text, record, index) => {
+        return {
+          children: <div>{text}</div>,
+        };
       },
     },
     {
-      title: "Bến GB",
-      dataIndex: "is_active",
-      width: 80,
-      render: (value, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            <Checkbox
-              onChange={(e) => onActive(e, value, row)}
-              checked={value}
-              size='small'
-            />
-          </div>
-        )
+      title: "Số ghế",
+      dataIndex: "command",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text?.date}</div>,
+        };
       },
     },
     {
-      title: "Lưu đêm",
-      dataIndex: "is_active",
-      width: 80,
-      render: (value, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            <Checkbox
-              onChange={(e) => onActive(e, value, row)}
-              checked={value}
-              size='small'
-            />
-          </div>
-        )
+      title: "Giá dịch vụ",
+      dataIndex: "command",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text?.date}</div>,
+        };
       },
     },
     {
-      title: "Active",
-      dataIndex: "is_active",
-      width: 80,
-      render: (value, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            <Checkbox
-              onChange={(e) => onActive(e, value, row)}
-              checked={value}
-              size='small'
-            />
-          </div>
-        )
+      title: "Trạng thái",
+      dataIndex: "command",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text?.date}</div>,
+        };
       },
     },
     {
-      title: "Địa chỉ",
-      dataIndex: "dmo_name",
-      width: 250,
+      title: "Trả sau",
+      dataIndex: "command",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text?.date}</div>,
+        };
+      },
     },
     {
       title: "Thao tác",
-      width: 80,
-      dataIndex: "active",
-      fixed: "right",
-      render: (text, record, row) => {
-        const ids = record.dmo_id
-        return (
-          <div style={{ textAlign: 'center' }}>
-            <Tooltip placement="topLeft">
-              <Button
-                type="link"
-                icon={<EditOutlined />}
-                onClick={() => onEdit(ids)}
-              />
-            </Tooltip>
-          </div>
-        )
+      dataIndex: "otp",
+      width: 110,
+      fixed:'right',
+      render: () => {
+        return <div style={{ textAlign: 'center', justifyContent: 'center', }}>
+          <Dropdown overlay={menu} >
+            <a>
+              <i class="fa-solid fa-ellipsis"></i>
+            </a>
+          </Dropdown>
+        </div>
       }
-    }
+    },
   ];
-  // const renderContent = () => {
-  //   return (
-  //     <Row justify="end" style={{ marginBottom: 5, marginTop: 5 }}>
-  //       <Pagination
-  //         onShowSizeChange={(current, size) => {
-  //           setParams((prevState) => {
-  //             let nextState = { ...prevState };
-  //             nextState.page = 1;
-  //             nextState.size = size;
-  //             return nextState;
-  //           });
-  //         }}
-  //         onChange={(page, pageSize) => {
-  //           setParams((prevState) => {
-  //             let nextState = { ...prevState };
-  //             nextState.page = page;
-  //             return nextState;
-  //           });
-  //         }}
-  //         total={total}
-  //         current={params.page}
-  //         pageSize={params.size}
-  //         showSizeChanger
-  //       />
-  //     </Row>
-  //   );
-  // };
-
+  const onEdit = (record, index) => {
+    form.setFieldsValue({
+      ...record,
+      date: record?.date && moment(record?.date, "YYYY-MM-DD"),
+      start_date:
+        record?.start_date && moment(record?.start_date, "YYYY-MM-DD"),
+      end_date: record?.end_date && moment(record?.end_date, "YYYY-MM-DD"),
+    });
+    setIsEdit(true);
+  };
+  const onRemove = (record) => {
+    confirm({
+      title: "Bạn có muốn xóa chế độ BHXH này không?",
+      icon: <ExclamationCircleOutlined />,
+      // content:
+      //   "Lệnh điều động sẽ được gửi đến tất cả các nhân viên bạn đã chọn",
+      okText: "Đồng ý",
+      okType: "primary",
+      onOk() {
+        onApi(record);
+      },
+      onCancel() {},
+    });
+  };
+  const onApi = async (row) => {
+  };
   return (
     <div className={className}>
-      <DefineTable
-        columns={columns}
-        dataSource={data}
-        scroll={{ y: "calc(100vh - 330px)" }}
-        pagination={false}
-      />
-      {/* {renderContent()} */}
-
-    </div >
+        <DefineTable
+          bordered
+          columns={columns}
+          dataSource={data}
+          scroll={{ x: 'calc(700px + 10%)', y: 240 }}
+          pagination={false}
+        />
+    </div>
   );
-});
-TableList.propTypes = {
-  className: PropTypes.any,
 };
-export default styled(TableList)`
-  
+
+export default styled(Social)`
+  .customer {
+    .anticon-plus-circle {
+      font-size: 26px !important;
+      color: green;
+    }
+  }
+  .customerClose {
+    .anticon-close-circle {
+      font-size: 26px !important;
+      color: red;
+    }
+  }
 `;

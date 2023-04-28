@@ -60,11 +60,9 @@ const ContractCar = ({ className, profile }) => {
 
   return (
     <Row className={className} gutter={[16, 16]}>
-      <Col span={24}>
-        {/* <Filter params={params} setParams={setParams} /> */}
-      </Col >
+      
       <Spin spinning={loadding}>
-        <Col span={24}>
+        <Col span={24} style={{width:'calc(100% - 10px)'}}>
           <TableList
             data={data}
             params={params}
