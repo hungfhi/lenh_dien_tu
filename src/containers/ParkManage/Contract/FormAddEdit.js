@@ -36,7 +36,7 @@ const FormAddEdit = ({
             >
                 <Row gutter={[8, 0]}>
                     <Col span={24}>
-                        <div>Tên bến<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <div>Tên hợp đồng<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="dmo_name"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
@@ -65,7 +65,7 @@ const FormAddEdit = ({
                         </Form.Item>
 
                     </Col>
-                    <Col span={24}>
+                    <Col span={12}>
                         <div>Đơn vị vận tải<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="dmo_name"
@@ -75,7 +75,7 @@ const FormAddEdit = ({
                         </Form.Item>
 
                     </Col>
-                    <Col span={24}>
+                    <Col span={12}>
                         <div>Địa chỉ</div>
                         <Form.Item name="dmo_name">
                             <Input placeholder={""} />
@@ -137,11 +137,10 @@ const FormAddEdit = ({
                 <div
                     className="action"
                     style={{
-                        position: "absolute",
                         right: 0,
                         bottom: 0,
                         width: "100%",
-                        padding: "10px 20px",
+                        padding: "10px 0px",
                         background: "#fff",
                         textAlign: "left",
                     }}
@@ -149,10 +148,10 @@ const FormAddEdit = ({
                     <Button type="danger" style={{ height: 35 }} onClick={onHiddenModal}>
                         Thoát
                     </Button>
-                    
+
                     <Button
                         htmlType="submit"
-                        style={{ height: 35, float: "right", backgroundColor: '#01579B', color: '#fff',marginLeft:20 }}
+                        style={{ height: 35, float: "right", backgroundColor: '#01579B', color: '#fff', marginLeft: 20 }}
                     >
                         {itemSelected ? "Cập nhật" : "Thêm mới"}
                     </Button>
@@ -161,9 +160,10 @@ const FormAddEdit = ({
                     >
                         Lịch sử
                     </Button>
-                    
+
                 </div>
             </Form>
+
         </div>
     );
 };

@@ -31,8 +31,8 @@ const StyledInput = ({
         dataSource={dataSource}
         rowSelection={rowSelection}
         expandable={expandable}
-        scroll={scroll == false ? false : objScroll}
-        // scroll={scroll == false ? false : scroll}
+        // scroll={scroll == false ? false : objScroll}
+        scroll={scroll}
         sticky={true}
         // rowKey={() => {
         //   return new Date().getTime()
@@ -51,10 +51,6 @@ StyledInput.propTypes = {
 export default styled(StyledInput)`
   .ant-row-end {
     display: none
-  }
-  .ant-table-ping-right:not(.ant-table-has-fix-right)
-    .ant-table-container::after {
-    box-shadow: none;
   }
   .ant-table-tbody > tr > td,
   .ant-table tfoot > tr > th,
@@ -82,7 +78,7 @@ export default styled(StyledInput)`
   .ant-table-expanded-row-fixed {
     height: 100px;
     .ant-empty-normal {
-      margin: 2px 0;
+      margin: auto 0;
       .ant-empty-normal .ant-empty-image {
         height: 30px;
       }

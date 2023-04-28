@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Row, Spin, message } from "antd";
+import { Button, Col, Drawer, Row, Spin, Tabs, message } from "antd";
 import PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
@@ -10,7 +10,7 @@ import Update from './Update';
 import _ from "lodash"
 import { useSelector, } from 'react-redux';
 import { apis } from "configs";
-
+const { TabPane } = Tabs;
 const data = [
   {
     id: '1',
@@ -111,9 +111,11 @@ const Index = ({ className, profile }) => {
           />
         </Spin>
       </Col>
+
+
       <Drawer
         destroyOnClose
-        width={"90%"}
+        width={"100%"}
         title="Thêm mới hợp đồng"
         placement="right"
         closable={true}
@@ -127,7 +129,7 @@ const Index = ({ className, profile }) => {
       </Drawer>
       <Drawer
         destroyOnClose
-        width={"90%"}
+        width={"100%"}
         title="Cập nhật hợp đồng"
         placement="right"
         closable={true}
@@ -135,13 +137,13 @@ const Index = ({ className, profile }) => {
         visible={isShowModalEdit}
       >
         {
-          itemSelected ? (
+          
             <Update
               onRefreshList={onRefreshList}
               onHiddenModalEdit={onHiddenModalEdit}
               itemSelected={itemSelected}
             />
-          ) : <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spin spinning /></div>
+          
         }
       </Drawer>
     </Row>
