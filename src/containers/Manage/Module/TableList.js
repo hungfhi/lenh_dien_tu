@@ -7,11 +7,13 @@ import PropTypes from "prop-types";
 import React, { memo, useState } from "react";
 import styled from "styled-components";
 import { Ui } from "utils/Ui";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setLoad } from "redux/action";
 const { confirm } = Modal;
 
 const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList, onDel }) => {
   const [expended, setExpended] = useState()
+  const dispatch = useDispatch()
   const onChange = async (e, value, row) => {
     const payload = {
       uuid: row?.id,
@@ -22,6 +24,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
         if (res.status === 200) {
           Ui.showSuccess({ message: "Thay đổi trạng thái thành công" });
           onRefreshList()
+          dispatch(setLoad(true));
         }
       })
       .catch(err => {
