@@ -42,7 +42,7 @@ const FormAddEdit = ({
             >
                 <Row gutter={[16, 16]}>
                     <Col style={{ margin: 0 }} span={24}>
-                        <div>Họ đệm <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <div>Tên loại xe <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
                             name="name"
                             rules={[{ required: true, message: 'Vui lòng nhập tên loại xe' }]}

@@ -69,6 +69,12 @@ const category = {
     },
     getDistrict(payload) {
         return axios.get(`${domain.ServiceAddress}/administrative/districts?${qs.stringify(payload)}`);
+    },
+    getModel(payload) {
+        return axios.get(`${domain.ServiceAddress}/models`);
+    },
+    getByMerchant(payload) {
+        return axios.get(`${domain.ServiceAddress}/roles/get-by-merchant`);
     }
 }
 

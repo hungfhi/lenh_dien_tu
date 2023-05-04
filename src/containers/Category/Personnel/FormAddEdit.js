@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, InputNumber, Select, DatePicker, Switch } from "antd";
+import { Button, Col, Form, Input, Row, InputNumber, Select, DatePicker, Switch, Checkbox } from "antd";
 import { category } from "configs";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -23,6 +23,13 @@ const FormAddEdit = ({
     const [status, setStatus] = useState(itemSelected ? (itemSelected?.status?.id == 1 ? true : false) : true)
     const [listDrivingLicenseRank, setListDrivingLicenseRank] = useState([]);
     const [listPositions, setListPositions] = useState([]);
+    const [listStations, setListStations] = useState([]);
+    const [listByMerchant, setListByMerchant] = useState([]);
+    const [listModel, setListModel] = useState([]);
+    const [modelChooses, setModelChooses] = useState([]);
+
+    console.log(itemSelected);
+
     const renderGender = (gender) => {
         switch (gender) {
             case 'Giới tính nam':
@@ -48,6 +55,7 @@ const FormAddEdit = ({
             }
         })
     }, []);
+
     const getListPotisions = useCallback(async () => {
         category.getPositions().then(res => {
             setListPositions(res?.data?.data);
@@ -58,9 +66,48 @@ const FormAddEdit = ({
         })
     }, []);
 
+    const getListStations = useCallback(async () => {
+        const payload = {};
+        category.getStation(payload).then(res => {
+            // console.log(res);
+            setListStations(res?.data?.data);
+        }).catch(err => {
+            if (err.response?.status === 422 && err.response?.data?.errors) {
+                Ui.showErrors('Có lỗi xảy ra');
+            }
+        })
+    }, []);
+
+    const getListModel = useCallback(async () => {
+        const payload = {};
+        category.getModel(payload).then(res => {
+            // console.log(res);
+            setListModel(res?.data?.data);
+        }).catch(err => {
+            if (err.response?.status === 422 && err.response?.data?.errors) {
+                Ui.showErrors('Có lỗi xảy ra');
+            }
+        })
+    }, []);
+
+    const getListByMerchant = useCallback(async () => {
+        const payload = {};
+        category.getByMerchant(payload).then(res => {
+            // console.log(res);
+            setListByMerchant(res?.data?.data);
+        }).catch(err => {
+            if (err.response?.status === 422 && err.response?.data?.errors) {
+                Ui.showErrors('Có lỗi xảy ra');
+            }
+        })
+    }, []);
+
     useEffect(() => {
         getListDrivingLicenseRank();
         getListPotisions();
+        getListStations();
+        getListByMerchant();
+        getListModel();
     }, []);
 
 
@@ -71,10 +118,6 @@ const FormAddEdit = ({
     const onActive = (value) => {
         setStatus(!value);
     }
-
-    useEffect(() => {
-        getListDrivingLicenseRank();
-    }, [getListDrivingLicenseRank]);
 
     const onFinishFailed = () => {
     };
@@ -103,6 +146,7 @@ const FormAddEdit = ({
                     modelable_id: itemSelected && itemSelected?.modelable_id || null,
                     modelable_type: itemSelected && itemSelected?.modelable_type || null,
                     email: itemSelected && itemSelected?.user?.email || null,
+                    station_id: null
                 }}
                 form={form}
             >
@@ -128,14 +172,15 @@ const FormAddEdit = ({
 
                     </Col>
                     <Col style={{ margin: 0 }} span={12}>
-                        <div>Mã nhân viên <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <div>Email <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
-                            name="staff_code"
-                            rules={[{ required: true, message: 'Vui lòng nhập mã nhân viên' }]}
+                            name="email"
+                            rules={[{ required: true, message: 'Vui lòng nhập email' }]}
                         >
-                            <Input placeholder={""} />
+                            <Input disabled={itemSelected && true || false} placeholder={""} />
                         </Form.Item>
                     </Col>
+
                     <Col style={{ margin: 0 }} span={12}>
                         <div>Số điện thoại <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
@@ -147,6 +192,15 @@ const FormAddEdit = ({
                                     message: "Chỉ được nhập số",
                                 },
                             ]}
+                        >
+                            <Input placeholder={""} />
+                        </Form.Item>
+                    </Col>
+                    <Col style={{ margin: 0 }} span={12}>
+                        <div>Mã nhân viên <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <Form.Item
+                            name="staff_code"
+                            rules={[{ required: true, message: 'Vui lòng nhập mã nhân viên' }]}
                         >
                             <Input placeholder={""} />
                         </Form.Item>
@@ -176,6 +230,20 @@ const FormAddEdit = ({
 
                     </Col>
                     <Col style={{ margin: 0 }} span={12}>
+                        <div>Giới tính <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <Form.Item
+                            name="gender"
+                            rules={[{ required: true, message: 'Vui lòng nhập tên' }]}
+                        >
+                            <Select defaultValue placeholder="Chọn giới tính">
+                                <Select.Option value={1}>Nam</Select.Option>
+                                <Select.Option value={2}>Nữ</Select.Option>
+                                <Select.Option value={3}>Giới tính khác</Select.Option>
+                            </Select>
+                        </Form.Item>
+
+                    </Col>
+                    <Col style={{ margin: 0 }} span={12}>
                         <div>Chức vụ <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
                             name="position_id"
@@ -191,15 +259,51 @@ const FormAddEdit = ({
 
                     </Col>
                     <Col style={{ margin: 0 }} span={12}>
-                        <div>Giới tính <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <div>Bến làm việc <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
-                            name="gender"
-                            rules={[{ required: true, message: 'Vui lòng nhập tên' }]}
+                            name="station_id"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Select defaultValue placeholder="Chọn giới tính">
-                                <Select.Option value={1}>Nam</Select.Option>
-                                <Select.Option value={2}>Nữ</Select.Option>
-                                <Select.Option value={3}>Giới tính khác</Select.Option>
+                            <Select defaultValue placeholder="Chọn bến làm việc">
+                                {listStations && listStations.map((item, index) => {
+
+                                    return <Select.Option value={item?.id}>{item?.name}</Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
+
+                    </Col>
+                    <Col style={{ margin: 0 }} span={12}>
+                        <div>Mô hình kinh doanh <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <Form.Item
+                            name="model_id"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Select
+                                mode="multiple"
+                                onChange={e => {
+                                    setModelChooses(e);
+                                }}
+                            >
+                                {listModel && listModel.map((item, index) => {
+
+                                    return <Select.Option value={item?.id}>{item?.name}</Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
+
+                    </Col>
+                    <Col style={{ margin: 0 }} span={12}>
+                        <div>Quyền tài khoản <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <Form.Item
+                            name="merchant_id"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Select defaultValue>
+                                {listByMerchant && listByMerchant.map((item, index) => {
+
+                                    return <Select.Option value={item?.id}>{item?.name}</Select.Option>
+                                })}
                             </Select>
                         </Form.Item>
 
@@ -254,6 +358,28 @@ const FormAddEdit = ({
                         </Form.Item>
 
                     </Col>
+                    {/* <div style={{ width: '100%', display: 'flex' }}>
+                        <Col span={3}>
+                            <div style={{ paddingTop: 5 }}>Quản lý bến</div>
+                        </Col>
+                        <Col span={2}>
+                            <Form.Item>
+                                <Checkbox></Checkbox>
+                            </Form.Item>
+                        </Col>
+
+                    </div>
+                    <div style={{ width: '100%', display: 'flex', marginTop: -15 }}>
+                        <Col span={3}>
+                            <div style={{ paddingTop: 5 }}>Vận hành tuyến</div>
+                        </Col>
+                        <Col span={2}>
+                            <Form.Item>
+                                <Checkbox></Checkbox>
+                            </Form.Item>
+                        </Col>
+                    </div> */}
+
                     <Col style={{ margin: 0, display: 'flex' }} span={24}>
                         <div style={{ ...styles.txtTitle }}>Trạng thái hoạt động<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
