@@ -9,7 +9,7 @@ import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
 import { useSelector,  } from 'react-redux';
-import { apis } from "configs";
+import { apis, manage } from "configs";
 
 const Index = ({ className, profile }) => {
 
@@ -30,16 +30,15 @@ const Index = ({ className, profile }) => {
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-      apis.getBusStation(data)
+      manage.getTransport(data)
           .then(res => {
               if (res.status === 200) {
-                Ui.showSuccess({ message: "Thành công" });
+                setData(res?.data?.data)
               }
           })
           .catch(err => {
               if (err.response?.status === 422 && err.response?.data?.errors) {
                   message.warn(err.response.data?.errors[0].msg)
-                  message.error('Error!')
               }
           })
     await setLoading(false);
