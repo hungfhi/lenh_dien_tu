@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../index.scss";
 import { Link, useLocation } from "react-router-dom"
 import _ from 'lodash'
-import { Breadcrumb, Layout, Menu, Modal, Dropdown, Button, Select, Form, Row, Col, Spin } from 'antd';
+import { Breadcrumb, Layout, Menu, Modal, Dropdown, Button, Select, Form, Row, Col, Spin, Popover } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setProfileUser } from 'redux/action'
@@ -270,11 +270,13 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
               })}
             </Breadcrumb>
             <div className='fs-14' style={{ color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL, fontWeight: 600, display: 'flex' }}>
-              {mechants.length !== 0 ? <Button type="dashed" onClick={showModal} >
-                Đổi nhà xe
-              </Button>  : ''}
+              {mechants.length !== 0 ? <Popover content={"Đổi nhà xe"} trigger="hover">
+                <Button type="text" onClick={showModal} style={{ borderRadius: 4, backgroundColor: '#01579B' }}>
+                  <span style={{ fontWeight: 'bold', color: '#fff' }}><i class="fa-solid fa-recycle"></i></span>
+                </Button>
+              </Popover> : ''}
 
-              <Modal title="Thay đổi nhà xe" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ height: 320 }}>
+              <Modal title="Thay đổi nhà xe" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ height: 320 }} destroyOnClose>
                 <Form
                   onFinishFailed={onFinishFailed}
                   className={className}
