@@ -9,10 +9,9 @@ import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
 import { useSelector,  } from 'react-redux';
-import { apis } from "configs";
+import { apis, manage } from "configs";
 
 const Index = ({ className, profile }) => {
-
 
   const user = useSelector((state) => state?.rootReducer?.user);
 
@@ -24,22 +23,22 @@ const Index = ({ className, profile }) => {
   const [isShowModalEdit, setShowModalEdit] = useState(false)
   const [params, setParams] = useState({
     page: 1,
-    size: 20,
+    per_page: 20,
     name: "",
   });
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-      apis.getBusStation(data)
+      manage.getCarPark(params)
           .then(res => {
               if (res.status === 200) {
-                Ui.showSuccess({ message: "Thành công" });
+                setData(res?.data?.data)
+                setTotal(res?.data?.meta?.total)
               }
           })
           .catch(err => {
               if (err.response?.status === 422 && err.response?.data?.errors) {
                   message.warn(err.response.data?.errors[0].msg)
-                  message.error('Error!')
               }
           })
     await setLoading(false);
@@ -56,19 +55,16 @@ const Index = ({ className, profile }) => {
   });
 
   const onEdit = useCallback(async (ids) => {
-    setShowModalEdit(true)
-    // const result = await ServiceBase.requestJson({
-    //   method: "GET",
-    //   url: `/v1/category-declare/quota/${ids}`,
-    //   data: {
-
-    //   },
-    // });
-    // if (result.hasErrors) {
-    //   Ui.showErrors(result?.errors);
-    // } else {
-    //   setItemSelected(result?.value?.data)
-    // }
+    setShowModalEdit(true);
+        manage.getDetailCarPark(ids)
+        .then(res => {
+          if (res.status === 200) {
+            setItemSelected(res?.data?.data)
+          }
+        })
+        .catch(err => {
+          Ui.showError({ message: err?.response?.data?.message });
+        })
   }, [])
 
 
@@ -93,6 +89,8 @@ const Index = ({ className, profile }) => {
             loadding={loadding}
             data={data}
             onEdit={onEdit}
+            total={total}
+            setTotal={setTotal}
             onRefreshList={onRefreshList}
             setParams={setParams}
           />

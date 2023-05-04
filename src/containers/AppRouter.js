@@ -123,7 +123,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/merchants"
+          path="/transport-unit"
           element={
             <PrivateRoute>
               <TransportUnit />
