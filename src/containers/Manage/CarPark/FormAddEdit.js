@@ -86,7 +86,6 @@ const FormAddEdit = ({
 
     const onActive = (value) => {
         setActive(!value)
-        console.log("!value",isActive)
     }
 
     const [form] = Form.useForm();

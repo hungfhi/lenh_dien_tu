@@ -71,8 +71,16 @@ const manage = {
         return axios.get(`${domain.ServiceAddress}/merchants?${qs.stringify(payload)}`)
     },
 
+    getModel(payload) {
+        return axios.get(`${domain.ServiceAddress}/models?${qs.stringify(payload)}`)
+    },
+
     getDetailTransport(payload) {
         return axios.get(`${domain.ServiceAddress}/merchants/${payload}`)
+    },
+
+    updateTransport(payload){
+        return axios.put(`${domain.ServiceAddress}/merchants/${payload?.uuid}`, payload)
     },
 
     getUserMerchant(payload) {
