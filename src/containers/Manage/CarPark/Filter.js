@@ -33,7 +33,7 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
         <Col span={4}>
           <Input
             allowClear
-            placeholder={"Filter text"}
+            placeholder={"Nhập tên bến"}
             onChange={(e) => {
               _changeQuery({ name: "name", value: e.target.value });
             }}

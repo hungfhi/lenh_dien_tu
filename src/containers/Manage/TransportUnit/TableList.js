@@ -1,5 +1,5 @@
 import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { Button, Modal, Pagination, Row, Tooltip } from "antd";
+import { Button, Checkbox, Modal, Pagination, Row, Tooltip } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
 import PropTypes from "prop-types";
@@ -9,7 +9,7 @@ import { Ui } from "utils/Ui";
 
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit,  onRefreshList }) => {
+const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList }) => {
 
   const onChange = async (e, value, row) => {
     const params = {
@@ -20,9 +20,9 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
   const onActive = (e, value, row) => {
     let name = ''
     if (e == false) {
-      name = 'Bạn muốn bỏ active nhóm tuyến này không?'
+      name = 'Bạn muốn bỏ active không?'
     } else {
-      name = 'Bạn muốn active nhóm tuyến này không?'
+      name = 'Bạn muốn active không?'
     }
     confirm({
       title: `Thông báo`,
@@ -56,43 +56,64 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
     },
     {
       title: "Tên đơn vị",
-      dataIndex: "dmo_id",
-      width: 100,
+      dataIndex: "name",
+      width: 150,
     },
     {
       title: "Địa chỉ",
-      dataIndex: "dmo_name",
+      dataIndex: "address",
       width: 300,
     },
     {
       title: "Mã số thuế",
-      dataIndex: "dmo_name",
+      dataIndex: "tax_code",
       width: 150,
     },
     {
       title: "Số điện thoại",
-      dataIndex: "dmo_name",
-      width: 300,
+      dataIndex: "phone",
+      width: 120,
     },
     {
       title: "Email",
-      dataIndex: "dmo_name",
-      width: 300,
+      dataIndex: "email",
+      width: 150,
+    },
+    {
+      title: "Quản lý bến",
+      dataIndex: "models",
+      width: 100,
+      render: (value, row) => {
+        return <div style={{ textAlign: 'center' }}>
+          <Checkbox onChange={(e) => onActive(e, value, row)}
+            checked={value}
+            size='small' />
+        </div>
+      }
+    },
+    {
+      title: "Vận hành tuyến",
+      dataIndex: "models",
+      width: 100,
+      render: (value, row) => {
+        return <div style={{ textAlign: 'center' }}>
+          <Checkbox onChange={(e) => onActive(e, value, row)}
+            checked={value}
+            size='small' />
+        </div>
+      }
     },
     {
       title: "Trạng thái",
-      dataIndex: "dmo_name",
-      width: 300,
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "dmo_name",
-      width: 300,
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "dmo_name",
-      width: 300,
+      dataIndex: "is_active",
+      width: 100,
+      render: (value, row) => {
+        return <div style={{ textAlign: 'center' }}>
+          <Checkbox onChange={(e) => onActive(e, value, row)}
+            checked={value}
+            size='small' />
+        </div>
+      }
     },
     {
       title: "Thao tác",

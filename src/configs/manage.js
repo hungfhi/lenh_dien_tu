@@ -21,6 +21,7 @@ const manage = {
     },
 
 
+ 
     //module
     getModule(payload) {
         return axios.get(`${domain.ServiceAddress}/menus?${qs.stringify(payload)}`)
@@ -36,11 +37,44 @@ const manage = {
         return axios.delete(`${domain.ServiceAddress}/menus/${payload?.uuid}`, payload)
     },
 
-    // user merchant
-    getUserMerchant(payload) {
-        return axios.get(`${domain.ServiceAddress}/merchantUser?${qs.stringify(payload)}`);
-    }
 
+
+    //bến xe
+
+    getCarPark(payload) {
+        return axios.get(`${domain.ServiceAddress}/stations?${qs.stringify(payload)}`)
+    },
+
+    getDetailCarPark(payload) {
+        return axios.get(`${domain.ServiceAddress}/stations/${payload}`)
+    },
+
+    getProvince(payload) {
+        return axios.get(`${domain.ServiceAddress}/administrative/provinces?${qs.stringify(payload)}`)
+    },
+
+    getDistrict(payload) {
+        return axios.get(`${domain.ServiceAddress}/administrative/districts?${qs.stringify(payload)}`)
+    },
+
+    createCarPark(payload) {
+        return axios.post(`${domain.ServiceAddress}/stations`, payload)
+    },
+    updateCarPark(payload){
+        return axios.put(`${domain.ServiceAddress}/stations/${payload?.uuid}`, payload)
+    },
+
+    
+    //đơn vị vận tải
+
+    getTransport(payload) {
+        return axios.get(`${domain.ServiceAddress}/merchants?${qs.stringify(payload)}`)
+    },
+
+    getDetailTransport(payload) {
+        return axios.get(`${domain.ServiceAddress}/merchants/${payload}`)
+    },
+    
 
 
 }

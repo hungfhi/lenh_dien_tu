@@ -30,7 +30,7 @@ const TransportUnit = memo(
          */
         const _handleLoadData = useCallback(async () => {
             setFetching(true);
-            users.getTransportUnit()
+            users.getTransportUnitUser()
             .then(res => {
               if (res.status === 200) {
                 setDataSource(res?.data?.data);
