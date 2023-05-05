@@ -1,16 +1,19 @@
 import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { Button, Modal, Pagination, Row, Tooltip } from "antd";
+import { Button, Modal, Pagination, Row, Switch, Tag, Tooltip } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
+import moment from "moment";
 import PropTypes from "prop-types";
 import React, { memo } from "react";
 import styled from "styled-components";
-import { COLOR_GREEN, COLOR_RED } from 'theme/colors';
+import { COLOR_GREEN, COLOR_RED } from "theme/colors";
 import { Ui } from "utils/Ui";
+import _ from "lodash";
+
 
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList, setTotal, total }) => {
+const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList }) => {
 
   const onChange = async (e, value, row) => {
     const params = {
@@ -38,9 +41,6 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
     });
   };
 
-
-
-
   const columns = [
     {
       title: "#",
@@ -49,103 +49,99 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
       fixed: "left",
       align: 'center',
       render: (value, row, index) => {
-        const stringIndex = `${((params.page - 1) * params.size + index)}`;
+        const stringIndex = `${((params.page - 1) * params.limit + index)}`;
         return (
           <h5 style={{ textAlign: 'center' }}>{params.page === 1 ? index + 1 : parseInt(stringIndex) + 1}</h5>
         );
       },
     },
     {
-      title: "Mã tuyến",
-      dataIndex: "route_code",
-      width: 100,
-      render: (text, record, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            {text}
-          </div>
-        )
-      }
-    },
-    {
-      title: "Tên tuyến",
-      dataIndex: "name",
-      width: 300,
-      render: (text, record, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            {text}
-          </div>
-        )
-      }
-    },
-    {
-      title: "Bến đi",
-      dataIndex: "start_station",
+      title: "Họ tên",
+      dataIndex: "full_name",
       width: 150,
-      render: (text, record, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            {text?.name}
-          </div>
-        )
-      }
     },
     {
-      title: "Bến đến",
-      dataIndex: "end_station",
+      title: "Tên hiển thị",
+      dataIndex: "username",
       width: 150,
-      render: (text, record, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            {text?.name}
-          </div>
-        )
-      }
+      render: (value) => <div>{value}</div>
     },
     {
-      title: "Cự ly",
-      dataIndex: "is_active",
+      title: "Số điện thoại",
+      dataIndex: "phone",
       width: 150,
-      render: (text, record) => {
-
-        return (
-          <div style={{ textAlign: 'center' }}>
-            {record?.merchant_routes[0] &&
-              <div>{record?.merchant_routes[0]?.distance} km</div>
-            }
-
-          </div>
-        )
-      }
+      render: (value) => <div>{value}</div>
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      width: 180,
+    },
+    {
+      title: "CCCD",
+      dataIndex: "citizen_identity",
+      width: 150,
+    },
+    {
+      title: "Loại tài khoản",
+      dataIndex: "roles",
+      width: 250,
+      render: (text, record) => (
+        <>
+          {_.map(text, (i) => {
+            return (
+              <Tag>{i.name}</Tag>
+            )
+          })}
+        </>
+      )
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "created_at",
+      width: 120,
+      render: (text, record) => (
+        <span>{moment(text).format("DD-MM-YYYY HH:mm")}</span>
+      )
     },
     {
       title: "Trạng thái",
       dataIndex: "is_active",
-      width: 150,
-      render: (text, record) => {
-        return (
-          <div style={{ textAlign: 'center', color: record?.is_active === 1 ? COLOR_GREEN : COLOR_RED }}>
-            {record?.is_active === 1 ? 'Active' : 'Disable'}
-          </div>
-        )
-      }
-    },
-
-    {
-      title: "Thao tác",
-      width: 80,
-      dataIndex: "active",
-      fixed: "right",
-      render: (text, record, row) => {
+      render: (value, row) => {
         return (
           <div style={{ textAlign: 'center' }}>
-            <Tooltip placement="topLeft">
+            <Switch
+              onChange={(e) => onActive(e, value?.id, row)}
+              checked={value?.id == 1 ? true : false}
+              size='small'
+            />
+          </div>
+        )
+      },
+      width: 120,
+    },
+    {
+      title: "Thao tác",
+      width: 100,
+      dataIndex: "action",
+      render: (record, value, row) => {
+        const ids = value.id
+        const values = value.status
+        return (
+          <div style={{ textAlign: 'center', display: 'flex' }}>
+            <Button
+              type="link"
+              onClick={() => onEdit(ids)}
+            >
+              <i class="fa-regular fa-pen-to-square" style={{ color: '#01579B', fontSize: 20 }}></i>
+            </Button>
+            <Tooltip placement="topLeft" title="Đổi mật khẩu">
               <Button
                 type="link"
-                icon={<EditOutlined />}
-                onClick={() => onEdit(record)}
-              />
+                // onClick={() => onChangeP(ids)}
+              >
+                <i class="fas fa-key" style={{ color: '#01579B', fontSize: 20 }} />
+              </Button>
             </Tooltip>
           </div>
         )

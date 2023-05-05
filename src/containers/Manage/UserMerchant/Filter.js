@@ -61,53 +61,13 @@ const Filter = ({ className, setParams, params, setShowModal, operator, stations
     <div className={className}>
       <Row gutter={[8, 8]}>
         <Col span={4}>
-          <div>Tuyến</div>
-          <Select
-            placeholder="Tuyến"
-            optionFilterProp="children"
+          <div>Tên loại xe</div>
+          <Input
             allowClear
-            style={{ width: '100%' }}
-            onChange={onChangeRoute}
-            options={allRoute}
-          />
-        </Col>
-
-        <Col span={4}>
-          <div>Trạng thái</div>
-          <Select
-            style={{ width: '100%' }}
-            allowClear={true}
-            placeholder={'Chọn trạng thái'}
+            placeholder={"Nhập tên loại xe"}
             onChange={(e) => {
-              _changeQuery({ name: "is_active", value: e });
+              _changeQuery({ name: "name", value: e.target.value });
             }}
-          >
-            <Select.Option value={0}>Không hoạt động</Select.Option>
-            <Select.Option value={1}>Hoạt động</Select.Option>
-          </Select>
-        </Col>
-        <Col span={4}>
-          <div>Bến đi</div>
-          <Select
-            placeholder="Bến đi"
-            optionFilterProp="children"
-            allowClear
-            style={{ width: '100%' }}
-            onChange={onChangeStartStation}
-
-            options={stations}
-          />
-        </Col>
-        <Col span={4}>
-          <div>Bến đến</div>
-          <Select
-            placeholder="Bến đến"
-            optionFilterProp="children"
-            allowClear
-            style={{ width: '100%' }}
-            onChange={onChangeEndStation}
-
-            options={stations}
           />
         </Col>
         <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>

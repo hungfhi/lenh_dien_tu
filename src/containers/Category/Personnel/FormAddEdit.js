@@ -28,8 +28,6 @@ const FormAddEdit = ({
     const [listModel, setListModel] = useState([]);
     const [modelChooses, setModelChooses] = useState([]);
 
-    console.log(itemSelected);
-
     const renderGender = (gender) => {
         switch (gender) {
             case 'Giới tính nam':
@@ -146,7 +144,8 @@ const FormAddEdit = ({
                     modelable_id: itemSelected && itemSelected?.modelable_id || null,
                     modelable_type: itemSelected && itemSelected?.modelable_type || null,
                     email: itemSelected && itemSelected?.user?.email || null,
-                    station_id: null
+                    station_id: null,
+                    merchant_id: itemSelected && itemSelected?.user?.roles[0]?.id || null
                 }}
                 form={form}
             >

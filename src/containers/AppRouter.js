@@ -32,6 +32,7 @@ import Contract from './ParkManage/Contract';
 import Product from './Category/Product';
 import ProvinceCity from './Category/ProvinceCity';
 import District from './Category/District';
+import UserMerchant from './Manage/UserMerchant';
 const AppRouter = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state?.rootReducer?.user);
@@ -217,6 +218,14 @@ const AppRouter = () => {
           element={
             <PrivateRoute>
               <District />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/merchant-user"
+          element={
+            <PrivateRoute>
+              <UserMerchant />
             </PrivateRoute>
           }
         />

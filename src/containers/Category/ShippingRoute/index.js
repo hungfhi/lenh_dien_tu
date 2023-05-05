@@ -8,7 +8,7 @@ import Create from './Create';
 import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
-import { useSelector,  } from 'react-redux';
+import { useSelector, } from 'react-redux';
 import { category } from "configs";
 
 const Index = ({ className, profile }) => {
@@ -28,89 +28,104 @@ const Index = ({ className, profile }) => {
   const [params, setParams] = useState({
     page: 1,
     size: 20,
+    route_id: '',
+    is_active: '',
+    station_start_id: '',
+    station_end_id: ''
   });
 
-    const getStation = useCallback(async () => {
-    
-      category.getStation(params)
-          .then(res => {
-              if (res.status === 200) {
-                const newStations =[]
-                const newProvince =[]
+  const getStation = useCallback(async () => {
 
-                res?.data?.data.map(item => {
-                  newStations.push({
-                    ...item, 
-                    value: item?.id,
-                    label: item?.name,
-                  })
-                  newProvince.push({
-                    ...item, 
-                    value: item?.province?.id,
-                    label: item?.province?.name,
-                  })
-                })
-                setProvince(newProvince)
-                setStations(newStations)
-              }
+    category.getStation(params)
+      .then(res => {
+        if (res.status === 200) {
+          const newStations = []
+          const newProvince = []
+
+          res?.data?.data.map(item => {
+            newStations.push({
+              ...item,
+              value: item?.id,
+              label: item?.name,
+            })
+            newProvince.push({
+              ...item,
+              value: item?.province?.id,
+              label: item?.province?.name,
+            })
           })
-          .catch(err => {
-              if (err.response?.status === 422 && err.response?.data?.errors) {
-                  message.warn(err.response.data?.errors[0].msg)
-                  message.error('Error!')
-              }
-          })
-    
+          // setProvince(newProvince)
+          setStations(newStations)
+        }
+      })
+      .catch(err => {
+        if (err.response?.status === 422 && err.response?.data?.errors) {
+          message.warn(err.response.data?.errors[0].msg)
+          message.error('Error!')
+        }
+      })
+
   }, []);
 
-  useEffect(()=>{
+  const getListProvinceCity = useCallback(async () => {
+
+    setLoading(true);
+    category.getProvinceCity().then(res => {
+      if (res.status === 200) {
+        setProvince(res.data.data);
+      }
+    }).catch(err => {
+      Ui.showError({ message: 'Có lỗi xảy ra' });
+    });
+  }, []);
+
+
+  useEffect(() => {
     getStation()
     getAllRoutes()
-  },[])
+    getListProvinceCity();
+  }, [])
 
   const getAllRoutes = useCallback(async () => {
     setLoading(true);
-      category.getRoute(params)
-          .then(res => {
-              if (res.status === 200) {
-                 const allRoute =[]
-                res?.data?.data.map(item => {
-                  allRoute.push({
-                    ...item, 
-                    value: item?.id,
-                    label: item?.name,
-                  })
-                })
-                setAllRoute(allRoute)
-              }
+    category.getRoute(params)
+      .then(res => {
+        if (res.status === 200) {
+          const allRoute = []
+          res?.data?.data.map(item => {
+            allRoute.push({
+              ...item,
+              value: item?.id,
+              label: item?.name,
+            })
           })
-          .catch(err => {
-              if (err.response?.status === 422 && err.response?.data?.errors) {
-                  message.warn(err.response.data?.errors[0].msg)
-                  message.error('Error!')
-              }
-          })
+          setAllRoute(allRoute)
+        }
+      })
+      .catch(err => {
+        if (err.response?.status === 422 && err.response?.data?.errors) {
+          message.warn(err.response.data?.errors[0].msg)
+          message.error('Error!')
+        }
+      })
     await setLoading(false);
   }, [params]);
 
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-      category.getRoute(params)
-          .then(res => {
-              if (res.status === 200) {
-                setData(res?.data?.data)
-                setTotal(res?.data?.meta?.total)
-              }
-          })
-          .catch(err => {
-              if (err.response?.status === 422 && err.response?.data?.errors) {
-                  message.warn(err.response.data?.errors[0].msg)
-                  message.error('Error!')
-              }
-          })
-    await setLoading(false);
+    category.getRoute(params).then(res => {
+      if (res.status === 200) {
+        setData(res?.data?.data)
+        setTotal(res?.data?.meta?.total)
+      }
+      setLoading(false);
+    }).catch(err => {
+      Ui.showErrors('Có lỗi xảy ra');
+    });
   }, [params]);
+
+  // console.log(allRoute);
 
 
   const onHiddenModal = useCallback(() => {
@@ -140,7 +155,7 @@ const Index = ({ className, profile }) => {
   return (
     <Row className={className} gutter={[16, 16]}>
       <Col xs={24}>
-        <Filter stations={stations} params={params} setParams={setParams} setShowModal={setShowModal} allRoute={allRoute}/>
+        <Filter stations={stations} params={params} setParams={setParams} setShowModal={setShowModal} allRoute={allRoute} />
       </Col>
       <Col xs={24}>
         <Spin spinning={loadding}>
@@ -169,6 +184,7 @@ const Index = ({ className, profile }) => {
           onHiddenModal={onHiddenModal}
           stations={stations}
           province={province}
+          allRoute={allRoute}
         />
       </Drawer>
       <Drawer
@@ -186,8 +202,9 @@ const Index = ({ className, profile }) => {
               onRefreshList={onRefreshList}
               onHiddenModalEdit={onHiddenModalEdit}
               itemSelected={itemSelected}
-               stations={stations}
-          province={province}
+              stations={stations}
+              province={province}
+              allRoute={allRoute}
             />
           ) : <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spin spinning /></div>
         }
