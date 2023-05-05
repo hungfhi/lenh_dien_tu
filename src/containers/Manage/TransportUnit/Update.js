@@ -14,7 +14,6 @@ const UpdateDinhMuc = ({
   itemSelected
 }) => {
   const onSave = useCallback(async (values) => {
-    console.log('dsadasdasd',values)
     const models = []
     if (values?.is_mechant && values?.is_station) {
       models.push(1, 2)
@@ -26,31 +25,29 @@ const UpdateDinhMuc = ({
       return null;
     }
 
-    console.log("models", models)
-
     const payload = {
+      uuid: itemSelected?.id,
       name: values?.name,
-      merchant_code: values?.merchant_code,
       tax_code: values?.tax_code,
       phone: values?.phone,
       email: values?.email,
       address: values?.address,
-      is_active: values?.is_active,
+      is_active: values?.is_active ? 1 : 0,
+      models:models
     }
-    // manage.createCarPark(payload)
-    //   .then(res => {
-    //     if (res.status === 200) {
-    //       Ui.showSuccess({ message: "Thành công" });
-    //       onRefreshList()
-    //       onHiddenModalEdit()
-    //     }
-    //   })
-    //   .catch(err => {
-    //     if (err.response?.status === 422 && err.response?.data?.errors) {
-    //       message.warn(err.response.data?.errors[0].msg)
-    //     }
-    //   })
-
+    manage.updateTransport(payload)
+      .then(res => {
+        if (res.status === 200) {
+          Ui.showSuccess({ message: "Thành công" });
+          onRefreshList()
+          onHiddenModalEdit()
+        }
+      })
+      .catch(err => {
+        if (err.response?.status === 422 && err.response?.data?.errors) {
+          message.warn(err.response.data?.errors[0].msg)
+        }
+      })
   })
   return (
     <div className={className}>
