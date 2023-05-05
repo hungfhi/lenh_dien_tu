@@ -13,8 +13,6 @@ const FormAddEdit = ({
     stations,
     province
 }) => {
-    // console.log(province);
-
 
     const [isActive, setActive] = useState(itemSelected ? (itemSelected.is_active == 1 ? true : false) : true)
 
@@ -56,7 +54,7 @@ const FormAddEdit = ({
                             name="start_province_id"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            {/* <Select
+                            <Select
                                 showSearch
                                 placeholder="Chọn tỉnh đi"
                                 optionFilterProp="children"
@@ -64,13 +62,7 @@ const FormAddEdit = ({
                                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
                                 options={province}
-                            /> */}
-                            <Select>
-                                {province && province?.map(item => {
-                                    return <Select.Option value={item?.id}>{item?.name}</Select.Option>
-                                })}
-
-                            </Select>
+                            />
                         </Form.Item>
 
                     </Col>
@@ -97,7 +89,7 @@ const FormAddEdit = ({
                             name="end_province_id"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            {/* <Select
+                            <Select
                                 showSearch
                                 placeholder="Chọn tỉnh đến"
                                 optionFilterProp="children"
@@ -105,13 +97,7 @@ const FormAddEdit = ({
                                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
                                 options={province}
-                            /> */}
-                            <Select>
-                                {province && province?.map(item => {
-                                    return <Select.Option value={item?.id}>{item?.name}</Select.Option>
-                                })}
-
-                            </Select>
+                            />
                         </Form.Item>
 
                     </Col>

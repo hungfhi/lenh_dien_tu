@@ -9,16 +9,26 @@ import styled from "styled-components";
 import { COLOR_GREEN, COLOR_RED } from "theme/colors";
 import { Ui } from "utils/Ui";
 import _ from "lodash";
+import { manage } from "configs";
 
 
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList }) => {
+const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList, onChangeP }) => {
 
   const onChange = async (e, value, row) => {
-    const params = {
-      active: value ? 0 : 1,
+    const payload = {
+      is_active: e ? 1 : 0,
     };
+
+    manage.changeStatusMerchantUser(row?.id, payload).then(res => {
+      if (res.status === 200) {
+        Ui.showSuccess({ message: "Thay đổi trạng thái thành công" });
+        onRefreshList();
+      }
+    }).catch(err => {
+      Ui.showError({ message: err?.response?.data?.message });
+    })
   };
 
   const onActive = (e, value, row) => {
@@ -82,20 +92,20 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
       dataIndex: "citizen_identity",
       width: 150,
     },
-    {
-      title: "Loại tài khoản",
-      dataIndex: "roles",
-      width: 250,
-      render: (text, record) => (
-        <>
-          {_.map(text, (i) => {
-            return (
-              <Tag>{i.name}</Tag>
-            )
-          })}
-        </>
-      )
-    },
+    // {
+    //   title: "Loại tài khoản",
+    //   dataIndex: "roles",
+    //   width: 250,
+    //   render: (text, record) => (
+    //     <>
+    //       {_.map(text, (i) => {
+    //         return (
+    //           <Tag>{i.name}</Tag>
+    //         )
+    //       })}
+    //     </>
+    //   )
+    // },
     {
       title: "Ngày tạo",
       dataIndex: "created_at",
@@ -104,41 +114,42 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
         <span>{moment(text).format("DD-MM-YYYY HH:mm")}</span>
       )
     },
-    {
-      title: "Trạng thái",
-      dataIndex: "is_active",
-      render: (value, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            <Switch
-              onChange={(e) => onActive(e, value?.id, row)}
-              checked={value?.id == 1 ? true : false}
-              size='small'
-            />
-          </div>
-        )
-      },
-      width: 120,
-    },
+    // {
+    //   title: "Trạng thái",
+    //   dataIndex: "is_active",
+    //   render: (value, row) => {
+
+    //     return (
+    //       <div style={{ textAlign: 'center' }}>
+    //         <Switch
+    //           onChange={(e) => onActive(e, value?.id, row)}
+    //           checked={value?.id == 1 ? true : false}
+    //           size='small'
+    //         />
+    //       </div>
+    //     )
+    //   },
+    //   width: 120,
+    // },
     {
       title: "Thao tác",
       width: 100,
       dataIndex: "action",
       render: (record, value, row) => {
-        const ids = value.id
-        const values = value.status
+        const ids = value.id;
+        const values = value.status;
         return (
-          <div style={{ textAlign: 'center', display: 'flex' }}>
-            <Button
+          <div style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+            {/* <Button
               type="link"
               onClick={() => onEdit(ids)}
             >
               <i class="fa-regular fa-pen-to-square" style={{ color: '#01579B', fontSize: 20 }}></i>
-            </Button>
+            </Button> */}
             <Tooltip placement="topLeft" title="Đổi mật khẩu">
               <Button
                 type="link"
-                // onClick={() => onChangeP(ids)}
+                onClick={() => onChangeP(ids)}
               >
                 <i class="fas fa-key" style={{ color: '#01579B', fontSize: 20 }} />
               </Button>

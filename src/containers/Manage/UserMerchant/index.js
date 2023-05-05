@@ -4,9 +4,10 @@ import { manage } from 'configs';
 import { Ui } from 'utils/Ui';
 import styled from 'styled-components';
 import PropTypes from "prop-types";
-import { Col, Row, Spin } from 'antd';
+import { Col, Modal, Row, Spin } from 'antd';
 import Filter from './Filter';
 import TableList from './TableList';
+import FormChangePass from './FormChangePass';
 
 const UserMerchant = ({ className }) => {
 
@@ -14,7 +15,10 @@ const UserMerchant = ({ className }) => {
     const [listUserMerchant, setListUserMerchant] = useState([]);
     const [isShowModal, setShowModal] = useState(false);
     const [itemSelected, setItemSelected] = useState(null);
-    const [isShowModalEdit, setShowModalEdit] = useState(false)
+    const [isShowModalEdit, setShowModalEdit] = useState(false);
+    const [total, setTotal] = useState(0);
+    const [showChange, setShowChange] = useState(false);
+    const [getId, setGetId] = useState("");
     const [params, setParams] = useState({
         page: 1,
         size: 20,
@@ -31,27 +35,35 @@ const UserMerchant = ({ className }) => {
             if (res.status === 200) {
                 setListUserMerchant(res?.data?.data);
             }
-        setLoading(false);
+            setLoading(false);
         }).catch(err => {
             Ui.showError({ message: 'Có lỗi xảy ra' });
         })
     }, [params]);
 
-    const onHiddenModal = useCallback(() => {
-        setShowModal(false);
+    const onChangeP = (ids) => {
+        setGetId(ids)
+        setShowChange(true);
+    };
+    const handleClose = useCallback(() => {
+        setShowChange(false);
     });
 
-    const onHiddenModalEdit = useCallback(() => {
-        setItemSelected(null);
-        setShowModalEdit(false);
-    });
+    // const onHiddenModal = useCallback(() => {
+    //     setShowModal(false);
+    // });
+
+    // const onHiddenModalEdit = useCallback(() => {
+    //     setItemSelected(null);
+    //     setShowModalEdit(false);
+    // });
 
     const onEdit = useCallback(async (ids) => {
         setShowModalEdit(true)
         const payload = {
             uuid: ids
         }
-        // category.getDetailProduct(payload)
+        // users.getInfoUser(payload)
         //     .then(res => {
         //         if (res.status === 200) {
         //             setItemSelected(res?.data?.data)
@@ -60,7 +72,7 @@ const UserMerchant = ({ className }) => {
         //     .catch(err => {
         //         Ui.showError({ message: err?.response?.data?.message });
         //     })
-    }, [])
+    }, []);
 
     useEffect(() => {
         getListUserMerchant();
@@ -78,14 +90,14 @@ const UserMerchant = ({ className }) => {
             <Col xs={24}>
                 <Spin spinning={loading}>
                     <TableList
-                        params={params}
-                        // loadding={loadding}
                         data={listUserMerchant}
-                        onEdit={onEdit}
-                        // total={total}
-                        onRefreshList={onRefreshList}
+                        params={params}
                         setParams={setParams}
-                    // setTotal={setTotal}
+                        total={total}
+                        onRefreshList={onRefreshList}
+                        // onEdit={onEdit}
+                        onChangeP={onChangeP}
+                        setTotal={setTotal}
                     />
                 </Spin>
             </Col>
@@ -122,6 +134,14 @@ const UserMerchant = ({ className }) => {
                     ) : <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spin spinning /></div>
                 }
             </Drawer> */}
+            <Modal footer={null} title="Đổi mật khẩu" visible={showChange} closable={false} destroyOnClose>
+                <FormChangePass
+                    onRefreshList={onRefreshList}
+                    handleClose={handleClose}
+                    onChangeP={onChangeP}
+                    getId={getId}
+                />
+            </Modal>
         </Row>
     );
 };

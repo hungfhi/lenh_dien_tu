@@ -126,7 +126,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
       render: (text, record) => {
         return (
           <div style={{ textAlign: 'center', color: record?.is_active === 1 ? COLOR_GREEN : COLOR_RED }}>
-            {record?.is_active === 1 ? 'Active' : 'Disable'}
+            {record?.is_active === 1 ? 'Active' : 'In Active'}
           </div>
         )
       }

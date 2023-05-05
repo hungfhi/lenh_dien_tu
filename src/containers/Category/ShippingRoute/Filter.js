@@ -63,11 +63,15 @@ const Filter = ({ className, setParams, params, setShowModal, operator, stations
         <Col span={4}>
           <div>Tuyến</div>
           <Select
+            showSearch
             placeholder="Tuyến"
             optionFilterProp="children"
             allowClear
             style={{ width: '100%' }}
             onChange={onChangeRoute}
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
             options={allRoute}
           />
         </Col>
@@ -89,11 +93,15 @@ const Filter = ({ className, setParams, params, setShowModal, operator, stations
         <Col span={4}>
           <div>Bến đi</div>
           <Select
+            showSearch
             placeholder="Bến đi"
             optionFilterProp="children"
             allowClear
             style={{ width: '100%' }}
             onChange={onChangeStartStation}
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
 
             options={stations}
           />
@@ -101,12 +109,15 @@ const Filter = ({ className, setParams, params, setShowModal, operator, stations
         <Col span={4}>
           <div>Bến đến</div>
           <Select
+            showSearch
             placeholder="Bến đến"
             optionFilterProp="children"
             allowClear
             style={{ width: '100%' }}
             onChange={onChangeEndStation}
-
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
             options={stations}
           />
         </Col>

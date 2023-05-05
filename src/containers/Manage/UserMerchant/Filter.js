@@ -64,15 +64,35 @@ const Filter = ({ className, setParams, params, setShowModal, operator, stations
           <div>Tên loại xe</div>
           <Input
             allowClear
-            placeholder={"Nhập tên loại xe"}
+            placeholder={"Số điện thoại"}
             onChange={(e) => {
-              _changeQuery({ name: "name", value: e.target.value });
+              _changeQuery({ name: "phone", value: e.target.value });
             }}
           />
         </Col>
-        <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>
-          <Button className="btn-add" onClick={() => setShowModal(true)} > Thêm mới</Button>
+        <Col span={4}>
+          <div>Email</div>
+          <Input
+            allowClear
+            placeholder={"Email"}
+            onChange={(e) => {
+              _changeQuery({ name: "email", value: e.target.value });
+            }}
+          />
         </Col>
+        <Col span={4}>
+          <div>Username</div>
+          <Input
+            allowClear
+            placeholder={"Username"}
+            onChange={(e) => {
+              _changeQuery({ name: "username", value: e.target.value });
+            }}
+          />
+        </Col>
+        {/* <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>
+          <Button className="btn-add" onClick={() => setShowModal(true)} > Thêm mới</Button>
+        </Col> */}
       </Row>
     </div>
   );

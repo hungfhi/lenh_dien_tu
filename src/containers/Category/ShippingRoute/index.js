@@ -48,14 +48,14 @@ const Index = ({ className, profile }) => {
               value: item?.id,
               label: item?.name,
             })
-            newProvince.push({
-              ...item,
-              value: item?.province?.id,
-              label: item?.province?.name,
-            })
-          })
-          // setProvince(newProvince)
-          setStations(newStations)
+            // newProvince.push({
+            //   ...item,
+            //   value: item?.province?.id,
+            //   label: item?.province?.name,
+            // });
+          });
+
+          setStations(newStations);
         }
       })
       .catch(err => {
@@ -72,13 +72,23 @@ const Index = ({ className, profile }) => {
     setLoading(true);
     category.getProvinceCity().then(res => {
       if (res.status === 200) {
-        setProvince(res.data.data);
+
+        const newProvince = [];
+
+        res?.data?.data.map(item => {
+
+          newProvince.push({
+            ...item,
+            value: item?.id,
+            label: item?.name,
+          });
+        });
+        setProvince(newProvince);
       }
     }).catch(err => {
       Ui.showError({ message: 'Có lỗi xảy ra' });
     });
   }, []);
-
 
   useEffect(() => {
     getStation()
@@ -111,7 +121,6 @@ const Index = ({ className, profile }) => {
     await setLoading(false);
   }, [params]);
 
-
   const getDataTable = useCallback(async () => {
     setLoading(true);
     category.getRoute(params).then(res => {
@@ -124,9 +133,6 @@ const Index = ({ className, profile }) => {
       Ui.showErrors('Có lỗi xảy ra');
     });
   }, [params]);
-
-  // console.log(allRoute);
-
 
   const onHiddenModal = useCallback(() => {
     setShowModal(false);
@@ -155,7 +161,13 @@ const Index = ({ className, profile }) => {
   return (
     <Row className={className} gutter={[16, 16]}>
       <Col xs={24}>
-        <Filter stations={stations} params={params} setParams={setParams} setShowModal={setShowModal} allRoute={allRoute} />
+        <Filter
+          stations={stations}
+          params={params}
+          setParams={setParams}
+          setShowModal={setShowModal}
+          allRoute={allRoute}
+        />
       </Col>
       <Col xs={24}>
         <Spin spinning={loadding}>
