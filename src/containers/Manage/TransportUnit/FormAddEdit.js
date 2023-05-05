@@ -10,16 +10,9 @@ const FormAddEdit = ({
     onSave,
     onHiddenModal,
 }) => {
-
-    const is_station = itemSelected && itemSelected?.models?.find(item => item?.model_type == 'App\\Models\\Station') !== undefined ? true : false
-    const is_mechant = itemSelected && itemSelected?.models?.find(item => item?.model_type == 'App\\Models\\Merchant') !== undefined ? true : false
-
-    console.log('is_station',is_station)
-    console.log('is_mechant',is_mechant)
-
     const [isActive, setActive] = useState(itemSelected && itemSelected.is_active == 1 ? true : false)
-    const [isStation, setStation] = useState(is_station)
-    const [isMechant, setMechant] = useState(is_mechant)
+    const [isStation, setStation] = useState(itemSelected && itemSelected?.models?.find(item => item?.model_type == 'App\\Models\\Station') !== undefined ? true : false)
+    const [isMechant, setMechant] = useState(itemSelected && itemSelected?.models?.find(item => item?.model_type == 'App\\Models\\Merchant') !== undefined ? true : false)
     const [form] = Form.useForm();
     const onFinish = async (values) => {
         onSave(values)
@@ -27,12 +20,33 @@ const FormAddEdit = ({
     const onFinishFailed = () => {
     };
 
-    const onStation = (value) => {
-        setStation(!value)
+    const onStation = (e) => {
+        if (e.target.checked) {
+            form.setFieldsValue({
+                is_station: true,
+            })
+        }
+        else {
+            form.setFieldsValue({
+                is_mechant: true,
+                is_station: false,
+            })
+        }
+        setStation(e.target.checked)
     }
 
-    const onMechant = (value) => {
-        setMechant(!value)
+    const onMechant = (e) => {
+        if (e.target.checked) {
+            form.setFieldsValue({
+                is_mechant: true,
+            })
+        }
+        else {
+            form.setFieldsValue({
+                is_station: true,
+                is_mechant: false,
+            })
+        }
     }
 
     const onActive = (value) => {
@@ -53,9 +67,9 @@ const FormAddEdit = ({
                     phone: itemSelected && itemSelected.phone || '',
                     address: itemSelected && itemSelected.address || '',
                     email: itemSelected && itemSelected.email || '',
-                    is_active: isActive,
-                    is_station: isStation,
-                    is_mechant: isMechant
+                    is_active: itemSelected && itemSelected.is_active == 1 ? true : false,
+                    is_station: itemSelected && itemSelected?.models?.find(item => item?.model_type == 'App\\Models\\Station') !== undefined ? true : false,
+                    is_mechant: itemSelected && itemSelected?.models?.find(item => item?.model_type == 'App\\Models\\Merchant') !== undefined ? true : false
                 }}
                 form={form}
             >
@@ -74,8 +88,15 @@ const FormAddEdit = ({
                         <div>Mã số thuế</div>
                         <Form.Item
                             name="tax_code"
+                            rules={[
+                                { required: true, message: "Vui lòng nhập mã số thuế" },
+                                {
+                                    pattern: new RegExp(/^[0-9]+$/i),
+                                    message: "Chỉ được nhập số",
+                                },
+                            ]}                            
                         >
-                            <InputNumber placeholder="Nhập mã số thuế" style={{ width: '100%' }} />
+                            <Input placeholder="Nhập mã số thuế" style={{ width: '100%' }} />
 
                         </Form.Item>
                     </Col>
@@ -83,16 +104,22 @@ const FormAddEdit = ({
                         <div>Số điện thoại</div>
                         <Form.Item
                             name="phone"
+                            rules={[
+                                { required: true, message: "Vui lòng nhập hotline" },
+                                {
+                                    pattern: new RegExp(/^[0-9]+$/i),
+                                    message: "Chỉ được nhập số",
+                                },
+                                { min: 10, message: "SĐT phải chỉ được nhập 10 chữ số" },
+                                { max: 10, message: "SĐT phải chỉ được nhập 10 chữ số" },
+                            ]}
                         >
-                            <InputNumber placeholder="Nhập số điện thoại" style={{ width: '100%' }} />
-
+                            <Input placeholder={"Nhập SĐT"} />
                         </Form.Item>
                     </Col>
                     <Col span={24}>
                         <div>Địa chỉ</div>
-                        <Form.Item
-                            name="address"
-                        >
+                        <Form.Item name="address">
                             <Input placeholder="Nhập địa chỉ" />
                         </Form.Item>
                     </Col>
@@ -118,8 +145,8 @@ const FormAddEdit = ({
                     <Col span={24}>
                         <Row style={{ marginBottom: -20 }}>
                             <div style={{ width: 150 }}>Quản lý bến</div>
-                            <Form.Item name="is_station">
-                                <Checkbox onChange={(e) => onStation(e?.target?.checked)}
+                            <Form.Item name="is_station" valuePropName="checked">
+                                <Checkbox onChange={(e) => onStation(e)}
                                     size='small'
                                     defaultChecked={isStation} />
                             </Form.Item>
@@ -128,8 +155,8 @@ const FormAddEdit = ({
                     <Col span={24}>
                         <Row style={{ marginBottom: -20 }}>
                             <div style={{ width: 150 }}>Vận hành tuyến</div>
-                            <Form.Item name="is_mechant">
-                                <Checkbox onChange={(e) => onMechant(e?.target?.checked)}
+                            <Form.Item name="is_mechant" valuePropName="checked">
+                                <Checkbox onChange={(e) => onMechant(e)}
                                     size='small'
                                     defaultChecked={isMechant} />
                             </Form.Item>
