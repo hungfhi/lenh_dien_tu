@@ -15,10 +15,6 @@ const Create = ({
   const onFinishFailed = () => {
   };
   const onSave = async (values) => {
-
-
-    console.log('valuesvalues',values)
-
     const payload = {
       name: values?.name,
       station_code: values?.station_code,

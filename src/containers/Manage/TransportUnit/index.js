@@ -17,6 +17,7 @@ const Index = ({ className, profile }) => {
   const user = useSelector((state) => state?.rootReducer?.user);
 
   const [data, setData] = useState([]);
+  const [models, setModels] = useState([]);
   const [total, setTotal] = useState(0);
   const [loadding, setLoading] = useState(false);
   const [isShowModal, setShowModal] = useState(false);
@@ -30,7 +31,7 @@ const Index = ({ className, profile }) => {
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-      manage.getTransport(data)
+      manage.getTransport(params)
           .then(res => {
               if (res.status === 200) {
                 setData(res?.data?.data)
@@ -45,6 +46,21 @@ const Index = ({ className, profile }) => {
   }, [params]);
 
 
+  const getModels = useCallback(async () => {
+      manage.getModel()
+          .then(res => {
+              if (res.status === 200) {
+                setModels(res?.data?.data)
+              }
+          })
+          .catch(err => {
+              if (err.response?.status === 422 && err.response?.data?.errors) {
+                  message.warn(err.response.data?.errors[0].msg)
+              }
+          })
+  }, [params]);
+
+
   const onHiddenModal = useCallback(() => {
     setShowModal(false);
   });
@@ -55,13 +71,23 @@ const Index = ({ className, profile }) => {
   });
 
   const onEdit = useCallback(async (ids) => {
-    setShowModalEdit(true)
+    setShowModalEdit(true);
+        manage.getDetailTransport(ids)
+        .then(res => {
+          if (res.status === 200) {
+            setItemSelected(res?.data?.data)
+          }
+        })
+        .catch(err => {
+          Ui.showError({ message: err?.response?.data?.message });
+        })
   }, [])
 
 
   useEffect(() => {
     getDataTable();
-  }, [getDataTable]);
+    getModels();
+  }, [getDataTable,getModels]);
 
   const onRefreshList = () => {
     getDataTable();
@@ -79,6 +105,7 @@ const Index = ({ className, profile }) => {
             params={params}
             loadding={loadding}
             data={data}
+            models={models}
             onEdit={onEdit}
             onRefreshList={onRefreshList}
             setParams={setParams}
