@@ -84,7 +84,7 @@ const FormAddEdit = ({
 
                     </Col>
                     <Col span={12}>
-                        <div>Mã số thuế</div>
+                        <div>Mã số thuế<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="tax_code"
                             rules={[
@@ -100,11 +100,11 @@ const FormAddEdit = ({
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <div>Số điện thoại</div>
+                        <div>Số điện thoại<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="phone"
                             rules={[
-                                { required: true, message: "Vui lòng nhập hotline" },
+                                { required: true, message: "Vui lòng nhập SĐT" },
                                 {
                                     pattern: new RegExp(/^[0-9]+$/i),
                                     message: "Chỉ được nhập số",
@@ -117,8 +117,12 @@ const FormAddEdit = ({
                         </Form.Item>
                     </Col>
                     <Col span={24}>
-                        <div>Địa chỉ</div>
-                        <Form.Item name="address">
+                        <div>Địa chỉ<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <Form.Item name="address"
+                            rules={[
+                                { required: true, message: "Vui lòng nhập địa chỉ" },
+                            ]}
+                        >
                             <Input placeholder="Nhập địa chỉ" />
                         </Form.Item>
                     </Col>
@@ -129,16 +133,15 @@ const FormAddEdit = ({
                             rules={[
                                 {
                                     type: 'email',
-                                    message: 'The input is not valid E-mail!',
+                                    message: 'Vui lòng nhập đúng định dạng E-mail!',
                                 },
                                 {
                                     required: true,
-                                    message: 'Please input your E-mail!',
+                                    message: 'Vui lòng nhập E-mail!',
                                 },
                             ]}
                         >
-                            <Input placeholder="Nhập E-mail" />
-
+                            <Input placeholder="Nhập E-mail"/>
                         </Form.Item>
                     </Col>
                     <Col span={24}>
