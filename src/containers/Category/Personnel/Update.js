@@ -15,6 +15,7 @@ const UpdateDinhMuc = ({
 }) => {
 
   const onSave = async (values) => {
+    console.log(values);
     const payload = {
       ...values,
       first_name: values?.first_name,

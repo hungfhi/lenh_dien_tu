@@ -1,21 +1,21 @@
-import { Button, Col, Form, Input, Row,InputNumber, Switch, Select } from "antd";
+import { Button, Col, Form, Input, Row, InputNumber, Switch, Select } from "antd";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { DIMENSION_PADDING_NORMAL, DIMENSION_PADDING_SMALL } from 'theme/dimensions';
 
 const { TextArea } = Input;
-const FormAddEdit = ({ 
-        className,
-        itemSelected,
-        onSave,
-        onHiddenModal,
-        stations,
-        province
-    }) => {
-   
-    const [isActive, setActive] = useState(true)
-    
+const FormAddEdit = ({
+    className,
+    itemSelected,
+    onSave,
+    onHiddenModal,
+    stations,
+    province
+}) => {
+
+    const [isActive, setActive] = useState(itemSelected ? (itemSelected.is_active == 1 ? true : false) : true)
+
     const [form] = Form.useForm();
     const onFinish = async (values) => {
         onSave(values)
@@ -23,12 +23,12 @@ const FormAddEdit = ({
     const onFinishFailed = () => {
     };
 
-    const onActive =(value)=>{
+    const onActive = (value) => {
         setActive(!value)
-        console.log(!value)
+        // console.log(!value)
     }
-    
-    console.log('itemSelected',itemSelected)
+
+    // console.log('itemSelected', itemSelected)
     return (
         <div className={className}>
             <Form
@@ -37,13 +37,13 @@ const FormAddEdit = ({
                 onFinish={onFinish}
                 name="control-hooks"
                 initialValues={{
-                    "route_code": itemSelected && itemSelected.id || '',
+                    "route_code": itemSelected && itemSelected.route_code || '',
                     "start_province_id": itemSelected && itemSelected.start_province?.id || '',
                     "end_province_id": itemSelected && itemSelected.end_province?.id || '',
                     "start_station_id": itemSelected && itemSelected.start_station?.id || '',
                     "end_station_id": itemSelected && itemSelected.end_station?.id || '',
                     "name": itemSelected && itemSelected.name || '',
-                    "is_active": itemSelected && itemSelected.is_active?.value ===1?true: false || true,
+                    is_active: itemSelected && itemSelected.is_active == 1 ? true : false,
                 }}
                 form={form}
             >
@@ -77,13 +77,13 @@ const FormAddEdit = ({
                                 placeholder="Chọn bến đi"
                                 optionFilterProp="children"
                                 filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
                                 options={stations}
                             />
                         </Form.Item>
                     </Col>
-                     <Col span={12}>
+                    <Col span={12}>
                         <div>Tỉnh đến<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="end_province_id"
@@ -112,7 +112,7 @@ const FormAddEdit = ({
                                 placeholder="Chọn bến đến"
                                 optionFilterProp="children"
                                 filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
                                 options={stations}
                             />
@@ -128,7 +128,7 @@ const FormAddEdit = ({
                         </Form.Item>
 
                     </Col>
-                     <Col span={12}>
+                    <Col span={12}>
                         <div>Tên tuyến<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="name"
@@ -138,23 +138,23 @@ const FormAddEdit = ({
                         </Form.Item>
 
                     </Col>
-                     <Col span={24}>
-                       
-                       <Row>
-                         <div style={{paddingTop: DIMENSION_PADDING_SMALL/2, paddingRight: DIMENSION_PADDING_NORMAL}}>Trạng thái hoạt động<span style={{ color: '#dc2d2d' }}>*</span></div>
-                        <Form.Item
-                            name="is_active"
-                            rules={[{ required: false, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                             <Switch
-                                onChange={(e) => onActive(e)}
-                                size='small'
-                                defaultChecked={isActive}
+                    <Col span={24}>
+
+                        <Row>
+                            <div style={{ paddingTop: DIMENSION_PADDING_SMALL / 2, paddingRight: DIMENSION_PADDING_NORMAL }}>Trạng thái hoạt động<span style={{ color: '#dc2d2d' }}>*</span></div>
+                            <Form.Item
+                                name="is_active"
+                                rules={[{ required: false, message: 'Vui lòng nhập dữ liệu' }]}
+                            >
+                                <Switch
+                                    onChange={(e) => onActive(e)}
+                                    size='small'
+                                    defaultChecked={isActive}
                                 />
-                        </Form.Item>
-                       </Row>
+                            </Form.Item>
+                        </Row>
                     </Col>
-                    
+
                 </Row>
                 <div
                     className="action"
@@ -184,7 +184,7 @@ const FormAddEdit = ({
     );
 };
 FormAddEdit.propTypes = {
-  className: PropTypes.any,
+    className: PropTypes.any,
 };
 export default styled(FormAddEdit)`
   .btn-add {

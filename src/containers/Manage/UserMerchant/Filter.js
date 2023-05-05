@@ -61,69 +61,38 @@ const Filter = ({ className, setParams, params, setShowModal, operator, stations
     <div className={className}>
       <Row gutter={[8, 8]}>
         <Col span={4}>
-          <div>Tuyến</div>
-          <Select
-            showSearch
-            placeholder="Tuyến"
-            optionFilterProp="children"
+          <div>Tên loại xe</div>
+          <Input
             allowClear
-            style={{ width: '100%' }}
-            onChange={onChangeRoute}
-            filterOption={(input, option) =>
-              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-            }
-            options={allRoute}
-          />
-        </Col>
-
-        <Col span={4}>
-          <div>Trạng thái</div>
-          <Select
-            style={{ width: '100%' }}
-            allowClear={true}
-            placeholder={'Chọn trạng thái'}
+            placeholder={"Số điện thoại"}
             onChange={(e) => {
-              _changeQuery({ name: "is_active", value: e });
+              _changeQuery({ name: "phone", value: e.target.value });
             }}
-          >
-            <Select.Option value={0}>Không hoạt động</Select.Option>
-            <Select.Option value={1}>Hoạt động</Select.Option>
-          </Select>
-        </Col>
-        <Col span={4}>
-          <div>Bến đi</div>
-          <Select
-            showSearch
-            placeholder="Bến đi"
-            optionFilterProp="children"
-            allowClear
-            style={{ width: '100%' }}
-            onChange={onChangeStartStation}
-            filterOption={(input, option) =>
-              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-            }
-
-            options={stations}
           />
         </Col>
         <Col span={4}>
-          <div>Bến đến</div>
-          <Select
-            showSearch
-            placeholder="Bến đến"
-            optionFilterProp="children"
+          <div>Email</div>
+          <Input
             allowClear
-            style={{ width: '100%' }}
-            onChange={onChangeEndStation}
-            filterOption={(input, option) =>
-              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-            }
-            options={stations}
+            placeholder={"Email"}
+            onChange={(e) => {
+              _changeQuery({ name: "email", value: e.target.value });
+            }}
           />
         </Col>
-        <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>
+        <Col span={4}>
+          <div>Username</div>
+          <Input
+            allowClear
+            placeholder={"Username"}
+            onChange={(e) => {
+              _changeQuery({ name: "username", value: e.target.value });
+            }}
+          />
+        </Col>
+        {/* <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>
           <Button className="btn-add" onClick={() => setShowModal(true)} > Thêm mới</Button>
-        </Col>
+        </Col> */}
       </Row>
     </div>
   );

@@ -20,6 +20,7 @@ const manage = {
         return axios.get(`${domain.ServiceAddress}/permissions?${qs.stringify(payload)}`)
     },
 
+
  
     //module
     getModule(payload) {
@@ -77,10 +78,20 @@ const manage = {
     getDetailTransport(payload) {
         return axios.get(`${domain.ServiceAddress}/merchants/${payload}`)
     },
+
     updateTransport(payload){
         return axios.put(`${domain.ServiceAddress}/merchants/${payload?.uuid}`, payload)
     },
-    
+
+    getUserMerchant(payload) {
+        return axios.get(`${domain.ServiceAddress}/merchantUser?${qs.stringify(payload)}`);
+    },
+    changeMerchantUserPassword(id, payload) {
+        return axios.put(`${domain.ServiceAddress}/merchantUser/${id}/set-password`, payload);
+    },
+    changeStatusMerchantUser(id, payload) {
+        return axios.put(`${domain.ServiceAddress}/merchantUser/${id}/change-status`, payload);
+    }
     
 
 

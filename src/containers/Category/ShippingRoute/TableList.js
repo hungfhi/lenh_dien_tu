@@ -10,7 +10,7 @@ import { Ui } from "utils/Ui";
 
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit,  onRefreshList, setTotal,total }) => {
+const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList, setTotal, total }) => {
 
   const onChange = async (e, value, row) => {
     const params = {
@@ -61,7 +61,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       width: 100,
       render: (text, record, row) => {
         return (
-          <div  style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
             {text}
           </div>
         )
@@ -73,7 +73,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       width: 300,
       render: (text, record, row) => {
         return (
-          <div  style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
             {text}
           </div>
         )
@@ -83,9 +83,9 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       title: "Bến đi",
       dataIndex: "start_station",
       width: 150,
-       render: (text, record, row) => {
+      render: (text, record, row) => {
         return (
-          <div  style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
             {text?.name}
           </div>
         )
@@ -97,8 +97,24 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       width: 150,
       render: (text, record, row) => {
         return (
-          <div  style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
             {text?.name}
+          </div>
+        )
+      }
+    },
+    {
+      title: "Cự ly",
+      dataIndex: "is_active",
+      width: 150,
+      render: (text, record) => {
+
+        return (
+          <div style={{ textAlign: 'center' }}>
+            {record?.merchant_routes[0] &&
+              <div>{record?.merchant_routes[0]?.distance} km</div>
+            }
+
           </div>
         )
       }
@@ -107,15 +123,15 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
       title: "Trạng thái",
       dataIndex: "is_active",
       width: 150,
-      render: (text, record, row) => {
+      render: (text, record) => {
         return (
-          <div style={{ textAlign: 'center', color: text ===1? COLOR_GREEN:COLOR_RED }}>
-            {text===1 ? 'Active': 'Disable'}
+          <div style={{ textAlign: 'center', color: record?.is_active === 1 ? COLOR_GREEN : COLOR_RED }}>
+            {record?.is_active === 1 ? 'Active' : 'In Active'}
           </div>
         )
       }
     },
-    
+
     {
       title: "Thao tác",
       width: 80,
