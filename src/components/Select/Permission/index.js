@@ -5,8 +5,10 @@ import _ from "lodash";
 import { memo, useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Ui } from "utils/Ui";
-const localSearchFunc = (input, option) =>
-    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+const localSearchFunc = (input, option) => {
+    console.log('input', input, option)
+    // return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+}
 const Permission = memo(
     ({
         className,
@@ -28,15 +30,6 @@ const Permission = memo(
             users.getPermissions()
                 .then(res => {
                     if (res.status === 200) {
-                        // _.map(res.data.data, (items) => {
-                        //         _.map(items?.permissions, (item) => {
-                        //             data.push({
-                        //                 id: item.slug,
-                        //                 name: item?.name,
-                        //             }) 
-                        //         })
-                        //     })
-
                         const dataSet = []
                         _.map(res?.data?.data, (items) => {
                             dataSet.push({
@@ -71,6 +64,7 @@ const Permission = memo(
 
 
         const _handleSearch = useCallback((input) => {
+
             setTimeout(() => {
                 setSearch(input || "");
             }, 666000)
@@ -85,14 +79,19 @@ const Permission = memo(
         return (
             <Select
                 {...props}
-                // mode={mode}
                 allowClear={allowClear}
                 style={{ width: "100%" }}
                 showSearch
                 placeholder={placeholder}
                 labelInValue={labelInValue}
                 className={className}
-                filterOption={typeSearch === "local" ? localSearchFunc : false}
+                filterOption={(input, option) => {
+                    if (option.children) {
+                        return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 ? true : false;
+                    } else if (option.label) {
+                        return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0 ? true : false;
+                    }
+                }}
                 loading={fetching}
                 notFoundContent={fetching ? <Spin size="small" /> : "Không có dữ liệu"}
                 onChange={_handleOnChange}
