@@ -21,7 +21,7 @@ const manage = {
     },
 
 
- 
+
     //module
     getModule(payload) {
         return axios.get(`${domain.ServiceAddress}/menus?${qs.stringify(payload)}`)
@@ -60,11 +60,11 @@ const manage = {
     createCarPark(payload) {
         return axios.post(`${domain.ServiceAddress}/stations`, payload)
     },
-    updateCarPark(payload){
+    updateCarPark(payload) {
         return axios.put(`${domain.ServiceAddress}/stations/${payload?.uuid}`, payload)
     },
 
-    
+
     //đơn vị vận tải
 
     getTransport(payload) {
@@ -83,9 +83,21 @@ const manage = {
     },
     changeStatusMerchantUser(id, payload) {
         return axios.put(`${domain.ServiceAddress}/merchantUser/${id}/change-status`, payload);
-    }
-    
+    },
 
+    // Mô hình kinh doanh
+    getBusinessModel(payload) {
+        return axios.get(`${domain.ServiceAddress}/business`)
+    },
+    getDetailBusinessType(payload) {
+        return axios.get(`${domain.ServiceAddress}/business/${payload.id}`);
+    },
+    createBusinessType(payload) {
+        return axios.post(`${domain.ServiceAddress}/business`, payload);
+    },
+    updateBusinessType(id, payload) {
+        return axios.put(`${domain.ServiceAddress}/business/${id}`, payload);
+    }
 
 }
 
