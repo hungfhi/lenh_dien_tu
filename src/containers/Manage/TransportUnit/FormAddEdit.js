@@ -32,7 +32,6 @@ const FormAddEdit = ({
                 is_station: false,
             })
         }
-        setStation(e.target.checked)
     }
 
     const onMechant = (e) => {

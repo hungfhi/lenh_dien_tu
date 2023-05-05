@@ -14,13 +14,14 @@ const UpdateDinhMuc = ({
   itemSelected
 }) => {
   const onSave = useCallback(async (values) => {
+
     const models = []
     if (values?.is_mechant && values?.is_station) {
       models.push(1, 2)
     } else if (values?.is_mechant && !values?.is_station) {
-      models.push(1)
-    } else if (!values?.is_mechant && values?.is_station) {
       models.push(2)
+    } else if (!values?.is_mechant && values?.is_station) {
+      models.push(1)
     } else {
       return null;
     }
