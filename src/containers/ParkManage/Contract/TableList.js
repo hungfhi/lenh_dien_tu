@@ -2,6 +2,7 @@ import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { Button, Modal, Pagination, Row, Checkbox, Tooltip, } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
+import moment from "moment";
 import PropTypes from "prop-types";
 import React, { memo } from "react";
 import styled from "styled-components";
@@ -65,23 +66,26 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
     // },
     {
       title: "Mã HĐ",
-      dataIndex: "dmo_id",
-      width: 100,
+      dataIndex: "contract_code",
+      width: 150,
     },
     {
       title: "Số HĐ",
-      dataIndex: "dmo_name",
+      dataIndex: "contract_number",
       width: 100,
     },
     {
       title: "Tên hợp đồng",
-      dataIndex: "dmo_name",
+      dataIndex: "name",
       width: 200,
     },
     {
       title: "Thời hạn",
-      dataIndex: "dmo_name",
+      dataIndex: "start_date",
       width: 200,
+      render: (value,row) => {
+        return <div>{moment(row?.start_date).format("DD/MM/YYYY")} - {moment(row?.end_date).format("DD/MM/YYYY")}</div>
+      }
     },
     {
       title: "Tên khách hàng",
@@ -170,7 +174,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
     },
     {
       title: "Địa chỉ",
-      dataIndex: "dmo_name",
+      dataIndex: "address",
       width: 250,
     },
     {
