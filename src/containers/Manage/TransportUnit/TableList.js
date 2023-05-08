@@ -10,71 +10,7 @@ import { Ui } from "utils/Ui";
 import _ from "lodash"
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList, models }) => {
-  const [payload, setPayload] = useState([]);
-
-  const onChange = async (check, values, items) => {
-    // console.log('check', check)
-    // console.log('values', values)
-    // console.log('item', items)
-    if (check !== 0) {
-      console.log('values',values.filter(item => item.id !== items?.id))
-      setPayload(values.filter(item => item.id !== items?.id));
-
-    }
-    else {
-      let newModels = _.clone(values);
-      newModels.push({
-        ...items,
-        id: items?.id,
-        name: items?.name,
-        model_type: items?.model_type,
-      });
-
-      console.log('newModels',newModels)
-      setPayload(newModels)
-    }
-
-
-
-    // const payload = {
-    //   // uuid: row?.id,
-    //   // is_active: row?.is_active === 1 ? 0 : 1,
-    // }
-    // manage.updateTransport(payload)
-    //   .then(res => {
-    //     if (res.status === 200) {
-    //       Ui.showSuccess({ message: "Thay đổi trạng thái thành công" });
-    //       onRefreshList()
-    //     }
-    //   })
-    //   .catch(err => {
-    //     Ui.showError({ message: err?.response?.data?.message });
-    //   })
-  };
-
-  const onActive = (check, values, items) => {
-    let name = ''
-    if (check == true) {
-      name = 'Bạn muốn bỏ active không?'
-    } else {
-      name = 'Bạn muốn active không?'
-    }
-    confirm({
-      title: `Thông báo`,
-      icon: <ExclamationCircleOutlined />,
-      content: `${name}`,
-      okText: "Có",
-      cancelText: "Không",
-      onOk() {
-        onChange(check, values, items);
-      },
-      onCancel() { },
-    });
-  };
-
-
-
+const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList, total,models }) => {
 
   const columns = [
     {
@@ -84,7 +20,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
       fixed: "left",
       align: 'center',
       render: (value, row, index) => {
-        const stringIndex = `${((params.page - 1) * params.size + index)}`;
+        const stringIndex = `${((params.page - 1) * params.per_page + index)}`;
         return (
           <h5 style={{ textAlign: 'center' }}>{params.page === 1 ? index + 1 : parseInt(stringIndex) + 1}</h5>
         );
@@ -175,33 +111,33 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
     }
   ];
 
-  // const renderContent = () => {
-  //   return (
-  //     <Row justify="end" style={{ marginBottom: 5, marginTop: 5 }}>
-  //       <Pagination
-  //         onShowSizeChange={(current, size) => {
-  //           setParams((prevState) => {
-  //             let nextState = { ...prevState };
-  //             nextState.page = 1;
-  //             nextState.size = size;
-  //             return nextState;
-  //           });
-  //         }}
-  //         onChange={(page, pageSize) => {
-  //           setParams((prevState) => {
-  //             let nextState = { ...prevState };
-  //             nextState.page = page;
-  //             return nextState;
-  //           });
-  //         }}
-  //         total={total}
-  //         current={params.page}
-  //         pageSize={params.size}
-  //         showSizeChanger
-  //       />
-  //     </Row>
-  //   );
-  // };
+  const renderContent = () => {
+    return (
+      <Row justify="end" style={{ marginBottom: 5, marginTop: 5 }}>
+        <Pagination
+          onShowSizeChange={(current, size) => {
+            setParams((prevState) => {
+              let nextState = { ...prevState };
+              nextState.page = 1;
+              nextState.per_page = size;
+              return nextState;
+            });
+          }}
+          onChange={(page, pageSize) => {
+            setParams((prevState) => {
+              let nextState = { ...prevState };
+              nextState.page = page;
+              return nextState;
+            });
+          }}
+          total={total}
+          current={params.page}
+          pageSize={params.per_page}
+          showSizeChanger
+        />
+      </Row>
+    );
+  };
 
   return (
     <div className={className}>
@@ -211,7 +147,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
         scroll={{ y: "calc(100vh - 330px)" }}
         pagination={false}
       />
-      {/* {renderContent()} */}
+      {renderContent()}
 
     </div >
   );

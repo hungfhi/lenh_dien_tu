@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { DIMENSION_PADDING_NORMAL, DIMENSION_PADDING_SMALL } from 'theme/dimensions';
-const { TextArea } = Input;
 const FormAddEdit = ({
     className,
     itemSelected,

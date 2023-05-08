@@ -18,6 +18,7 @@ const Index = ({ className, profile }) => {
 
   const [data, setData] = useState([]);
   const [models, setModels] = useState([]);
+  const [stations, setStations] = useState([]);
   const [total, setTotal] = useState(0);
   const [loadding, setLoading] = useState(false);
   const [isShowModal, setShowModal] = useState(false);
@@ -25,8 +26,9 @@ const Index = ({ className, profile }) => {
   const [isShowModalEdit, setShowModalEdit] = useState(false)
   const [params, setParams] = useState({
     page: 1,
-    size: 20,
-    name: "",
+    per_page: 20,
+    merchant_name: "",
+    station_id:undefined
   });
 
   const getDataTable = useCallback(async () => {
@@ -35,6 +37,7 @@ const Index = ({ className, profile }) => {
           .then(res => {
               if (res.status === 200) {
                 setData(res?.data?.data)
+                setTotal(res?.data?.meta?.total)
               }
           })
           .catch(err => {
@@ -59,6 +62,24 @@ const Index = ({ className, profile }) => {
               }
           })
   }, [params]);
+
+
+
+  const getStations = useCallback(async () => {
+    manage.getStation()
+        .then(res => {
+            if (res.status === 200) {
+              setStations(res?.data?.data)
+            }
+        })
+        .catch(err => {
+            if (err.response?.status === 422 && err.response?.data?.errors) {
+                message.warn(err.response.data?.errors[0].msg)
+            }
+        })
+}, [params]);
+
+
 
 
   const onHiddenModal = useCallback(() => {
@@ -87,7 +108,8 @@ const Index = ({ className, profile }) => {
   useEffect(() => {
     getDataTable();
     getModels();
-  }, [getDataTable,getModels]);
+    getStations();
+  }, [getDataTable,getModels,getStations]);
 
   const onRefreshList = () => {
     getDataTable();
@@ -97,7 +119,7 @@ const Index = ({ className, profile }) => {
   return (
     <Row className={className} gutter={[16, 16]}>
       <Col xs={24}>
-        <Filter params={params} setParams={setParams} setShowModal={setShowModal} />
+        <Filter params={params} setParams={setParams} setShowModal={setShowModal} stations={stations}/>
       </Col>
       <Col xs={24}>
         <Spin spinning={loadding}>
@@ -105,6 +127,7 @@ const Index = ({ className, profile }) => {
             params={params}
             loadding={loadding}
             data={data}
+            total={total}
             models={models}
             onEdit={onEdit}
             onRefreshList={onRefreshList}
