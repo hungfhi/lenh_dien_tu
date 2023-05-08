@@ -7,4 +7,5 @@ import command from './command'
 import report from './report'
 import plan from './plan'
 import manage from './manage'
-export { domain,  apis, auth, users, category, manage,plan, command, report }
+import station from './station'
+export { domain,  apis, auth, users, category, manage,plan, command, report, station }

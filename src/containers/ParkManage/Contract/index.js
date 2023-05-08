@@ -9,27 +9,15 @@ import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
 import { useSelector, } from 'react-redux';
-import { apis } from "configs";
+import { apis, station } from "configs";
 const { TabPane } = Tabs;
-const data = [
-  {
-    id: '1',
-    name: 'hungf',
-    date: 20 - 12 - 2012
-  },
-  {
-    id: '2',
-    name: 'mai',
-    date: 16 - 11 - 2012
-  },
-]
 
 const Index = ({ className, profile }) => {
 
 
   const user = useSelector((state) => state?.rootReducer?.user);
 
-  // const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [loadding, setLoading] = useState(false);
   const [isShowModal, setShowModal] = useState(false);
@@ -43,10 +31,10 @@ const Index = ({ className, profile }) => {
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-    apis.getBusStation(data)
+    station.getContract(data)
       .then(res => {
         if (res.status === 200) {
-          Ui.showSuccess({ message: "Thành công" });
+          setData(res?.data?.data)
         }
       })
       .catch(err => {
