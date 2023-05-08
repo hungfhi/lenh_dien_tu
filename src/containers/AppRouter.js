@@ -33,6 +33,7 @@ import Product from './Category/Product';
 import ProvinceCity from './Category/ProvinceCity';
 import District from './Category/District';
 import UserMerchant from './Manage/UserMerchant';
+import BusinessModel from './Manage/BusinessType';
 const AppRouter = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state?.rootReducer?.user);
@@ -226,6 +227,14 @@ const AppRouter = () => {
           element={
             <PrivateRoute>
               <UserMerchant />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/business-model"
+          element={
+            <PrivateRoute>
+              <BusinessModel />
             </PrivateRoute>
           }
         />

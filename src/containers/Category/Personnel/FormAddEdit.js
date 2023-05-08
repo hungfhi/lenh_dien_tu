@@ -120,6 +120,8 @@ const FormAddEdit = ({
     const onFinishFailed = () => {
     };
 
+    console.log(itemSelected);
+
     return (
         <div className={className}>
             <Form
@@ -144,8 +146,8 @@ const FormAddEdit = ({
                     modelable_id: itemSelected && itemSelected?.modelable_id || null,
                     modelable_type: itemSelected && itemSelected?.modelable_type || null,
                     email: itemSelected && itemSelected?.user?.email || null,
-                    station_id: null,
-                    merchant_id: itemSelected && itemSelected?.user?.roles[0]?.id || null
+                    station_id: itemSelected && itemSelected?.user?.station_used?.id || null,
+                    roles: itemSelected && itemSelected?.user?.roles[0]?.id || null,
                 }}
                 form={form}
             >
@@ -263,7 +265,11 @@ const FormAddEdit = ({
                             name="station_id"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Select defaultValue placeholder="Chọn bến làm việc">
+                            <Select
+                                defaultValue
+                                placeholder="Chọn bến làm việc"
+                                disabled={itemSelected?.user?.model_used?.model_type === "App\\Models\\Station" ? false : true}
+                            >
                                 {listStations && listStations.map((item, index) => {
 
                                     return <Select.Option value={item?.id}>{item?.name}</Select.Option>
@@ -295,7 +301,7 @@ const FormAddEdit = ({
                     <Col style={{ margin: 0 }} span={12}>
                         <div>Quyền tài khoản <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
-                            name="merchant_id"
+                            name="roles"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
                             <Select defaultValue>
