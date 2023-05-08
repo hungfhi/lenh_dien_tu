@@ -75,6 +75,10 @@ const manage = {
         return axios.get(`${domain.ServiceAddress}/models?${qs.stringify(payload)}`)
     },
 
+    getStation(payload) {
+        return axios.get(`${domain.ServiceAddress}/stations?${qs.stringify(payload)}`)
+    },
+
     getDetailTransport(payload) {
         return axios.get(`${domain.ServiceAddress}/merchants/${payload}`)
     },
