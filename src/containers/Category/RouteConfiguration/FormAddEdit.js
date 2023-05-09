@@ -11,10 +11,13 @@ const FormAddEdit = ({
     onSave,
     onHiddenModal,
     stations,
-    province
+    province,
+    allRoute,
+    allUnit
 }) => {
 
-    const [isActive, setActive] = useState(itemSelected ? (itemSelected.is_active == 1 ? true : false) : true)
+    // console.log(itemSelected);
+    const [isActive, setActive] = useState(itemSelected ? (itemSelected?.is_active == 1 ? true : false) : true);
 
     const [form] = Form.useForm();
     const onFinish = async (values) => {
@@ -37,104 +40,67 @@ const FormAddEdit = ({
                 onFinish={onFinish}
                 name="control-hooks"
                 initialValues={{
-                    "route_code": itemSelected && itemSelected.route_code || '',
-                    "start_province_id": itemSelected && itemSelected.start_province?.id || '',
-                    "end_province_id": itemSelected && itemSelected.end_province?.id || '',
-                    "start_station_id": itemSelected && itemSelected.start_station?.id || '',
-                    "end_station_id": itemSelected && itemSelected.end_station?.id || '',
-                    "name": itemSelected && itemSelected.name || '',
-                    is_active: isActive,
+                    "route_id": itemSelected && itemSelected?.route?.id || '',
+                    "distance": itemSelected && itemSelected?.distance || '',
+                    "merchant_id": itemSelected && itemSelected?.merchant?.id || '',
+                    "is_active": isActive,
                 }}
                 form={form}
             >
                 <Row gutter={[16, 16]}>
                     <Col span={12}>
-                        <div>Tỉnh đi<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <div>Tuyến<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
-                            name="start_province_id"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                            name="route_id"
+                            rules={[{ required: true, message: 'Vui lòng chọn tuyến' }]}
                         >
                             <Select
                                 showSearch
-                                placeholder="Chọn tỉnh đi"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                                }
-                                options={province}
-                            />
-                        </Form.Item>
-
-                    </Col>
-                    <Col span={12}>
-                        <div>Bến đi <span style={{ color: '#dc2d2d' }}>*</span></div>
-                        <Form.Item
-                            name="start_station_id"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                            <Select
-                                showSearch
-                                placeholder="Chọn bến đi"
+                                placeholder="Chọn tuyến"
                                 optionFilterProp="children"
                                 filterOption={(input, option) =>
                                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
-                                options={stations}
+                                options={allRoute}
                             />
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <div>Tỉnh đến<span style={{ color: '#dc2d2d' }}>*</span></div>
-                        <Form.Item
-                            name="end_province_id"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                            <Select
-                                showSearch
-                                placeholder="Chọn tỉnh đến"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                                }
-                                options={province}
-                            />
+                            {/* <Select>
+                                {allRoute?.map(item => {
+                                    return <Select.Option value={item?.value}>{item?.value}</Select.Option>
+                                })}
+                            </Select> */}
                         </Form.Item>
 
                     </Col>
                     <Col span={12}>
-                        <div>Bến đến <span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <div>Cự ly<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
-                            name="end_station_id"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                            name="distance"
+                            rules={[
+                                { required: true, message: 'Vui lòng nhập cự ly' },
+                                {
+                                    pattern: new RegExp(/^[0-9]+$/i),
+                                    message: "Chỉ được nhập số",
+                                },
+                            ]}
+                        >
+                            <Input placeholder="Cự ly" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                        <div>Đơn vị vận tải<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <Form.Item
+                            name="merchant_id"
+                            rules={[{ required: true, message: 'Vui lòng chọn đơn vị vận tải' }]}
                         >
                             <Select
                                 showSearch
-                                placeholder="Chọn bến đến"
+                                placeholder="Chọn đơn vị vận tải"
                                 optionFilterProp="children"
                                 filterOption={(input, option) =>
                                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
-                                options={stations}
+                                options={allUnit}
                             />
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <div>Mã tuyến<span style={{ color: '#dc2d2d' }}>*</span></div>
-                        <Form.Item
-                            name="route_code"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                            <Input placeholder={"Nhập mã tuyến"} />
-                        </Form.Item>
-
-                    </Col>
-                    <Col span={12}>
-                        <div>Tên tuyến<span style={{ color: '#dc2d2d' }}>*</span></div>
-                        <Form.Item
-                            name="name"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                            <Input placeholder={"Nhập tên tuyến"} />
                         </Form.Item>
 
                     </Col>

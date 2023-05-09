@@ -11,29 +11,33 @@ const Create = ({
   onRefreshList,
   itemSelected,
   stations,
-  province
+  province,
+  allRoute,
+  allUnit
 }) => {
   const [form] = Form.useForm();
   const onFinishFailed = () => {
   };
   const onSave = async (values) => {
+    console.log(values);
 
     const payload = {
-      ...values,
-      is_active: values?.is_active ? 1 : 0
+      "route_id": values?.route_id,
+      "merchant_id": values?.merchant_id,
+      "distance": values?.distance,
+      "is_active": values?.is_active ? 1 : 0
     }
-    // console.log(payload);
-    category.createRoute(payload).then(res => {
-      if (res.status === 200) {
-        Ui.showSuccess({ message: "Thành công" });
-        onRefreshList();
-        onHiddenModal();
-      }
-    }).catch(err => {
-      if (err.response?.status === 422 && err.response?.data?.errors) {
-        message.error(err.response?.data?.message);
-      }
-    });
+
+    console.log(payload);
+
+    // category.createMerchantRoutes(payload).then(res => {
+    //   Ui.showSuccess({ message: "Thành công" });
+    //   onHiddenModal();
+    //   onRefreshList();
+    // }).catch(err => {
+    //   Ui.showError({ message: 'Có lỗi xảy ra' });
+    // });
+
   }
   return (
     <div className={className}>
@@ -43,6 +47,8 @@ const Create = ({
         province={province}
         onSave={onSave}
         onHiddenModal={onHiddenModal}
+        allRoute={allRoute}
+        allUnit={allUnit}
       />
     </div>
   );

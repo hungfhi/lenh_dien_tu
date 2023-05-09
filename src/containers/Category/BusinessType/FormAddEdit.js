@@ -89,13 +89,15 @@ const FormAddEdit = ({
 
                     </Col>
                     <Col style={{ margin: 0 }} span={24}>
-                        <div>Roles <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <div>Roles</div>
                         <Form.Item
                             name="roles"
                         // rules={[{ required: true, message: 'Vui lòng nhập tên loại hình' }]}
                         >
                             <Select
                                 mode="multiple"
+                                style={{ width: '100%' }}
+                                placeholder={'Chọn roles'}
                             >
                                 {allRoles?.map(item => {
 

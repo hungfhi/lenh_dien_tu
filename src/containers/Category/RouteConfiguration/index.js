@@ -9,7 +9,7 @@ import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
 import { useSelector, } from 'react-redux';
-import { category } from "configs";
+import { category, manage } from "configs";
 
 const Index = ({ className, profile }) => {
 
@@ -18,10 +18,11 @@ const Index = ({ className, profile }) => {
 
   const [data, setData] = useState([]);
   const [allRoute, setAllRoute] = useState([]);
+  const [allUnit, setAllUnit] = useState([]);
   const [stations, setStations] = useState([]);
   const [province, setProvince] = useState([]);
   const [total, setTotal] = useState(0);
-  const [loadding, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isShowModal, setShowModal] = useState(false);
   const [itemSelected, setItemSelected] = useState(null);
   const [isShowModalEdit, setShowModalEdit] = useState(false)
@@ -30,8 +31,9 @@ const Index = ({ className, profile }) => {
     size: 20,
     route_id: '',
     is_active: '',
-    station_start_id: '',
-    station_end_id: ''
+    start_station_id: '',
+    end_station_id: '',
+    per_page: 10
   });
 
   const getStation = useCallback(async () => {
@@ -49,13 +51,13 @@ const Index = ({ className, profile }) => {
               label: item?.name,
             })
             // newProvince.push({
-            //   ...item,
+            //   ...item, 
             //   value: item?.province?.id,
             //   label: item?.province?.name,
-            // });
-          });
-
-          setStations(newStations);
+            // })
+          })
+          // setProvince(newProvince)
+          setStations(newStations)
         }
       })
       .catch(err => {
@@ -90,13 +92,13 @@ const Index = ({ className, profile }) => {
     });
   }, []);
 
-  // console.log(province);
 
   useEffect(() => {
-    getStation()
-    getAllRoutes()
-    getListProvinceCity();
-  }, [])
+    // getStation();
+    getTransportUnit();
+    // getListProvinceCity();
+    getAllRoutes();
+  }, []);
 
   const getAllRoutes = useCallback(async () => {
     setLoading(true);
@@ -123,18 +125,43 @@ const Index = ({ className, profile }) => {
     await setLoading(false);
   }, []);
 
+  const getTransportUnit = useCallback(async () => {
+    // setLoading(true);
+    manage.getTransport(params).then(res => {
+      if (res.status === 200) {
+        const allUnit = [];
+        res?.data?.data.map(item => {
+          allUnit.push({
+            ...item,
+            value: item?.id,
+            label: item?.name,
+          });
+        });
+        setAllUnit(allUnit);
+      }
+    }).catch(err => {
+      Ui.showErrors('Có lỗi xảy ra')
+    });
+    // await setLoading(false);
+  }, []);
+
+
   const getDataTable = useCallback(async () => {
     setLoading(true);
-    category.getRoute(params).then(res => {
+    category.getMerchantRoutes(params).then(res => {
       if (res.status === 200) {
-        setData(res?.data?.data)
-        setTotal(res?.data?.meta?.total)
+        setData(res?.data?.data);
+        setTotal(res?.data?.meta?.total);
       }
       setLoading(false);
     }).catch(err => {
-      Ui.showErrors('Có lỗi xảy ra');
+      if (err.response?.status === 422 && err.response?.data?.errors) {
+        message.warn(err.response.data?.errors[0].msg)
+        message.error('Error!')
+      }
     });
   }, [params]);
+  // console.log(allRoute);
 
   const onHiddenModal = useCallback(() => {
     setShowModal(false);
@@ -163,19 +190,13 @@ const Index = ({ className, profile }) => {
   return (
     <Row className={className} gutter={[16, 16]}>
       <Col xs={24}>
-        <Filter
-          stations={stations}
-          params={params}
-          setParams={setParams}
-          setShowModal={setShowModal}
-          allRoute={allRoute}
-        />
+        <Filter stations={stations} params={params} setParams={setParams} setShowModal={setShowModal} allRoute={allRoute} />
       </Col>
       <Col xs={24}>
-        <Spin spinning={loadding}>
+        <Spin spinning={loading}>
           <TableList
             params={params}
-            loadding={loadding}
+            loadding={loading}
             data={data}
             onEdit={onEdit}
             total={total}
@@ -199,6 +220,7 @@ const Index = ({ className, profile }) => {
           stations={stations}
           province={province}
           allRoute={allRoute}
+          allUnit={allUnit}
         />
       </Drawer>
       <Drawer
@@ -219,6 +241,7 @@ const Index = ({ className, profile }) => {
               stations={stations}
               province={province}
               allRoute={allRoute}
+              allUnit={allUnit}
             />
           ) : <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spin spinning /></div>
         }
