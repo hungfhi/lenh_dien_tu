@@ -123,7 +123,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
                 style={{ width: '100%' }}
                 type="link"
                 icon={<EditOutlined />}
-                onClick={() => onEdit(ids)}
+                onClick={() => onEdit(record)}
               />
             </Tooltip>
           </div>

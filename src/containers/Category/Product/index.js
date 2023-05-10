@@ -30,10 +30,10 @@ const Product = ({ className }) => {
             if (res.status === 200) {
                 setListProduct(res?.data?.data);
             }
+            setLoading(false);
         }).catch(err => {
             Ui.showError({ message: 'Có lỗi xảy ra' });
         })
-        await setLoading(false);
     }, [params]);
 
     const onHiddenModal = useCallback(() => {

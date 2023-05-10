@@ -81,6 +81,9 @@ const category = {
     getMerchantRoutes(payload) {
         return axios.get(`${domain.ServiceAddress}/merchantRoutes?${qs.stringify(payload)}`);
     },
+    getDetailMerchantRoutes(payload) {
+        return axios.get(`${domain.ServiceAddress}/merchantRoutes/${payload?.id}`)
+    },
     createMerchantRoutes(payload) {
         return axios.post(`${domain.ServiceAddress}/merchantRoutes`, payload);
     },

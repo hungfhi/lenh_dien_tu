@@ -42,7 +42,6 @@ const FormAddEdit = ({
                 initialValues={{
                     "route_id": itemSelected && itemSelected?.route?.id || '',
                     "distance": itemSelected && itemSelected?.distance || '',
-                    "merchant_id": itemSelected && itemSelected?.merchant?.id || '',
                     "is_active": isActive,
                 }}
                 form={form}
@@ -85,24 +84,6 @@ const FormAddEdit = ({
                         >
                             <Input placeholder="Cự ly" />
                         </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                        <div>Đơn vị vận tải<span style={{ color: '#dc2d2d' }}>*</span></div>
-                        <Form.Item
-                            name="merchant_id"
-                            rules={[{ required: true, message: 'Vui lòng chọn đơn vị vận tải' }]}
-                        >
-                            <Select
-                                showSearch
-                                placeholder="Chọn đơn vị vận tải"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                                }
-                                options={allUnit}
-                            />
-                        </Form.Item>
-
                     </Col>
                     <Col span={24}>
 

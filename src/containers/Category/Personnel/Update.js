@@ -15,9 +15,16 @@ const UpdateDinhMuc = ({
 }) => {
 
   const onSave = async (values) => {
-    console.log(values);
+
+    // console.log(values);
+    const idRoles = [];
+    values?.roles.map(item => {
+      idRoles.push(item.value);
+    });
+
+    const idModels = [];
+    idModels.push(values.model_id);
     const payload = {
-      ...values,
       first_name: values?.first_name,
       last_name: values?.last_name,
       staff_code: values?.staff_code,
@@ -31,9 +38,15 @@ const UpdateDinhMuc = ({
       gender: values?.gender,
       date_of_birth: moment(values?.date_of_birth).format('YYYY-MM-DD'),
       address: values?.address,
-      modelable_id: values?.modelable_id,
-      modelable_type: values?.modelable_type,
+      modelable_id: values?.modelable_id || 1,
+      // modelable_type: values?.modelable_type ||'',
+      email: values?.email,
+      roles: values?.roles,
+      station_id: values?.station_id || null,
+      model_id: values?.model_id
     };
+    // console.log(payload);
+
 
     category.updatePerson(itemSelected?.id, payload).then(res => {
       if (res.status === 200) {

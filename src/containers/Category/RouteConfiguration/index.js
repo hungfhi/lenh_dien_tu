@@ -140,7 +140,7 @@ const Index = ({ className, profile }) => {
         setAllUnit(allUnit);
       }
     }).catch(err => {
-      Ui.showErrors('Có lỗi xảy ra')
+      Ui.showErrors('Có lỗi xảy ra');
     });
     // await setLoading(false);
   }, []);
@@ -173,7 +173,8 @@ const Index = ({ className, profile }) => {
   });
 
   const onEdit = useCallback(async (row) => {
-    setShowModalEdit(true)
+    
+    // category
     setItemSelected(row);
   }, [])
 
