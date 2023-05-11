@@ -9,7 +9,7 @@ import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
 import { useSelector, } from 'react-redux';
-import { apis, station } from "configs";
+import { apis, manage, station } from "configs";
 const { TabPane } = Tabs;
 
 const Index = ({ className, profile }) => {
@@ -19,6 +19,8 @@ const Index = ({ className, profile }) => {
 
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
+  const [stations, setStations] = useState([]);
+  const [stationConvert, setStationConvert] = useState([]);
   const [loadding, setLoading] = useState(false);
   const [isShowModal, setShowModal] = useState(false);
   const [itemSelected, setItemSelected] = useState(null);
@@ -29,12 +31,48 @@ const Index = ({ className, profile }) => {
     name: "",
   });
 
+
+
   const getDataTable = useCallback(async () => {
+    const payload = {
+      is_contract : 1
+    }
     setLoading(true);
-    station.getContract(data)
+    station.getContract(params)
       .then(res => {
         if (res.status === 200) {
-          setData(res?.data?.data)
+
+          manage.getStation(payload)
+            .then(res1 => {
+              if (res1.status === 200) {
+                const stationCheck = []
+                _.map(res1?.data?.data, (items) => {
+                  stationCheck.push({
+                    value: items.id,
+                    label:items.name
+                  });
+
+                })
+                setStationConvert(stationCheck)
+                setStations(res1?.data?.data)
+                setData(_.map(res?.data?.data, (item) => {
+                  let arr = _.map(item.station, (_item) => {
+                    _item.ativeNew = 1;
+                    return _item;
+                  });
+                  let dataConcat = _.concat(arr, res1?.data?.data);
+                  let arrNew = _.uniqBy(dataConcat, "id");
+                  item.arrNew = arrNew;
+                  return item;
+                }));
+              }
+            })
+            .catch(err1 => {
+              if (err1.response?.status === 422 && err1.response?.data?.errors) {
+                message.warn(err1.response.data?.errors[0].msg)
+              }
+            })
+
         }
       })
       .catch(err => {
@@ -47,6 +85,8 @@ const Index = ({ className, profile }) => {
   }, [params]);
 
 
+
+
   const onHiddenModal = useCallback(() => {
     setShowModal(false);
   });
@@ -57,29 +97,41 @@ const Index = ({ className, profile }) => {
   });
 
   const onEdit = useCallback(async (ids) => {
-    setShowModalEdit(true)
-    // const result = await ServiceBase.requestJson({
-    //   method: "GET",
-    //   url: `/v1/category-declare/quota/${ids}`,
-    //   data: {
-
-    //   },
-    // });
-    // if (result.hasErrors) {
-    //   Ui.showErrors(result?.errors);
-    // } else {
-    //   setItemSelected(result?.value?.data)
-    // }
+    setShowModalEdit(true);
+    station.getDetailContract(ids)
+      .then(res => {
+        if (res.status === 200) {
+          setItemSelected(res?.data?.data)
+        }
+      })
+      .catch(err => {
+        Ui.showError({ message: err?.response?.data?.message });
+      })
   }, [])
 
 
   useEffect(() => {
     getDataTable();
+    if (stations.length !== 0 && data.length !== 0) {
+      setData(_.map(data, (item) => {
+        let arr = _.map(item.station, (_item) => {
+          _item.ativeNew = 1;
+          return _item;
+        });
+        let dataConcat = _.concat(arr, stations);
+        let arrNew = _.uniqBy(dataConcat, "id");
+        item.arrNew = arrNew;
+        return item;
+      }));
+    }
   }, [getDataTable]);
+
 
   const onRefreshList = () => {
     getDataTable();
   }
+
+ 
 
 
   return (
@@ -92,6 +144,7 @@ const Index = ({ className, profile }) => {
           <TableList
             params={params}
             loadding={loadding}
+            stations={stations}
             data={data}
             onEdit={onEdit}
             onRefreshList={onRefreshList}
@@ -113,6 +166,7 @@ const Index = ({ className, profile }) => {
         <Create
           onRefreshList={onRefreshList}
           onHiddenModal={onHiddenModal}
+          stations={stationConvert}
         />
       </Drawer>
       <Drawer
@@ -125,13 +179,14 @@ const Index = ({ className, profile }) => {
         visible={isShowModalEdit}
       >
         {
-          
+          itemSelected ? (
             <Update
               onRefreshList={onRefreshList}
               onHiddenModalEdit={onHiddenModalEdit}
               itemSelected={itemSelected}
+              stations={stationConvert}
             />
-          
+          ) : <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spin spinning /></div>
         }
       </Drawer>
     </Row>
