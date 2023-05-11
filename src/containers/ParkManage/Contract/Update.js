@@ -12,6 +12,7 @@ const UpdateDinhMuc = ({
     onRefreshList,
     itemSelected,
     stations,
+    transport
   }) => {
     const onSave = useCallback(async (values) => {
     })
@@ -20,6 +21,7 @@ const UpdateDinhMuc = ({
         <FormAddEdit 
           itemSelected={itemSelected}
           stations={stations}
+          transport={transport}
           onSave={onSave}
           onHiddenModal={onHiddenModalEdit}
         />

@@ -1,12 +1,10 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import styled from "styled-components";
-import PropTypes from "prop-types";
+import { EditOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Row, Tooltip, Empty } from "antd";
+import _, { ceil } from "lodash";
 import moment from 'moment';
-import { Row, Col, Checkbox, Radio, Input, Tooltip, Button } from "antd";
-import { URI } from "utils/constants";
-import { Ui } from "utils/Ui";
-import _ from "lodash";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import styled from "styled-components";
 
 
 const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
@@ -122,8 +120,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                   </th>
                 </tr>
               </thead>
-
-              <tbody style={{ fontSize: 13 }} className={className}>
+              {data?.length !== 0 ?<tbody style={{ fontSize: 13 }} className={className}>
                 {_.map(data, (item, index) => {
                   let _render = [];
                   let _renderTT = (
@@ -249,7 +246,8 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                   }
                   return _render;
                 })}
-              </tbody>
+              </tbody> : <p><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /></p> }
+              
             </table>
           </div>
         </div>
@@ -270,6 +268,7 @@ table {
 .table-scroll {
  	position:relative;
  	max-width:100%;
+  width: 100%;
  	border-left:1px solid #red;
 }
 

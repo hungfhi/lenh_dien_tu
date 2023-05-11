@@ -10,7 +10,19 @@ const { Option } = Select;
 
 let inputTimer = null;
 
-const Filter = ({ className, setParams, params, setShowModal, operator }) => {
+const Filter = ({ className, setParams, params, setShowModal, transport }) => {
+  const [fetching, setFetching] = useState(false);
+  const [search, setSearch] = useState(false);
+
+  const _handleSearch = useCallback((input) => {
+    setTimeout(() => {
+      setSearch(input || "");
+    }, 666000)
+  }, []);
+
+  const localSearchFunc = (input, option) =>
+    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+
   const _changeQuery = useCallback(
     (payload) => {
       if (inputTimer) {
@@ -31,13 +43,53 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
     <div className={className}>
       <Row gutter={[8, 8]}>
         <Col span={4}>
+          <div>Mã hợp đồng</div>
           <Input
             allowClear
-            placeholder={"Filter text"}
+            placeholder={"Mã hợp đồng"}
             onChange={(e) => {
-              _changeQuery({ name: "name", value: e.target.value });
+              _changeQuery({ name: "contract_code", value: e.target.value });
             }}
           />
+        </Col>
+        <Col span={4}>
+          <div>Số hợp đồng</div>
+          <Input
+            allowClear
+            placeholder={"Số hợp đồng"}
+            onChange={(e) => {
+              _changeQuery({ name: "contract_number", value: e.target.value });
+            }}
+          />
+        </Col>
+        <Col span={4}>
+          <div>Đơn vị vận tải</div>
+          <Select
+            size="default"
+            style={{ width: "100%" }}
+            placeholder="Đơn vị vận tải"
+            allowClear
+            loadOnMount
+            showSearch
+            className={className}
+            loading={fetching}
+            notFoundContent={fetching ? <Spin size="small" /> : "Không có dữ liệu"}
+            onSearch={_handleSearch}
+            filterOption={localSearchFunc}
+            onChange={(data) => {
+              setParams((prevState) => {
+                let nextState = { ...prevState };
+                nextState.merchant_id = data;
+                return nextState;
+              });
+            }}
+          >
+            {_.map(transport, (item, itemId) => (
+              <Select.Option key={itemId} value={item.id}>
+                {item.name}
+              </Select.Option>
+            ))}
+          </Select>
         </Col>
         <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>
           <Button className="btn-add" onClick={() => setShowModal(true)} > Thêm mới</Button>
