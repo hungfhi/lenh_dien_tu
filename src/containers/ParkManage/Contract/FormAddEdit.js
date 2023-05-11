@@ -25,6 +25,10 @@ const FormAddEdit = ({
     _.map(itemSelected?.stations, (item) => {
         return station_id.push(item?.id)
     })
+
+
+
+
     const is_full_package = itemSelected?.is_full_package?.value === 1 ? true : false
     const [form] = Form.useForm();
     const onFinish = async (values) => {
@@ -48,24 +52,14 @@ const FormAddEdit = ({
                     merchant_id: itemSelected && itemSelected.merchant_id || undefined,
                     email: itemSelected && itemSelected.email || '',
                     start_date: itemSelected && moment((date(itemSelected?.start_date))) || moment(),
-                    end_date: itemSelected && moment((date(itemSelected?.end_date))) || moment(),
+                    end_date: itemSelected && moment((date(itemSelected?.end_date))) || moment(new Date()).endOf('year'),
                     stations: station_id,
                     is_full_package: is_full_package === 1 ? true : false || true
                 }}
                 form={form}
             >
                 <Row gutter={[8, 0]}>
-                    <Col span={24}>
-                        <div>Tên hợp đồng<span style={{ color: '#dc2d2d' }}>*</span></div>
-                        <Form.Item
-                            name="name"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                            <Input placeholder={"Tên hợp đồng"} />
-                        </Form.Item>
-
-                    </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                         <div>Số hợp đồng<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="contract_number"
@@ -75,9 +69,8 @@ const FormAddEdit = ({
                         >
                             <Input placeholder={"Số hợp đồng"} />
                         </Form.Item>
-
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                         <div>Mã hợp đồng<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="contract_code"
@@ -87,7 +80,17 @@ const FormAddEdit = ({
                         </Form.Item>
 
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
+                        <div>Tên hợp đồng<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <Form.Item
+                            name="name"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Input placeholder={"Tên hợp đồng"} />
+                        </Form.Item>
+
+                    </Col>
+                    <Col span={8}>
                         <div>Đơn vị vận tải<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="merchant_id"
@@ -101,24 +104,54 @@ const FormAddEdit = ({
                                 filterOption={(input, option) =>
                                     option.children.toString().toLowerCase().indexOf(input.toLowerCase()) > 0
                                 }
+                                onSelect={(e, value) => {
+                                    form.setFieldsValue({
+                                        email: value.email,
+                                        address: value?.address,
+                                        tax_code: value?.tax_code
+                                    })
+                                }}
                             >
                                 {
                                     _.map(transport, (item) => {
-                                        return (<Option key={item.id} value={item.id}>{item.name}</Option>)
+                                        return (<Option key={item.id} value={item.id} email={item.email} address={item.address} tax_code={item.tax_code}>{item.name}</Option>)
                                     })
                                 }
                             </Select>
                         </Form.Item>
-
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
+                        <div>Bến xe<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <Form.Item
+                            name="stations"
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Select
+                                allowClear={true}
+                                mode="multiple"
+                                placeholder={"Bến xe"}
+                                showSearch
+                                style={{ width: '100%' }}
+                                filterOption={(input, option) =>
+                                    option.children.toString().toLowerCase().indexOf(input.toLowerCase()) > 0
+                                }
+                            >
+                                {
+                                    _.map(stations, (item) => {
+                                        return (<Option key={item.value} value={item.value}>{item.label}</Option>)
+                                    })
+                                }
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
                         <div>Địa chỉ</div>
                         <Form.Item name="address">
-                            <Input placeholder={""} />
+                            <Input placeholder={"Nhập địa chỉ"} disabled />
                         </Form.Item>
 
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                         <div>Mã số thuế<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="tax_code"
@@ -130,11 +163,10 @@ const FormAddEdit = ({
                                 },
                             ]}
                         >
-                            <Input placeholder="Nhập mã số thuế" style={{ width: '100%' }} />
-
+                            <Input placeholder="Nhập mã số thuế" style={{ width: '100%' }} disabled />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                         <div>Email<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="email"
@@ -149,11 +181,36 @@ const FormAddEdit = ({
                                 },
                             ]}
                         >
-                            <Input placeholder={""} />
+                            <Input placeholder={"Nhập E-mail!"} disabled />
                         </Form.Item>
 
                     </Col>
-                    <Col span={12}>
+                    <Col span={6}>
+                        <Row>
+                            <span style={{ fontWeight: 600 }}>Giá lưu đêm được ký thu trọn gói &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span style={{ marginTop: -4 }}>
+                                <Form.Item name="is_full_package" valuePropName="checked">
+                                    <Checkbox style={{ color: '#01579B' }} />
+                                </Form.Item>
+                            </span>
+                        </Row>
+                        <div style={{ marginTop: -30 }}>
+                            <Form.Item
+                                name="price"
+                            >
+                                <Form.Item
+                                    name="amount"
+                                    rules={[{ required: true, message: 'Vui lòng nhập số tiền từ 1000 trở lên' },]}
+                                >
+                                    <InputNumber min={1000} put placeholder={"Nhập giá trị tiền lưu đêm trọn gói"} style={{width:'100%'}}
+                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                    />
+                                </Form.Item>
+                            </Form.Item>
+                        </div>
+                    </Col>
+                    <Col span={8}>
                         <div>Ngày bắt đầu<span style={{ color: '#dc2d2d' }}>(*)</span></div>
                         <Form.Item
                             name="start_date"
@@ -166,7 +223,7 @@ const FormAddEdit = ({
                         </Form.Item>
 
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                         <div>Ngày kết thúc<span style={{ color: '#dc2d2d' }}>(*)</span></div>
                         <Form.Item
                             name="end_date"
@@ -179,26 +236,13 @@ const FormAddEdit = ({
                             />
                         </Form.Item>
                     </Col>
-                    <Col span={24}>
+                    {/* <Col span={24}>
                         <span style={{ fontWeight: 600 }}>Danh sách bến<span style={{ color: '#dc2d2d' }}>(*)</span></span>&nbsp;&nbsp;&nbsp;
                         <Form.Item name="stations" initialValue={station_id}>
                             <Checkbox.Group options={stations} />
                         </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                        <Row>
-                            <Col>
-                                <span style={{ fontWeight: 600 }}>Giá lưu đêm được ký thu trọn gói &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                            </Col>
-                            <Col>
-                                <Form.Item name="is_full_package" valuePropName="checked">
-                                    <Checkbox style={{ color: '#01579B' }} size="small" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                    </Col> */}
 
-
-                    </Col>
                     <br />
                     <br />
                     {

@@ -16,6 +16,9 @@ const Create = ({
   const onFinishFailed = () => {
   };
   const onSave = async (values) => {
+
+console.log('valuesvalues',values)
+
     const payload = {
       name: values?.name,
       contract_number: values?.contract_number,
@@ -42,8 +45,6 @@ const Create = ({
           message.warn(err.response.data?.errors[0].msg)
         }
       })
-
-
   }
   return (
     <div className={className}>
