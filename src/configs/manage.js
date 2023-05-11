@@ -94,7 +94,7 @@ const manage = {
 
 
 
-    ///
+    // Tài khoản Vận hành tuyến
 
     getUserMerchant(payload) {
         return axios.get(`${domain.ServiceAddress}/merchantUser?${qs.stringify(payload)}`);
@@ -118,7 +118,18 @@ const manage = {
     },
     updateBusinessType(id, payload) {
         return axios.put(`${domain.ServiceAddress}/business/${id}`, payload);
-    }
+    },
+
+    // Tài khoản Quản lý bến
+    getStationUser(payload) {
+        return axios.get(`${domain.ServiceAddress}/stationUser?${qs.stringify(payload)}`);
+    },
+    changeStationUserPassword(id, payload) {
+        return axios.put(`${domain.ServiceAddress}/stationUser/${id}/set-password`, payload);
+    },
+    changeStatusStationUser(id, payload) {
+        return axios.put(`${domain.ServiceAddress}/stationUser/${id}/change-status`, payload);
+    },
 
 }
 

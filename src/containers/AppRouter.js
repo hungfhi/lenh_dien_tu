@@ -35,6 +35,7 @@ import District from './Category/District';
 import UserMerchant from './Manage/UserMerchant';
 import RouteManagement from './Category/RouteConfiguration';
 import BusinessType from './Category/BusinessType';
+import UserStation from './Manage/UserStation';
 const AppRouter = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state?.rootReducer?.user);
@@ -244,6 +245,14 @@ const AppRouter = () => {
           element={
             <PrivateRoute>
               <RouteManagement />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/station-user"
+          element={
+            <PrivateRoute>
+              <UserStation />
             </PrivateRoute>
           }
         />
