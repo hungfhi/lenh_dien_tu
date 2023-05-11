@@ -61,7 +61,7 @@ const FormAddEdit = ({
                             name="name"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input placeholder={""} />
+                            <Input placeholder={"Tên hợp đồng"} />
                         </Form.Item>
 
                     </Col>
@@ -71,13 +71,9 @@ const FormAddEdit = ({
                             name="contract_number"
                             rules={[
                                 { required: true, message: "Vui lòng nhập số hợp đồng" },
-                                {
-                                    pattern: new RegExp(/^[0-9]+$/i),
-                                    message: "Chỉ được nhập số",
-                                },
                             ]}
                         >
-                            <Input placeholder={""} />
+                            <Input placeholder={"Số hợp đồng"} />
                         </Form.Item>
 
                     </Col>
@@ -87,7 +83,7 @@ const FormAddEdit = ({
                             name="contract_code"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input placeholder={""} />
+                            <Input placeholder={"Mã hợp đồng"} />
                         </Form.Item>
 
                     </Col>
