@@ -2,14 +2,18 @@
 import axios from 'axios'
 import domain from './domain'
 import qs from 'qs'
-const manage = {
+const station = {
 
     getContract(payload) {
         return axios.get(`${domain.ServiceAddress}/contract?${qs.stringify(payload)}`)
     },
 
-    createTransport(payload){
-        return axios.post(`${domain.ServiceAddress}/merchants`, payload)
+    getDetailContract(id) {
+        return axios.get(`${domain.ServiceAddress}/contract/${id}`);
+    },
+
+    createContract(payload){
+        return axios.post(`${domain.ServiceAddress}/contract`, payload)
     },
 
     updateTransport(payload){
@@ -18,4 +22,4 @@ const manage = {
 
 }
 
-export default manage
+export default station

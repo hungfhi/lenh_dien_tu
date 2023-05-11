@@ -64,7 +64,6 @@ const manage = {
         return axios.put(`${domain.ServiceAddress}/stations/${payload?.uuid}`, payload)
     },
 
-
     //đơn vị vận tải
 
     getTransport(payload) {

@@ -10,7 +10,8 @@ const UpdateDinhMuc = ({
     className, 
     onHiddenModalEdit,
     onRefreshList,
-    itemSelected
+    itemSelected,
+    stations,
   }) => {
     const onSave = useCallback(async (values) => {
     })
@@ -18,6 +19,7 @@ const UpdateDinhMuc = ({
     <div className={className}>
         <FormAddEdit 
           itemSelected={itemSelected}
+          stations={stations}
           onSave={onSave}
           onHiddenModal={onHiddenModalEdit}
         />
