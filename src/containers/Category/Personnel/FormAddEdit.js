@@ -211,7 +211,10 @@ const FormAddEdit = ({
                         <div>Email <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
                             name="email"
-                            rules={[{ required: true, message: 'Vui lòng nhập email' }]}
+                            rules={[
+                                { required: true, message: 'Vui lòng nhập email' },
+                                { type: "email", message: 'Vui lòng nhập đúng định dạng email' },
+                            ]}
                         >
                             <Input disabled={itemSelected && true || false} placeholder={""} />
                         </Form.Item>
@@ -283,7 +286,7 @@ const FormAddEdit = ({
                         <div>Chức vụ <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
                             name="position_id"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                            rules={[{ required: true, message: 'Vui lòng chọn chức vụ' }]}
                         >
                             <Select defaultValue>
                                 {listPositions && listPositions.map((item, index) => {
@@ -303,7 +306,7 @@ const FormAddEdit = ({
                             <Select
                                 defaultValue
                                 placeholder="Chọn bến làm việc"
-                                disabled={itemSelected?.user?.model_used?.model_type === "App\\Models\\Station" ? false : true}
+                                disabled={itemSelected?.user?.model_used?.model_type === "App\\\Models\\\Station" ? false : true}
                             >
                                 {listStations && listStations.map((item, index) => {
 
@@ -321,10 +324,10 @@ const FormAddEdit = ({
                         >
                             <Select
                                 mode="multiple"
-                            // defaultValue={itemSelected && itemSelected?.user?.model_used?.id || null}
-                            // onChange={e => {
-                            //     listModels.push(e);
-                            // }}
+                                // defaultValue={itemSelected && itemSelected?.user?.model_used?.id || null}
+                                // onChange={e => {
+                                //     listModels.push(e);
+                                // }}
                             >
                                 {listModel && listModel.map((item) => {
 
