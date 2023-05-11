@@ -39,7 +39,6 @@ const ContractCar = ({ className, profile }) => {
     apis.getBusStation(data)
       .then(res => {
         if (res.status === 200) {
-          Ui.showSuccess({ message: "Thành công" });
         }
       })
       .catch(err => {

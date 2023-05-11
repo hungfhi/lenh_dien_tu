@@ -13,51 +13,19 @@ const FormAddEdit = ({
     itemSelected,
     onSave,
     onHiddenModal,
-    stations
+    stations,
+    transport
 }) => {
-
-    const [transport, setTransport] = useState([]);
-    const getTransports = useCallback(async () => {
-        const payload = {
-            is_contract : 1
-        }
-        manage.getTransport(payload)
-            .then(res => {
-                if (res.status === 200) {
-                    setTransport(res?.data?.data)
-                }
-            })
-            .catch(err => {
-                if (err.response?.status === 422 && err.response?.data?.errors) {
-                    message.warn(err.response.data?.errors[0].msg)
-                }
-            })
-    }, []);
-
-    useEffect(() => {
-        getTransports()
-    }, [getTransports]);
-
-
-
-    function onChange(checked) {
-        console.log("checked = ", checked);
-    }
 
     const date = (value) => {
         const d = value.substr(0, 11).split("-")
         return d[2] + "-" + d[1] + "-" + d[0];
     }
-
     const station_id = []
     _.map(itemSelected?.stations, (item) => {
         return station_id.push(item?.id)
     })
-
-    const is_full_package = itemSelected?.is_full_package?.value ===1 ? true : false
-
-
-
+    const is_full_package = itemSelected?.is_full_package?.value === 1 ? true : false
     const [form] = Form.useForm();
     const onFinish = async (values) => {
         onSave(values)
@@ -101,7 +69,13 @@ const FormAddEdit = ({
                         <div>Số hợp đồng<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="contract_number"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                            rules={[
+                                { required: true, message: "Vui lòng nhập số hợp đồng" },
+                                {
+                                    pattern: new RegExp(/^[0-9]+$/i),
+                                    message: "Chỉ được nhập số",
+                                },
+                            ]}
                         >
                             <Input placeholder={""} />
                         </Form.Item>
@@ -168,7 +142,16 @@ const FormAddEdit = ({
                         <div>Email<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="email"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                            rules={[
+                                {
+                                    type: 'email',
+                                    message: 'Vui lòng nhập đúng định dạng E-mail!',
+                                },
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập E-mail!',
+                                },
+                            ]}
                         >
                             <Input placeholder={""} />
                         </Form.Item>
@@ -180,7 +163,10 @@ const FormAddEdit = ({
                             name="start_date"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <DatePicker style={{ width: "100%" }} format="DD-MM-YYYY" allowClear={false} />
+                            <DatePicker
+                                allowClear={false}
+                                style={{ width: "100%" }}
+                                format="DD-MM-YYYY" />
                         </Form.Item>
 
                     </Col>

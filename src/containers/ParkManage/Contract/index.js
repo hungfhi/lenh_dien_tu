@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Row, Spin, Tabs, message } from "antd";
+import {  Col, Drawer, Row, Spin, Tabs, message } from "antd";
 import PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
@@ -20,6 +20,7 @@ const Index = ({ className, profile }) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [stations, setStations] = useState([]);
+  const [transport, setTransport] = useState([]);
   const [stationConvert, setStationConvert] = useState([]);
   const [loadding, setLoading] = useState(false);
   const [isShowModal, setShowModal] = useState(false);
@@ -28,7 +29,9 @@ const Index = ({ className, profile }) => {
   const [params, setParams] = useState({
     page: 1,
     size: 20,
-    name: "",
+    contract_number: "",
+    contract_code: "",
+    merchant_id: undefined
   });
 
 
@@ -41,7 +44,7 @@ const Index = ({ className, profile }) => {
     station.getContract(params)
       .then(res => {
         if (res.status === 200) {
-
+          setTotal(res?.data?.meta?.total)
           manage.getStation(payload)
             .then(res1 => {
               if (res1.status === 200) {
@@ -83,6 +86,22 @@ const Index = ({ className, profile }) => {
       })
     await setLoading(false);
   }, [params]);
+  const getTransports = useCallback(async () => {
+      const payload = {
+          is_contract : 1
+      }
+      manage.getTransport(payload)
+          .then(res => {
+              if (res.status === 200) {
+                  setTransport(res?.data?.data)
+              }
+          })
+          .catch(err => {
+              if (err.response?.status === 422 && err.response?.data?.errors) {
+                  message.warn(err.response.data?.errors[0].msg)
+              }
+          })
+  }, []);
 
 
 
@@ -112,6 +131,7 @@ const Index = ({ className, profile }) => {
 
   useEffect(() => {
     getDataTable();
+    getTransports()
     if (stations.length !== 0 && data.length !== 0) {
       setData(_.map(data, (item) => {
         let arr = _.map(item.station, (_item) => {
@@ -124,7 +144,7 @@ const Index = ({ className, profile }) => {
         return item;
       }));
     }
-  }, [getDataTable]);
+  }, [getDataTable,getTransports]);
 
 
   const onRefreshList = () => {
@@ -137,7 +157,7 @@ const Index = ({ className, profile }) => {
   return (
     <Row className={className} gutter={[16, 16]}>
       <Col xs={24}>
-        <Filter params={params} setParams={setParams} setShowModal={setShowModal} />
+        <Filter params={params} setParams={setParams} setShowModal={setShowModal} transport={transport}/>
       </Col>
       <Col xs={24}>
         <Spin spinning={loadding}>
@@ -167,6 +187,7 @@ const Index = ({ className, profile }) => {
           onRefreshList={onRefreshList}
           onHiddenModal={onHiddenModal}
           stations={stationConvert}
+          transport={transport}
         />
       </Drawer>
       <Drawer
@@ -185,6 +206,7 @@ const Index = ({ className, profile }) => {
               onHiddenModalEdit={onHiddenModalEdit}
               itemSelected={itemSelected}
               stations={stationConvert}
+              transport={transport}
             />
           ) : <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spin spinning /></div>
         }

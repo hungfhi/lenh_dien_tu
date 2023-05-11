@@ -10,7 +10,7 @@ const Create = ({
   onHiddenModal,
   onRefreshList,
   stations,
-  itemSelected
+  transport
 }) => {
   const [form] = Form.useForm();
   const onFinishFailed = () => {
@@ -51,6 +51,7 @@ const Create = ({
         itemSelected={null}
         onSave={onSave}
         onHiddenModal={onHiddenModal}
+        transport={transport}
         stations={stations}
       />
     </div>
