@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { DIMENSION_PADDING_NORMAL, DIMENSION_PADDING_SMALL } from 'theme/dimensions';
 import { Ui } from "utils/Ui";
+import _ from 'lodash';
 
 
 const { TextArea } = Input;
@@ -26,7 +27,24 @@ const FormAddEdit = ({
     const [listStations, setListStations] = useState([]);
     const [listByMerchant, setListByMerchant] = useState([]);
     const [listModel, setListModel] = useState([]);
-    const [modelChooses, setModelChooses] = useState([]);
+    const [modelChooses, setModelChooses] = useState(itemSelected && itemSelected?.user?.model_used?.id || null);
+    const [rolesChooses, setRolesChooses] = useState([]);
+
+    let listRoles = _.map(itemSelected?.roles, (i) => {
+        return i?.id;
+    });
+
+    let listModels = _.map(itemSelected?.models, (i) => {
+        return i?.id
+    })
+
+    useEffect(() => {
+        const newRoles = [];
+        listRoles?.map(item => {
+            newRoles.push(item?.value);
+        });
+        setRolesChooses(newRoles);
+    }, []);
 
     const renderGender = (gender) => {
         switch (gender) {
@@ -80,7 +98,16 @@ const FormAddEdit = ({
         const payload = {};
         category.getModel(payload).then(res => {
             // console.log(res);
-            setListModel(res?.data?.data);
+            const newListModel = [];
+            res?.data?.data?.map(item => {
+                newListModel.push({
+                    ...item,
+                    value: item?.id,
+                    label: item?.name
+                });
+            });
+
+            setListModel(newListModel);
         }).catch(err => {
             if (err.response?.status === 422 && err.response?.data?.errors) {
                 Ui.showErrors('Có lỗi xảy ra');
@@ -92,7 +119,16 @@ const FormAddEdit = ({
         const payload = {};
         category.getByMerchant(payload).then(res => {
             // console.log(res);
-            setListByMerchant(res?.data?.data);
+            const newListByMerchant = [];
+            res?.data?.data?.map(item => {
+                newListByMerchant.push({
+                    ...item,
+                    value: item?.id,
+                    label: item?.name
+                });
+            });
+
+            setListByMerchant(newListByMerchant);
         }).catch(err => {
             if (err.response?.status === 422 && err.response?.data?.errors) {
                 Ui.showErrors('Có lỗi xảy ra');
@@ -120,8 +156,6 @@ const FormAddEdit = ({
     const onFinishFailed = () => {
     };
 
-    console.log(itemSelected);
-
     return (
         <div className={className}>
             <Form
@@ -141,13 +175,14 @@ const FormAddEdit = ({
                     date_of_birth: itemSelected && moment(itemSelected?.date_of_birth) || moment(),
                     driving_license_rank_id: itemSelected && itemSelected?.driving_license_rank_id?.id || '',
                     driving_license_expire_date: itemSelected && moment(itemSelected?.driving_license_expire_date) || moment(),
-                    status: itemSelected && itemSelected.status?.id == 1 ? true : false,
+                    status: status,
                     gender: itemSelected && renderGender(itemSelected?.gender) || null,
                     modelable_id: itemSelected && itemSelected?.modelable_id || null,
                     modelable_type: itemSelected && itemSelected?.modelable_type || null,
                     email: itemSelected && itemSelected?.user?.email || null,
                     station_id: itemSelected && itemSelected?.user?.station_used?.id || null,
-                    roles: itemSelected && itemSelected?.user?.roles[0]?.id || null,
+                    roles: listRoles,
+                    model_id: listModels
                 }}
                 form={form}
             >
@@ -263,7 +298,7 @@ const FormAddEdit = ({
                         <div>Bến làm việc <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
                             name="station_id"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
                             <Select
                                 defaultValue
@@ -282,17 +317,18 @@ const FormAddEdit = ({
                         <div>Mô hình kinh doanh <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
                             name="model_id"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
                             <Select
                                 mode="multiple"
-                                onChange={e => {
-                                    setModelChooses(e);
-                                }}
+                            // defaultValue={itemSelected && itemSelected?.user?.model_used?.id || null}
+                            // onChange={e => {
+                            //     listModels.push(e);
+                            // }}
                             >
-                                {listModel && listModel.map((item, index) => {
+                                {listModel && listModel.map((item) => {
 
-                                    return <Select.Option value={item?.id}>{item?.name}</Select.Option>
+                                    return <Select.Option value={item?.value}>{item?.label}</Select.Option>
                                 })}
                             </Select>
                         </Form.Item>
@@ -302,12 +338,20 @@ const FormAddEdit = ({
                         <div>Quyền tài khoản <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
                             name="roles"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Select defaultValue>
-                                {listByMerchant && listByMerchant.map((item, index) => {
+                            <Select
+                                mode="multiple"
+                            // onChange={e => {
+                            //     listRoles.push({
+                            //         value: e
+                            //     })
+                            // }}
+                            // defaultValue={listRoles}
+                            >
+                                {listByMerchant && listByMerchant.map((item) => {
 
-                                    return <Select.Option value={item?.id}>{item?.name}</Select.Option>
+                                    return <Select.Option value={item?.value}>{item?.label}</Select.Option>
                                 })}
                             </Select>
                         </Form.Item>
@@ -327,7 +371,13 @@ const FormAddEdit = ({
                         <div>Số GPLX</div>
                         <Form.Item
                             name="driving_license"
-                        // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                            rules={[
+                                // { required: true, message: 'Vui lòng nhập dữ liệu' },
+                                {
+                                    pattern: new RegExp(/^[0-9]+$/i),
+                                    message: "Chỉ được nhập số",
+                                },
+                            ]}
                         >
                             <Input placeholder={""} />
                         </Form.Item>

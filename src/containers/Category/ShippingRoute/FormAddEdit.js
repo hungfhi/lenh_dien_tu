@@ -43,7 +43,7 @@ const FormAddEdit = ({
                     "start_station_id": itemSelected && itemSelected.start_station?.id || '',
                     "end_station_id": itemSelected && itemSelected.end_station?.id || '',
                     "name": itemSelected && itemSelected.name || '',
-                    is_active: itemSelected && itemSelected.is_active == 1 ? true : false,
+                    is_active: isActive,
                 }}
                 form={form}
             >

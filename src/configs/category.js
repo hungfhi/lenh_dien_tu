@@ -75,6 +75,20 @@ const category = {
     },
     getByMerchant(payload) {
         return axios.get(`${domain.ServiceAddress}/roles/get-by-merchant`);
+    },
+
+    // Cấu hình tuyến
+    getMerchantRoutes(payload) {
+        return axios.get(`${domain.ServiceAddress}/merchantRoutes?${qs.stringify(payload)}`);
+    },
+    getDetailMerchantRoutes(payload) {
+        return axios.get(`${domain.ServiceAddress}/merchantRoutes/${payload?.id}`)
+    },
+    createMerchantRoutes(payload) {
+        return axios.post(`${domain.ServiceAddress}/merchantRoutes`, payload);
+    },
+    updateMerchantRoute(id, payload) {
+        return axios.put(`${domain.ServiceAddress}/merchantRoutes/${id}`, payload);
     }
 }
 

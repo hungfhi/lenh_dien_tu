@@ -54,20 +54,9 @@ const Personnel = ({ className, profile }) => {
     setShowModalEdit(false);
   });
 
-  const onEdit = useCallback(async (ids) => {
-    setShowModalEdit(true);
-        const payload = {
-            uuid:ids
-        }
-        category.getDetailPersons(payload)
-        .then(res => {
-          if (res.status === 200) {
-            setItemSelected(res?.data?.data)
-          }
-        })
-        .catch(err => {
-          Ui.showError({ message: err?.response?.data?.message });
-        })
+  const onEdit = useCallback(async (row) => {
+    setShowModalEdit(true)
+    setItemSelected(row);
   }, [])
 
 

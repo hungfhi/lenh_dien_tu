@@ -60,11 +60,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
       dataIndex: "route_code",
       width: 100,
       render: (text, record, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            {text}
-          </div>
-        )
+        return record?.route?.route_code;
       }
     },
     {
@@ -72,11 +68,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
       dataIndex: "name",
       width: 300,
       render: (text, record, row) => {
-        return (
-          <div style={{ textAlign: 'center' }}>
-            {text}
-          </div>
-        )
+        return record?.route?.name;
       }
     },
     {
@@ -86,7 +78,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
       render: (text, record, row) => {
         return (
           <div style={{ textAlign: 'center' }}>
-            {text?.name}
+            {record?.route?.start_station?.name}
           </div>
         )
       }
@@ -98,7 +90,20 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
       render: (text, record, row) => {
         return (
           <div style={{ textAlign: 'center' }}>
-            {text?.name}
+            {record?.route?.end_station?.name}
+          </div>
+        )
+      }
+    },
+    {
+      title: "Cự ly",
+      dataIndex: "distance",
+      width: 150,
+      render: (text, record) => {
+
+        return (
+          <div style={{ textAlign: 'center' }}>
+            {text} km
           </div>
         )
       }
@@ -107,10 +112,10 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
       title: "Trạng thái",
       dataIndex: "is_active",
       width: 150,
-      render: (text, record) => {
+      render: (text, record, row) => {
         return (
-          <div style={{ textAlign: 'center', color: record?.is_active === 1 ? COLOR_GREEN : COLOR_RED }}>
-            {record?.is_active === 1 ? 'Active' : 'In Active'}
+          <div style={{ textAlign: 'center', color: text === 1 ? COLOR_GREEN : COLOR_RED }}>
+            {text === 1 ? 'Active' : 'In Active'}
           </div>
         )
       }
