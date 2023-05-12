@@ -35,7 +35,7 @@ const FormAddEdit = ({
                         id: items.id,
                         title: items.name,
                         parent_id: items.parent_id,
-                        disabled: itemSelected?.id === items.id || (itemSelected && items?.parent_id === itemSelected?.parent_id && itemSelected?.child?.length !== 0) ? true : false,
+                        disabled: false,
                         children: _.map(items?.child, (item) => {
                             return {
                                 value: item.id,
@@ -79,7 +79,7 @@ const FormAddEdit = ({
                 initialValues={{
                     name: itemSelected && itemSelected.name || '',
                     order_number: itemSelected && itemSelected?.order_number == 0 ? 0 : parseInt(itemSelected?.order_number) || undefined,
-                    parent_id: itemSelected && itemSelected?.parent_id == 0 ? 0 : parseInt(itemSelected?.parent_id) || undefined,
+                    parent_id: itemSelected && itemSelected?.parent_id == 0 ? '' : parseInt(itemSelected?.parent_id) || undefined,
                     is_active: isActive
                 }}
                 form={form}
