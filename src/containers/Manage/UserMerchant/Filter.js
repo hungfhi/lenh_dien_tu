@@ -61,7 +61,7 @@ const Filter = ({ className, setParams, params, setShowModal, operator, stations
     <div className={className}>
       <Row gutter={[8, 8]}>
         <Col span={4}>
-          <div>Tên loại xe</div>
+          <div>Số điện thoại</div>
           <Input
             allowClear
             placeholder={"Số điện thoại"}

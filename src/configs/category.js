@@ -89,7 +89,25 @@ const category = {
     },
     updateMerchantRoute(id, payload) {
         return axios.put(`${domain.ServiceAddress}/merchantRoutes/${id}`, payload);
+    },
+
+    // Tiêu chuẩn chất lượng
+    getQualityStandard(payload) {
+        return axios.get(`${domain.ServiceAddress}/standards?${qs.stringify(payload)}`);
+    },
+    getDetailStandard(payload) {
+        return axios.get(`${domain.ServiceAddress}/standards/${payload.id}`);
+    },
+    updateStandard(id, payload) {
+        return axios.put(`${domain.ServiceAddress}/standards/${id}`, payload);
+    },
+    createStandard(payload) {
+        return axios.post(`${domain.ServiceAddress}/standards`, payload);
+    },
+    deleteStandard(payload) {
+        return axios.delete(`${domain.ServiceAddress}/standards/${payload.uuid}`);
     }
+
 }
 
 export default category

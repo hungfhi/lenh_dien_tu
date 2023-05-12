@@ -36,6 +36,7 @@ import UserMerchant from './Manage/UserMerchant';
 import RouteManagement from './Category/RouteConfiguration';
 import BusinessType from './Category/BusinessType';
 import UserStation from './Manage/UserStation';
+import QualityStandard from './Category/QualityStandard';
 const AppRouter = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state?.rootReducer?.user);
@@ -253,6 +254,14 @@ const AppRouter = () => {
           element={
             <PrivateRoute>
               <UserStation />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/quality-standard"
+          element={
+            <PrivateRoute>
+              <QualityStandard />
             </PrivateRoute>
           }
         />
