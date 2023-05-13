@@ -17,7 +17,7 @@ const { confirm } = Modal;
 let time;
 let format = "DD-MM-YYYY";
 
-const Social = ({ profile, className, idTabs, showModal,data, user_id }) => {
+const Social = ({ profile, className, idTabs, showModal, data, user_id, itemSelected, setItemSelected }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +31,7 @@ const Social = ({ profile, className, idTabs, showModal,data, user_id }) => {
   }, [idTabs]);
   // create
   const createRote = useCallback(async (param) => {
-    
+
   }, []);
   // update
   const updateRote = useCallback(async (param) => {
@@ -62,40 +62,45 @@ const Social = ({ profile, className, idTabs, showModal,data, user_id }) => {
   );
 
 
-  const onFinish = (value) => {
-    let param = {
-      ...value,
-      date: value.date && moment(value.date).format("YYYY-MM-DD"),
-      start_date: value.start_date && moment(value.start_date).format("YYYY-MM-DD"),
-      end_date: value.end_date && moment(value.end_date).format("YYYY-MM-DD"),
-      user_id: isEdit == false ? user_id : undefined,
-      id: isEdit ? form.getFieldValue()?.id : undefined,
-    };
- 
-    if (isEdit) {
-      updateRote(param);
+  const _handleSelectAll = async (selected, selectedRows, changeRows) => {
+    console.log("selectedRows",selectedRows)
+    if (!selected) {
+      setItemSelected([])
     } else {
-      createRote(param);
+      if (data.length === itemSelected.length) { // Trường hợp click vào xóa tất cả khi chưa full item
+        setItemSelected([])
+      } else {
+        let selectKeyNew = [];
+        // await selectedRows.map((item) => {
+        //   selectKeyNew.push(item.id)
+        // })
+        await setItemSelected(selectKeyNew);
+      }
+    }
+  }
+
+  const _handleSelect = (record, status) => {
+    if (!itemSelected.includes(record.id)) {
+      const selectKeyNew = [...itemSelected]
+      selectKeyNew.push(record.id)
+      setItemSelected(selectKeyNew)
+    } else {
+      const selectKeyNew = [...itemSelected]
+      const index = selectKeyNew.indexOf(record.id);
+      selectKeyNew.splice(index, 1);
+      setItemSelected(selectKeyNew)
     }
   };
 
-  let columns = [
-    {
-      title: () => (
-        <>
-          <div style={{ textAlign: "center" }}>#</div>
-        </>
-      ),
-      width: 50,
-      dataIndex: "node_code",
-      fixed: "left",
-      render: (text, record, index) => (
-        <>
-          <div>{index + 1}</div>
-        </>
-      ),
-    },
 
+  const clickHandler = (event) => {
+		if(event.detail == 2){
+			console.log("Double Clicked")
+		}
+	}
+
+
+  let columns = [
     {
       title: () => (
         <>
@@ -104,6 +109,7 @@ const Social = ({ profile, className, idTabs, showModal,data, user_id }) => {
       ),
       width: 100,
       dataIndex: "status",
+      fixed:'left',
       render: (text, record, index) => {
         return {
           children: <div>{text}</div>,
@@ -118,7 +124,6 @@ const Social = ({ profile, className, idTabs, showModal,data, user_id }) => {
       ),
       dataIndex: "date",
       width: 200,
-
       render: (text, record, index) => {
         return {
           children: <div>{text}</div>,
@@ -137,7 +142,17 @@ const Social = ({ profile, className, idTabs, showModal,data, user_id }) => {
       },
     },
     {
-      title: "Thời hạn",
+      title: "Từ ngày",
+      dataIndex: "end_date",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text}</div>,
+        };
+      },
+    },
+    {
+      title: "Đến ngày",
       dataIndex: "end_date",
       width: 100,
       render: (text, record, index) => {
@@ -168,6 +183,16 @@ const Social = ({ profile, className, idTabs, showModal,data, user_id }) => {
       },
     },
     {
+      title: "Loại ghế",
+      dataIndex: "command",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text?.date}</div>,
+        };
+      },
+    },
+    {
       title: "Giá dịch vụ",
       dataIndex: "command",
       width: 100,
@@ -178,7 +203,7 @@ const Social = ({ profile, className, idTabs, showModal,data, user_id }) => {
       },
     },
     {
-      title: "Trạng thái",
+      title: "Giờ cố định",
       dataIndex: "command",
       width: 100,
       render: (text, record, index) => {
@@ -188,12 +213,62 @@ const Social = ({ profile, className, idTabs, showModal,data, user_id }) => {
       },
     },
     {
-      title: "Trả sau",
+      title: "Thời gian",
       dataIndex: "command",
       width: 100,
       render: (text, record, index) => {
         return {
           children: <div>{text?.date}</div>,
+        };
+      },
+    },
+    {
+      title: "Dừng",
+      dataIndex: "command",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text?.date}</div>,
+        };
+      },
+    },
+    {
+      title: "Từ ngày",
+      dataIndex: "end_date",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text}</div>,
+        };
+      },
+    },
+    {
+      title: "Đến ngày",
+      dataIndex: "end_date",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text}</div>,
+        };
+      },
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "end_date",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text}</div>,
+        };
+      },
+    },
+    {
+      title: "Trả sau",
+      dataIndex: "end_date",
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: <div>{text}</div>,
         };
       },
     },
@@ -201,7 +276,7 @@ const Social = ({ profile, className, idTabs, showModal,data, user_id }) => {
       title: "Thao tác",
       dataIndex: "otp",
       width: 110,
-      fixed:'right',
+      fixed: 'right',
       render: () => {
         return <div style={{ textAlign: 'center', justifyContent: 'center', }}>
           <Dropdown overlay={menu} >
@@ -213,41 +288,27 @@ const Social = ({ profile, className, idTabs, showModal,data, user_id }) => {
       }
     },
   ];
-  const onEdit = (record, index) => {
-    form.setFieldsValue({
-      ...record,
-      date: record?.date && moment(record?.date, "YYYY-MM-DD"),
-      start_date:
-        record?.start_date && moment(record?.start_date, "YYYY-MM-DD"),
-      end_date: record?.end_date && moment(record?.end_date, "YYYY-MM-DD"),
-    });
-    setIsEdit(true);
-  };
-  const onRemove = (record) => {
-    confirm({
-      title: "Bạn có muốn xóa chế độ BHXH này không?",
-      icon: <ExclamationCircleOutlined />,
-      // content:
-      //   "Lệnh điều động sẽ được gửi đến tất cả các nhân viên bạn đã chọn",
-      okText: "Đồng ý",
-      okType: "primary",
-      onOk() {
-        onApi(record);
-      },
-      onCancel() {},
-    });
-  };
-  const onApi = async (row) => {
-  };
   return (
     <div className={className}>
-        <DefineTable
-          bordered
-          columns={columns}
-          dataSource={data}
-          scroll={{ x: 'calc(700px + 10%)', y: 240 }}
-          pagination={false}
-        />
+      <DefineTable
+        bordered
+        onRow={(record, rowIndex) => {
+          return {
+            onDoubleClick: event => {console.log("hehehehheheh")}, // double click row
+          };
+        }}
+        rowSelection={{
+          selectedRowKeys: itemSelected,
+          onSelect: _handleSelect,
+          onSelectAll: _handleSelectAll,
+        }}
+        rowKey="id"
+        columns={columns}
+        dataSource={data}
+        scroll={{ x: 'calc(700px + 10%)', y: 240 }}
+        pagination={false}
+        
+      />
     </div>
   );
 };

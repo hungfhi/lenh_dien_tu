@@ -19,8 +19,6 @@ const Index = ({ className, profile }) => {
   const [data, setData] = useState([]);
   const [allRoute, setAllRoute] = useState([]);
   const [allUnit, setAllUnit] = useState([]);
-  const [stations, setStations] = useState([]);
-  const [province, setProvince] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [isShowModal, setShowModal] = useState(false);
@@ -36,67 +34,8 @@ const Index = ({ className, profile }) => {
     per_page: 10
   });
 
-  const getStation = useCallback(async () => {
-
-    category.getStation(params)
-      .then(res => {
-        if (res.status === 200) {
-          const newStations = []
-          const newProvince = []
-
-          res?.data?.data.map(item => {
-            newStations.push({
-              ...item,
-              value: item?.id,
-              label: item?.name,
-            })
-            // newProvince.push({
-            //   ...item, 
-            //   value: item?.province?.id,
-            //   label: item?.province?.name,
-            // })
-          })
-          // setProvince(newProvince)
-          setStations(newStations)
-        }
-      })
-      .catch(err => {
-        if (err.response?.status === 422 && err.response?.data?.errors) {
-          message.warn(err.response.data?.errors[0].msg)
-          message.error('Error!')
-        }
-      })
-
-  }, []);
-
-  const getListProvinceCity = useCallback(async () => {
-
-    setLoading(true);
-    category.getProvinceCity().then(res => {
-      if (res.status === 200) {
-
-        const newProvince = [];
-
-        res?.data?.data.map(item => {
-
-          newProvince.push({
-            ...item,
-            value: item?.id,
-            label: item?.name,
-          });
-        });
-        setProvince(newProvince);
-      }
-    }).catch(err => {
-      Ui.showError({ message: 'Có lỗi xảy ra' });
-    });
-  }, []);
-
-
   useEffect(() => {
-    // getStation();
     getTransportUnit();
-    // getListProvinceCity();
     getAllRoutes();
   }, []);
 
@@ -172,10 +111,17 @@ const Index = ({ className, profile }) => {
     setShowModalEdit(false);
   });
 
-  const onEdit = useCallback(async (row) => {
-    
-    // category
-    setItemSelected(row);
+  const onEdit = useCallback(async (ids) => {
+    setShowModalEdit(true);
+        category.getDetailMerchantRoutes(ids)
+        .then(res => {
+          if (res.status === 200) {
+            setItemSelected(res?.data?.data)
+          }
+        })
+        .catch(err => {
+          Ui.showError({ message: err?.response?.data?.message });
+        })
   }, [])
 
 
@@ -191,7 +137,7 @@ const Index = ({ className, profile }) => {
   return (
     <Row className={className} gutter={[16, 16]}>
       <Col xs={24}>
-        <Filter stations={stations} params={params} setParams={setParams} setShowModal={setShowModal} allRoute={allRoute} />
+        <Filter params={params} setParams={setParams} setShowModal={setShowModal} allRoute={allRoute} />
       </Col>
       <Col xs={24}>
         <Spin spinning={loading}>
@@ -218,8 +164,6 @@ const Index = ({ className, profile }) => {
         <Create
           onRefreshList={onRefreshList}
           onHiddenModal={onHiddenModal}
-          stations={stations}
-          province={province}
           allRoute={allRoute}
           allUnit={allUnit}
         />
@@ -239,8 +183,6 @@ const Index = ({ className, profile }) => {
               onRefreshList={onRefreshList}
               onHiddenModalEdit={onHiddenModalEdit}
               itemSelected={itemSelected}
-              stations={stations}
-              province={province}
               allRoute={allRoute}
               allUnit={allUnit}
             />

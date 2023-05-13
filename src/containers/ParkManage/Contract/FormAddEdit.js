@@ -187,10 +187,10 @@ const FormAddEdit = ({
                     </Col>
                     <Col span={6}>
                         <Row>
-                            <span style={{ fontWeight: 600 }}>Giá lưu đêm được ký thu trọn gói &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span style={{ fontWeight: 600 }}>Giá lưu đêm được ký thu trọn gói &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span style={{ marginTop: -4 }}>
                                 <Form.Item name="is_full_package" valuePropName="checked">
-                                    <Checkbox style={{ color: '#01579B' }} />
+                                    <Checkbox style={{ color: '#01579B' }} size="large" />
                                 </Form.Item>
                             </span>
                         </Row>
@@ -202,7 +202,7 @@ const FormAddEdit = ({
                                     name="amount"
                                     rules={[{ required: true, message: 'Vui lòng nhập số tiền từ 1000 trở lên' },]}
                                 >
-                                    <InputNumber min={1000} put placeholder={"Nhập giá trị tiền lưu đêm trọn gói"} style={{width:'100%'}}
+                                    <InputNumber min={1000} put placeholder={"Nhập giá trị tiền lưu đêm trọn gói"} style={{ width: '100%' }}
                                         formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                         parser={value => value.replace(/\$\s?|(,*)/g, '')}
                                     />
@@ -245,12 +245,9 @@ const FormAddEdit = ({
 
                     <br />
                     <br />
-                    {
-                        itemSelected ? <Col span={24}>
-                            <TabTable />
-                        </Col> : null
-                    }
-
+                    <Col span={24}>
+                        <TabTable />
+                    </Col>
                 </Row>
                 <div
                     className="action"

@@ -52,7 +52,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
         },
       });
     } else {
-      navigate(`${item.key}`, { replace: true });
+      navigate(`${item.key}`, { replace: false });
     }
   }
 
