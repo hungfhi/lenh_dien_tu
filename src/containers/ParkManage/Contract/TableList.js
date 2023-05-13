@@ -32,6 +32,15 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
     return <Checkbox checked={checked}></Checkbox>
   }
 
+  const renderActive = (is_active) => {
+    if (is_active === 1) {
+      return <div style={{ color: '#00A991', fontWeight: 700, fontFamily: 'Nunito' }}>Đang hoạt động</div>
+    } else if (is_active === 2) {
+      return <div style={{ color: '#9B0101', fontWeight: 700, fontFamily: 'Nunito' }}>Kết thúc hợp đồng</div>
+    }
+    else return <div style={{ color: '#F57F17', fontWeight: 700, fontFamily: 'Nunito' }}>Hết hạn hợp đồng</div>
+  }
+
 
   return (
     <>
@@ -120,15 +129,15 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                   </th>
                 </tr>
               </thead>
-              {data?.length !== 0 ?<tbody style={{ fontSize: 13 }} className={className}>
+              {data?.length !== 0 ? <tbody style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.85)' }} className={className}>
                 {_.map(data, (item, index) => {
                   let _render = [];
                   let _renderTT = (
                     <>
                       <td
-                        className={`tg-73oq text-center customerBorderRight borderLeft  borderBottom`}
+                        className={`tg-73oq customerBorderRight borderLeft  borderBottom`}
                         style={{
-                          minWidth: "125px", color: '#444'
+                          minWidth: "125px", color: 'rgba(0, 0, 0, 0.85)'
                         }}
                         rowSpan="1"
                         key={`${index}-1`}
@@ -136,9 +145,9 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                         <div className="d-flex">{item.contract_code}</div>
                       </td>
                       <td
-                        className={`tg-73oq text-center customerBorderRight borderLeft borderBottom`}
+                        className={`tg-73oq customerBorderRight borderLeft borderBottom`}
                         style={{
-                          minWidth: "125px", color: '#444'
+                          minWidth: "125px", color: 'rgba(0, 0, 0, 0.85)'
                         }}
                         rowSpan="1"
                         key={`${index}-2`}
@@ -146,9 +155,9 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                         <div className="d-flex">{item.contract_number}</div>
                       </td>
                       <td
-                        className={`tg-73oq text-center customerBorderRight borderLeft borderBottom`}
+                        className={`tg-73oq customerBorderRight borderLeft borderBottom`}
                         style={{
-                          minWidth: "125px", color: '#444'
+                          minWidth: "125px", color: 'rgba(0, 0, 0, 0.85)'
                         }}
                         rowSpan="1"
                         key={`${index}-3`}
@@ -158,7 +167,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                       <td
                         className={`tg-73oq text-center customerBorderRight borderLeft borderBottom`}
                         style={{
-                          minWidth: "180px", color: '#444'
+                          minWidth: "180px", color: 'rgba(0, 0, 0, 0.85)'
                         }}
                         rowSpan="1"
                         key={`${index}-3`}
@@ -168,7 +177,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                       <td
                         className={`tg-73oq text-center customerBorderRight borderLeft fixLeft borderBottom`}
                         style={{
-                          minWidth: "125px", color: '#444'
+                          minWidth: "125px", color: 'rgba(0, 0, 0, 0.85)'
                         }}
                         rowSpan="1"
                         key={`${index}-3`}
@@ -186,10 +195,10 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                         rowSpan="1"
                         key={`${index}-1`}
                       >
-                        <Checkbox checked={item?.is_active}></Checkbox>
+                        {renderActive(item?.is_active)}
                       </td>
                       <td
-                        className={`tg-73oq text-center customerBorderRight borderLeft fixLeft borderBottom`}
+                        className={`tg-73oq customerBorderRight borderLeft fixLeft borderBottom`}
                         style={{
                           minWidth: "125px",
                         }}
@@ -201,7 +210,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                       <td
                         className={`tg-73oq text-center customerBorderRight borderLeft fixLeft borderBottom`}
                         style={{
-                          minWidth: "125px",
+                          minWidth: "85px",
                         }}
                         rowSpan="1"
                         key={`${index}-1`}
@@ -210,9 +219,9 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                           <Tooltip placement="topLeft">
                             <Button
                               type="link"
-                              icon={<EditOutlined />}
                               onClick={() => onEdit(item?.id)}
                             />
+                            <i class="fa-regular fa-pen-to-square" style={{ color: '#01579B', fontSize: 20 }}></i>
                           </Tooltip>
                         </div>
                       </td>
@@ -246,8 +255,8 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                   }
                   return _render;
                 })}
-              </tbody> : <p><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /></p> }
-              
+              </tbody> : <p><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /></p>}
+
             </table>
           </div>
         </div>
@@ -284,7 +293,7 @@ table {
  	border-spacing:0;
 }
  .table-scroll th, .table-scroll td {
- 	padding:5px 10px;
+ 	padding:0px 10px;
  	background:#fff;
  	white-space:nowrap;
 }

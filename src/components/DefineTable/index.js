@@ -15,7 +15,8 @@ const StyledInput = ({
   expandable,
   rowSelection,
   sticky,
-  scroll
+  scroll,
+  onRow
 }) => {
   let maxHeight = window.innerHeight;
   maxHeight = (maxHeight * 62) / 100;
@@ -28,6 +29,7 @@ const StyledInput = ({
       <Table
         bordered
         columns={columns}
+        onRow={onRow}
         dataSource={dataSource}
         rowSelection={rowSelection}
         expandable={expandable}

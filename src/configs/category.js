@@ -81,14 +81,26 @@ const category = {
     getMerchantRoutes(payload) {
         return axios.get(`${domain.ServiceAddress}/merchantRoutes?${qs.stringify(payload)}`);
     },
-    getDetailMerchantRoutes(payload) {
-        return axios.get(`${domain.ServiceAddress}/merchantRoutes/${payload?.id}`)
+    getDetailMerchantRoutes(id) {
+        return axios.get(`${domain.ServiceAddress}/merchantRoutes/${id}`)
     },
     createMerchantRoutes(payload) {
         return axios.post(`${domain.ServiceAddress}/merchantRoutes`, payload);
     },
-    updateMerchantRoute(id, payload) {
-        return axios.put(`${domain.ServiceAddress}/merchantRoutes/${id}`, payload);
+    updateMerchantRoute(payload) {
+        return axios.put(`${domain.ServiceAddress}/merchantRoutes/${payload?.id}`, payload);
+    },
+    updateTime(payload) {
+        return axios.post(`${domain.ServiceAddress}/merchantRoutes/assign-time/${payload?.id}`, payload);
+    },
+    delTime(payload) {
+        return axios.delete(`${domain.ServiceAddress}/merchantRoutes/assign-time/${payload?.id}`);
+    },
+    updatePlace(payload) {
+        return axios.post(`${domain.ServiceAddress}/merchantRoutes/assign-journey/${payload?.id}`, payload);
+    },
+    delPlace(payload) {
+        return axios.delete(`${domain.ServiceAddress}/merchantRoutes/assign-journey/${payload?.id}`);
     }
 }
 

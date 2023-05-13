@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { DIMENSION_PADDING_NORMAL, DIMENSION_PADDING_SMALL } from 'theme/dimensions';
+import TabTable from "./TabTable";
 
 const { TextArea } = Input;
 const FormAddEdit = ({
@@ -13,10 +14,8 @@ const FormAddEdit = ({
     stations,
     province,
     allRoute,
-    allUnit
+    allUnit,
 }) => {
-
-    // console.log(itemSelected);
     const [isActive, setActive] = useState(itemSelected ? (itemSelected?.is_active == 1 ? true : false) : true);
 
     const [form] = Form.useForm();
@@ -28,10 +27,7 @@ const FormAddEdit = ({
 
     const onActive = (value) => {
         setActive(!value)
-        // console.log(!value)
     }
-
-    // console.log('itemSelected', itemSelected)
     return (
         <div className={className}>
             <Form
@@ -40,13 +36,13 @@ const FormAddEdit = ({
                 onFinish={onFinish}
                 name="control-hooks"
                 initialValues={{
-                    "route_id": itemSelected && itemSelected?.route?.id || '',
+                    "route_id": itemSelected && itemSelected?.id || '',
                     "distance": itemSelected && itemSelected?.distance || '',
                     "is_active": isActive,
                 }}
                 form={form}
             >
-                <Row gutter={[16, 16]}>
+                <Row gutter={[16, 0]}>
                     <Col span={12}>
                         <div>Tuyến<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
@@ -55,6 +51,7 @@ const FormAddEdit = ({
                         >
                             <Select
                                 showSearch
+                                disabled
                                 placeholder="Chọn tuyến"
                                 optionFilterProp="children"
                                 filterOption={(input, option) =>
@@ -62,11 +59,6 @@ const FormAddEdit = ({
                                 }
                                 options={allRoute}
                             />
-                            {/* <Select>
-                                {allRoute?.map(item => {
-                                    return <Select.Option value={item?.value}>{item?.value}</Select.Option>
-                                })}
-                            </Select> */}
                         </Form.Item>
 
                     </Col>
@@ -101,7 +93,29 @@ const FormAddEdit = ({
                             </Form.Item>
                         </Row>
                     </Col>
+                    <div
+                    className="action"
+                    style={{
+                        right: 0,
+                        bottom: 0,
+                        width: "100%",
+                        padding: "10px 20px",
+                        background: "#fff",
+                        textAlign: "left",
+                    }}
+                >
+                    <Button
+                        htmlType="submit"
+                        type="primary"
+                        style={{ height: 35, float: "right" }}
+                    >
+                        {itemSelected ? "Cập nhật" : "Thêm mới"}
+                    </Button>
+                </div>
 
+                    <Col span={24}>
+                        <TabTable itemSelected={itemSelected} allRoute={allRoute} />
+                    </Col>
                 </Row>
                 <div
                     className="action"
@@ -118,13 +132,13 @@ const FormAddEdit = ({
                     <Button type="danger" style={{ height: 35 }} onClick={onHiddenModal}>
                         Thoát
                     </Button>
-                    <Button
+                    {/* <Button
                         htmlType="submit"
                         type="primary"
                         style={{ height: 35, float: "right" }}
                     >
                         {itemSelected ? "Cập nhật" : "Thêm mới"}
-                    </Button>
+                    </Button> */}
                 </div>
             </Form>
         </div>

@@ -26,6 +26,7 @@ const data = [
 
 const ContractCar = ({ className, profile }) => {
   // const [data, setData] = useState([]);
+  const [itemSelected, setItemSelected] = useState([]);
   const [loadding, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
   const [params, setParams] = useState({
@@ -60,7 +61,7 @@ const ContractCar = ({ className, profile }) => {
   return (
     <Row className={className} gutter={[16, 16]}>
       
-      <Spin spinning={loadding}>
+      <Spin spinning={loadding} style={{width:'100%'}}>
         <Col span={24} style={{width:'calc(100% - 10px)'}}>
           <TableList
             data={data}
@@ -68,6 +69,8 @@ const ContractCar = ({ className, profile }) => {
             setParams={setParams}
             total={total}
             setTotal={setTotal}
+            itemSelected={itemSelected}
+            setItemSelected={setItemSelected}
           />
         </Col>
       </Spin>
@@ -79,5 +82,7 @@ ContractCar.propTypes = {
   className: PropTypes.any,
 };
 export default styled(ContractCar)`
-  
+.ant-spin-nested-loading {
+  width: 100% !important;
+}
  `;

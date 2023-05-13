@@ -2,7 +2,7 @@ import { Form, message } from "antd";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Ui } from "utils/Ui";
-import FormAddEdit from './FormAddEdit';
+import FormAdd from './FormAdd';
 import { category } from 'configs';
 
 const Create = ({
@@ -19,29 +19,23 @@ const Create = ({
   const onFinishFailed = () => {
   };
   const onSave = async (values) => {
-    console.log(values);
-
     const payload = {
       "route_id": values?.route_id,
-      "merchant_id": values?.merchant_id,
       "distance": values?.distance,
       "is_active": values?.is_active ? 1 : 0
     }
-
-    console.log(payload);
-
-    // category.createMerchantRoutes(payload).then(res => {
-    //   Ui.showSuccess({ message: "Thành công" });
-    //   onHiddenModal();
-    //   onRefreshList();
-    // }).catch(err => {
-    //   Ui.showError({ message: 'Có lỗi xảy ra' });
-    // });
+    category.createMerchantRoutes(payload).then(res => {
+      Ui.showSuccess({ message: "Thành công" });
+      onHiddenModal();
+      onRefreshList();
+    }).catch(err => {
+      Ui.showError({ message: 'Có lỗi xảy ra' });
+    });
 
   }
   return (
     <div className={className}>
-      <FormAddEdit
+      <FormAdd
         itemSelected={null}
         stations={stations}
         province={province}
