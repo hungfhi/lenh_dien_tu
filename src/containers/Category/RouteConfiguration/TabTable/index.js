@@ -6,7 +6,8 @@ import TimeEnd from './TimeEnd';
 import StartPlace from './StartPlace';
 import EndPlace from './EndPlace';
 const TabTable = ({ className, itemSelected, allRoute }) => {
-    const route = allRoute.find(x => x.id === itemSelected?.id).name;
+    console.log("first",itemSelected?.route?.id)
+    const route = allRoute.find(x => x.id === itemSelected?.route?.id)?.name;
     const route_name = route.split("-");
     return (
         <div className={className} >

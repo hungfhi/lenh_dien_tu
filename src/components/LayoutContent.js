@@ -189,7 +189,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
             {
               !collapsed ? (
 
-                <div style={{ width: 180, color: '#01579B' }}>Admin Havaz <Button
+                <div style={{ width: 180, color: '#01579B' }}>Lệnh Điện Tử<Button
                   type="text"
                   onClick={toggleCollapsed}
                   style={{

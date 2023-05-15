@@ -21,13 +21,12 @@ const Update = ({
   const onSave = useCallback(async (values) => {
     const payload = {
       id: itemSelected?.id,
-      route_id: values?.route_id,
       distance: values?.distance,
       is_active: values?.is_active ? 1 : 0
     }
     category.updateMerchantRoute(payload).then(res => {
       Ui.showSuccess({ message: "Thành công" });
-      onHiddenModalEdit();
+      // onHiddenModalEdit();
       onRefreshList();
     }).catch(err => {
       Ui.showError({ message: 'Có lỗi xảy ra' });
