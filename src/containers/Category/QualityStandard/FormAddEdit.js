@@ -35,7 +35,7 @@ const FormAddEdit = ({
                         id: items.id,
                         title: items.name,
                         parent_id: items.parent_id,
-                        disabled: false,
+                        disabled: itemSelected?.id === items.id || (itemSelected && items?.parent_id===itemSelected?.parent_id && itemSelected?.child?.length!==0 )  ? true : false,
                         children: _.map(items?.child, (item) => {
                             return {
                                 value: item.id,
