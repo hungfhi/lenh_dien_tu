@@ -38,7 +38,7 @@ import BusinessType from './Category/BusinessType';
 import UserStation from './Manage/UserStation';
 import QualityStandard from './Category/QualityStandard';
 
-import TransportPlan from './Plan/TransportPlan';
+import SignCommand from './Command/SignCommand';
 import TransportPlans from './Category/TransportPlan';
 
 
@@ -271,10 +271,10 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/transport-plan"
+          path="/sign-command"
           element={
             <PrivateRoute>
-              <TransportPlan />
+              <SignCommand />
             </PrivateRoute>
           }
         />
