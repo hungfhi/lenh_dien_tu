@@ -36,7 +36,7 @@ const FormAddEdit = ({
                 onFinish={onFinish}
                 name="control-hooks"
                 initialValues={{
-                    "route_id": itemSelected && itemSelected?.id || '',
+                    "route_id": itemSelected && itemSelected?.route?.id || '',
                     "distance": itemSelected && itemSelected?.distance || '',
                     "is_active": isActive,
                 }}
