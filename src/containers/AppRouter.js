@@ -39,6 +39,7 @@ import UserStation from './Manage/UserStation';
 import QualityStandard from './Category/QualityStandard';
 
 import TransportPlan from './Plan/TransportPlan';
+import TransportPlans from './Category/TransportPlan';
 
 
 const AppRouter = () => {
@@ -269,12 +270,19 @@ const AppRouter = () => {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/transport-plan"
           element={
             <PrivateRoute>
               <TransportPlan />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/transport-plans"
+          element={
+            <PrivateRoute>
+              <TransportPlans />
             </PrivateRoute>
           }
         />
