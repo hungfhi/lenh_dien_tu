@@ -30,6 +30,7 @@ const FormAddEdit = ({
             if (res.status === 200) {
                 const dataSet = []
                 _.map(res?.data?.data, (items) => {
+
                     dataSet.push({
                         value: items.id,
                         id: items.id,
