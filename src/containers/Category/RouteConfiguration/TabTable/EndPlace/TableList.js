@@ -37,7 +37,7 @@ const RouterStart = memo(({ className, data, setData, params, total, itemSelecte
     const payload = {
       direction_id: 2,
       name: name,
-      id: itemSelected?.id
+      uuid: itemSelected?.id
     }
     if (inputTimer) {
       clearTimeout(inputTimer);
