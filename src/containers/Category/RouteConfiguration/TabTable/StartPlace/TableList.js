@@ -37,7 +37,7 @@ const RouterStart = memo(({ className, data, setData, params, total, itemSelecte
     const payload = {
       direction_id: 1,
       name: name,
-      id: itemSelected?.id
+      uuid: itemSelected?.id
     }
     if (inputTimer) {
       clearTimeout(inputTimer);
@@ -57,21 +57,22 @@ const RouterStart = memo(({ className, data, setData, params, total, itemSelecte
           }
         })
     }, 2000);
-  },
-    [data]
-  );
+  },[data]);
 
   const cancel = (e) => {
   };
 
-  const onUpdate = useCallback(async (row, time) => {
+  const onUpdate = useCallback(async (name,row) => {
     const payload = {
-      id: 'h71012',
+      id: row?.id,
       direction_id: 1,
-      name: '',
-      merchant_route_node_id: row?.id
+      name: name,
+      uuid:itemSelected?.id
     }
-    category.updatePlace(payload)
+    if (inputTimer) {
+      clearTimeout(inputTimer);
+    }inputTimer = setTimeout(() => {
+      category.updatePlace(payload)
       .then(res => {
         let dataClone = _.cloneDeep(data);
         dataClone.find(item => item.id === res?.data?.data?.id && (item.name = res?.data?.data?.name, true));
@@ -82,7 +83,8 @@ const RouterStart = memo(({ className, data, setData, params, total, itemSelecte
           message.error(err.response?.data?.message)
         }
       })
-  }, [data]);
+    }, 2000);
+  },[data]);
 
   const onConfirm = (ids) => {
     onDelRow(ids)
