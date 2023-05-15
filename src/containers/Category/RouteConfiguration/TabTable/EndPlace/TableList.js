@@ -22,9 +22,9 @@ const RouterStart = memo(({ className, data, setData, params, total, itemSelecte
   const onAdd = () => {
     let dataClone = _.cloneDeep(data);
     const idCheck = dataClone.find(item => item.id === 'h71012');
-    if(idCheck){
+    if (idCheck) {
       message.error('Vui lòng nhập điểm trả !')
-    }else {
+    } else {
       dataClone.push({
         id: 'h71012',
         direction_id: 2,
@@ -64,24 +64,28 @@ const RouterStart = memo(({ className, data, setData, params, total, itemSelecte
   const cancel = (e) => {
   };
 
-  const onUpdate = useCallback(async (row, time) => {
+  const onUpdate = useCallback(async (name, row) => {
     const payload = {
-      id: 'h71012',
+      id: row?.id,
       direction_id: 2,
-      name: '',
-      merchant_route_node_id: row?.id
+      name: name,
+      uuid: itemSelected?.id
     }
-    category.updatePlace(payload)
-      .then(res => {
-        let dataClone = _.cloneDeep(data);
-        dataClone.find(item => item.id === res?.data?.data?.id && (item.name = res?.data?.data?.name, true));
-        setData(dataClone)
-      })
-      .catch(err => {
-        if (err.response?.data) {
-          message.error(err.response?.data?.message)
-        }
-      })
+    if (inputTimer) {
+      clearTimeout(inputTimer);
+    } inputTimer = setTimeout(() => {
+      category.updatePlace(payload)
+        .then(res => {
+          let dataClone = _.cloneDeep(data);
+          dataClone.find(item => item.id === res?.data?.data?.id && (item.name = res?.data?.data?.name, true));
+          setData(dataClone)
+        })
+        .catch(err => {
+          if (err.response?.data) {
+            message.error(err.response?.data?.message)
+          }
+        })
+    }, 2000);
   }, [data]);
 
   const onConfirm = (ids) => {
@@ -113,7 +117,7 @@ const RouterStart = memo(({ className, data, setData, params, total, itemSelecte
 
   const columns = [
     {
-      title: "Điểm trả khách theo chiều trả",
+      title: "Điểm trả khách theo chiều về",
       dataIndex: "name",
       render: (value, row) => {
         return <Input bordered={false} defaultValue={value} style={{ width: '100%', color: '#01579B', fontWeight: 700, fontFamily: 'Nunito' }} suffix={<EditOutlined />} onChange={(e) => { row?.id === 'h71012' ? onPush(e.target.value, row) : onUpdate(e.target.value, row) }} />
