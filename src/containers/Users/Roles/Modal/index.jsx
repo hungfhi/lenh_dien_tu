@@ -20,7 +20,6 @@ const Roles = ({
     onUpdate
 }) => {
 
-    console.log("permissions",permissions)
     const [form] = Form.useForm();
     form.setFieldsValue({})
     const addBody = useCallback(
@@ -42,8 +41,6 @@ const Roles = ({
     let per = [];
     _.forEach(permissions, (v, k) => per.push(v))
 
-
-    console.log('per',per)
     return (
         <DrawerBase
             destroyOnClose

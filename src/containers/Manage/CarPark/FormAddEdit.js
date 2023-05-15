@@ -180,7 +180,6 @@ const FormAddEdit = ({
                                 filterOption={typeSearch === "local" ? localSearchFunc : false}
                                 notFoundContent={fetching ? <Spin size="small" /> : "Không có dữ liệu"}
                                 onSelect={(e, value) => {
-                                    console.log('value', value)
                                     form.setFieldsValue({
                                         province: value?.provinceId,
                                     })

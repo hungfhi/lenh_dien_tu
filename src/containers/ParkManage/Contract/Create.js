@@ -17,8 +17,6 @@ const Create = ({
   };
   const onSave = async (values) => {
 
-console.log('valuesvalues',values)
-
     const payload = {
       name: values?.name,
       contract_number: values?.contract_number,
