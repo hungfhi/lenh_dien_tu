@@ -37,6 +37,7 @@ const Index = ({ className, profile }) => {
             if (res.status === 200) {
                 const dataSet = [];
                 _.map(res?.data?.data, (items) => {
+                    const newItems = items?.child.sort((a, b) => a.order_number - b.order_number);
 
                     dataSet.push({
                         key: items.id,
@@ -45,8 +46,8 @@ const Index = ({ className, profile }) => {
                         is_active: items.is_active,
                         order_number: items.order_number,
                         parent_id: items.parent_id,
-                        children: _.map(items?.child, (item) => {
-                            console.log(item);
+                        children: _.map(newItems, (item) => {
+
                             return {
                                 key: item.id,
                                 id: item.id,
