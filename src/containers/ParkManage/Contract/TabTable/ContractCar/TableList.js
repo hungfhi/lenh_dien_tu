@@ -63,7 +63,6 @@ const Social = ({ profile, className, idTabs, showModal, data, user_id, itemSele
 
 
   const _handleSelectAll = async (selected, selectedRows, changeRows) => {
-    console.log("selectedRows",selectedRows)
     if (!selected) {
       setItemSelected([])
     } else {

@@ -27,8 +27,8 @@ const Index = ({ className, profile }) => {
   const [params, setParams] = useState({
     page: 1,
     size: 20,
-    route_id: '',
-    is_active: '',
+    route_id: undefined,
+    is_active: undefined,
     start_station_id: '',
     end_station_id: '',
     per_page: 10

@@ -24,7 +24,6 @@ const District = ({className}) => {
         setLoading(true);
         category.getDistrict(params).then(res => {
             if (res.status === 200) {
-                console.log(res);
                 setListDistrict(res?.data?.data);
                 setTotal(res?.meta?.total);
                 setLoading(false);

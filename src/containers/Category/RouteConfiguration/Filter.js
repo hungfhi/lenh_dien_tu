@@ -3,7 +3,7 @@ import { Row, Col, Select, Button, Input } from "antd";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-
+const { Option } = Select;
 let inputTimer = null;
 
 const Filter = ({ className, setParams, params, setShowModal, operator, stations, allRoute }) => {
@@ -24,11 +24,10 @@ const Filter = ({ className, setParams, params, setShowModal, operator, stations
   );
 
   const onChangeStatus = (value) => {
-
     if (value !== undefined)
-      _changeQuery({ name: "is_active", value: value ? 1 : 0 });
+      _changeQuery({ name: "is_active", value: value });
     else
-      _changeQuery({ name: "is_active", value: 1 });
+      _changeQuery({ name: "is_active", value: undefined });
   }
 
   const onChangeRoute = (value) => {
@@ -79,24 +78,20 @@ const Filter = ({ className, setParams, params, setShowModal, operator, stations
         <Col span={4}>
           <div>Trạng thái</div>
           <Select
-            placeholder="Trạng thái"
-            optionFilterProp="children"
+            size="default"
+            showSearch
+            className={className}
             allowClear
-            style={{ width: '100%' }}
-            onChange={onChangeStatus}
-
-            options={[
-              {
-                value: true,
-                label: 'Hoạt động',
-              },
-              {
-                value: false,
-                label: 'Không hoạt động',
-              },
-
-            ]}
-          />
+            loadOnMount
+            style={{ width: "100%" }}
+            placeholder="Trạng thái"
+            onChange={(e) => {
+              _changeQuery({ name: "is_active", value: e });
+            }}
+          >
+            <Option key={0}>Không hoạt động</Option>
+            <Option key={1}>Hoạt động</Option>
+          </Select>
         </Col>
         <Col span={4}>
           <div>Bến đi</div>
