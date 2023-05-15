@@ -170,7 +170,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                           minWidth: "180px", color: 'rgba(0, 0, 0, 0.85)'
                         }}
                         rowSpan="1"
-                        key={`${index}-3`}
+                        key={`${index}-4`}
                       >
                         <div className="d-flex">{moment(item?.start_date).format("DD/MM/YYYY")} - {moment(item?.end_date).format("DD/MM/YYYY")}</div>
                       </td>
@@ -180,7 +180,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                           minWidth: "125px", color: 'rgba(0, 0, 0, 0.85)'
                         }}
                         rowSpan="1"
-                        key={`${index}-3`}
+                        key={`${index}-5`}
                       >
                       </td>
                     </>
@@ -193,7 +193,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                           minWidth: "85px",
                         }}
                         rowSpan="1"
-                        key={`${index}-1`}
+                        key={`${index}-6`}
                       >
                         {renderActive(item?.is_active)}
                       </td>
@@ -203,7 +203,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                           minWidth: "125px",
                         }}
                         rowSpan="1"
-                        key={`${index}-1`}
+                        key={`${index}-7`}
                       >
                         <div>{item?.address}</div>
                       </td>
@@ -213,15 +213,16 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                           minWidth: "85px",
                         }}
                         rowSpan="1"
-                        key={`${index}-1`}
+                        key={`${index}-8`}
                       >
                         <div style={{ textAlign: 'center' }}>
                           <Tooltip placement="topLeft">
                             <Button
                               type="link"
                               onClick={() => onEdit(item?.id)}
-                            />
+                            >
                             <i class="fa-regular fa-pen-to-square" style={{ color: '#01579B', fontSize: 20 }}></i>
+                            </Button>
                           </Tooltip>
                         </div>
                       </td>
