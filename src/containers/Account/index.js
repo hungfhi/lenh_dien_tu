@@ -74,7 +74,6 @@ const Roles = ({ className, profile }) => {
   useEffect(() => {
   }, [profile])
 
-  console.log('user',user)
 
   return (
     <Row className={className} gutter={[16, 16]}>

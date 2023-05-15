@@ -37,7 +37,10 @@ import RouteManagement from './Category/RouteConfiguration';
 import BusinessType from './Category/BusinessType';
 import UserStation from './Manage/UserStation';
 import QualityStandard from './Category/QualityStandard';
-import TransportPlan from './Category/TransportPlan';
+
+import TransportPlan from './Plan/TransportPlan';
+import TransportPlans from './Category/TransportPlan';
+
 
 const AppRouter = () => {
   const dispatch = useDispatch()
@@ -272,6 +275,14 @@ const AppRouter = () => {
           element={
             <PrivateRoute>
               <TransportPlan />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/transport-plans"
+          element={
+            <PrivateRoute>
+              <TransportPlans />
             </PrivateRoute>
           }
         />
