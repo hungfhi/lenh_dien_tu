@@ -97,7 +97,7 @@ const category = {
         return axios.delete(`${domain.ServiceAddress}/merchantRoutes/assign-time/${payload?.id}`);
     },
     updatePlace(payload) {
-        return axios.post(`${domain.ServiceAddress}/merchantRoutes/assign-journey/${payload?.id}`, payload);
+        return axios.post(`${domain.ServiceAddress}/merchantRoutes/assign-journey/${payload?.uuid}`, payload);
     },
     delPlace(payload) {
         return axios.delete(`${domain.ServiceAddress}/merchantRoutes/assign-journey/${payload?.id}`);

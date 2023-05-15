@@ -17,6 +17,5 @@ const TabTable = () => (
             </Tabs.TabPane>
         </Tabs>
     </div>
-
 );
 export default TabTable;

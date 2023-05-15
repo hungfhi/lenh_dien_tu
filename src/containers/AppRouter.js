@@ -37,6 +37,10 @@ import RouteManagement from './Category/RouteConfiguration';
 import BusinessType from './Category/BusinessType';
 import UserStation from './Manage/UserStation';
 import QualityStandard from './Category/QualityStandard';
+
+import TransportPlan from './Plan/TransportPlan';
+
+
 const AppRouter = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state?.rootReducer?.user);
@@ -262,6 +266,15 @@ const AppRouter = () => {
           element={
             <PrivateRoute>
               <QualityStandard />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/transport-plan"
+          element={
+            <PrivateRoute>
+              <TransportPlan />
             </PrivateRoute>
           }
         />
