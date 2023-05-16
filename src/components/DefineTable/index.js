@@ -16,7 +16,9 @@ const StyledInput = ({
   rowSelection,
   sticky,
   scroll,
-  onRow
+  rowKey,
+  onRow,
+  components
 }) => {
   let maxHeight = window.innerHeight;
   maxHeight = (maxHeight * 62) / 100;
@@ -32,10 +34,12 @@ const StyledInput = ({
         onRow={onRow}
         dataSource={dataSource}
         rowSelection={rowSelection}
+        rowKey={rowKey}
         expandable={expandable}
         // scroll={scroll == false ? false : objScroll}
         scroll={scroll}
         sticky={true}
+        components={components}
         // rowKey={() => {
         //   return new Date().getTime()
         // }}
