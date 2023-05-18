@@ -38,11 +38,6 @@ const TableList = memo(({ className, data, params, total, setItems, items, setPa
   }, [itemSelected, items]
   );
 
-
-  console.log('itemSelected', itemSelected)
-
-
-
   const _handleSelect = useCallback((record, status) => {
     if (!items.includes(record.id)) {
       const selectKeyNew = [...items]
@@ -72,13 +67,21 @@ const TableList = memo(({ className, data, params, total, setItems, items, setPa
   const columns = [
     {
       title: "Nốt",
-      dataIndex: "time",
+      dataIndex: "departure_time",
       width: 200,
       fixed: "left",
+      render: (value) => {
+        return (
+          <div style={{fontWeight:700,fontFamily:'Nunito',fontSize:15}}>{moment(value, 'HH:mm:ss').format('HH:mm')}</div>
+        )
+      }
     },
     {
       title: "Kế hoạch",
       dataIndex: "name",
+      render: (value, row, record) => {
+        return <div>{row?.type_apply?.name}-{row?.schedule?.toString()}</div>
+      }
     },
   ];
 
@@ -109,5 +112,9 @@ export default styled(TableList)`
   font-size: 16px !important;
   font-weight: 700 !important;
   font-family: Nunito !important;
+}
+.ant-table-tbody > tr > td {
+  font-family: 'Nunito' !important;
+  font-size: 15px !important;
 }
 `;

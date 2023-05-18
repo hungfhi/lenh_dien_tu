@@ -26,16 +26,20 @@ const datas = [
 
 
 
-const EndPlace = ({ className,itemSelected,setItemSelected}) => {
-  const [data, setData] = useState(datas);
+const EndPlace = ({ className,itemSelected,setItemSelected,nodeB}) => {
+  const [data, setData] = useState(nodeB?.nodes);
   const [items, setItems] = useState([]);
   const [loadding, setLoading] = useState(false);
+
+  useEffect(() => {
+    setData(nodeB?.nodes)
+}, [nodeB]);
 
   return (
     <Row className={className} gutter={[16, 16]}>
       <Spin spinning={loadding}>
         <Col span={24}>
-          <div className="banner">Xuất phát từ bến xe Sơn La</div>
+          <div className="banner">Xuất phát từ bến xe {nodeB?.name}</div>
           <TableList
             data={data}
             setData={setData}

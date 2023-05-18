@@ -9,34 +9,63 @@ import { Tabs, message, Col, Button, Drawer, Spin } from 'antd';
 import React, { useState, useCallback, useEffect } from 'react';
 import styled from "styled-components";
 import Expected from './Expected';
-import Licensing from './Licensing';
 import Processing from './Processing';
-import Success from './Success';
 import Refuse from './Refuse';
 import moment from "moment";
 import TabTable from './TabTable';
-import { category } from 'configs';
+import Filter from './Filter';
+import { command } from 'configs';
 
 const SignCommand = ({
     className,
 }) => {
     const [isShowModal, setShowModal] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [itemSelected, setItemSelected] = useState([]);
+    const [allData, setAllData] = useState([]);
     const [allRoute, setAllRoute] = useState([]);
+
     const [params, setParams] = useState({
-        start_date: moment(),
-        end_date: moment(),
-        route_id:undefined
+        date_from: moment(),
+        date_to: moment(),
+        route: undefined,
+        direction: undefined,
+        status: 1,
+        page: 1,
+        size: 20,
     });
     const onHiddenModal = useCallback(() => {
         setShowModal(false);
-        setParams([])
     });
 
-    
+    const getAllData = useCallback(async () => {
+        const payload = {
+            route: params.route,
+            direction: params.direction,
+            status: params.status,
+            page: params.page,
+            size: params.size,
+            date_from: moment(params.date_from).format("YYYY-MM-DD"),
+            date_to: moment(params.date_to).format("YYYY-MM-DD"),
+        }
+        setLoading(true)
+        command.getCommand(payload)
+            .then(res => {
+                if (res.status === 200) {
+                    setAllData(res?.data?.data)
+                    setItemSelected([])
+                    setLoading(false)
+                }
+            })
+            .catch(err => {
+                message.error("Có lỗi xảy ra !")
+            })
+    }, [params]);
+
+
 
     const getAllRoutes = useCallback(async () => {
-        category.getRoute()
+        command.getCommandRoutes()
             .then(res => {
                 if (res.status === 200) {
                     const allRoute = []
@@ -51,15 +80,45 @@ const SignCommand = ({
                 }
             })
             .catch(err => {
-                if (err.response?.status === 422 && err.response?.data?.errors) {
-                    message.warn(err.response.data?.errors[0].msg)
-                }
+                message.error("Có lỗi xảy ra !")
             })
     }, []);
 
+
+
+
+    const onChange = (key) => {
+        setParams((prevState) => {
+            let nextState = { ...prevState };
+            nextState.status = key;
+            return nextState;
+        });
+    };
+
+    const onSign = useCallback(async () => {
+        if (itemSelected.length > 0) {
+            command.getCommand(itemSelected).then(res => {
+                if (res.status === 200) {
+                }
+            }).catch(err => {
+                message.error("Có lỗi xảy ra !")
+            })
+            message.success("Kí lệnh thành công.");
+        } else {
+            message.warning("Vui lòng chọn 1 bản ghi!")
+        }
+    }, [itemSelected]);
+
+
+
+    const onRefreshList = () => {
+        getAllData();
+    }
+
     useEffect(() => {
         getAllRoutes();
-    }, [getAllRoutes]);
+        getAllData();
+    }, [getAllRoutes, getAllData]);
 
 
     return (
@@ -67,26 +126,45 @@ const SignCommand = ({
             <div style={{ zIndex: 1, float: 'right', top: 90, right: 33, position: 'absolute', }}>
                 <Button onClick={() => setShowModal(true)} style={{ backgroundColor: '#00A991', color: '#fff', borderRadius: 6, height: 35, width: 120 }}>Tạo lệnh</Button>
             </div>
-            <Tabs defaultActiveKey="1" style={{ width: '100%' }}>
+            <Tabs defaultActiveKey="1" style={{ width: '100%' }} onChange={onChange}>
                 <Tabs.TabPane tab="Dự kiến" key="1">
-                    <Expected allRoute={allRoute}/>
+                    <Filter params={params} setParams={setParams} allRoute={allRoute} onSign={onSign} />
+                    <Expected
+                        data={allData}
+                        params={params}
+                        setParams={setParams}
+                        setItemSelected={setItemSelected}
+                        itemSelected={itemSelected}
+                        onRefreshList={onRefreshList}
+                        loading={loading}
+                    />
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="Đã cấp" key="2">
-                    <Licensing />
+                <Tabs.TabPane tab="Đang thực hiện" key="2">
+                    <Filter params={params} setParams={setParams} allRoute={allRoute} />
+                    <Processing
+                        data={allData}
+                        params={params}
+                        setParams={setParams}
+                        setItemSelected={setItemSelected}
+                        itemSelected={itemSelected}
+                        loading={loading}
+                    />
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="Đang thực hiện" key="3">
-                    <Processing />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="Thành công" key="4">
-                    <Success />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="Từ chối" key="5">
-                    <Refuse />
+                <Tabs.TabPane tab="Từ chối" key="3">
+                    <Filter params={params} setParams={setParams} allRoute={allRoute} onSign={onSign} />
+                    <Refuse
+                        data={allData}
+                        params={params}
+                        setParams={setParams}
+                        setItemSelected={setItemSelected}
+                        itemSelected={itemSelected}
+                        loading={loading}
+                    />
                 </Tabs.TabPane>
             </Tabs>
             <Drawer
                 destroyOnClose
-                width={"100%"}
+                width={"80%"}
                 title={<div style={{ fontFamily: 'Nunito', fontSize: 16, fontWeight: 700, color: '#01579B' }}>Tạo lệnh vận chuyển</div>}
                 placement="right"
                 closable={false}
@@ -97,8 +175,7 @@ const SignCommand = ({
                     allRoute.length !== 0 ? <TabTable
                         onHiddenModal={onHiddenModal}
                         allRoute={allRoute}
-                        params={params}
-                        setParams={setParams}
+                        onRefreshList={onRefreshList}
                     /> : <Spin></Spin>
 
                 }
@@ -116,7 +193,7 @@ export default styled(SignCommand)`
     padding: 12px 0;
     font-size: 16px;
     background: transparent;
-    border: 0;
+    border: 1px solid white !important;
     outline: none;
     cursor: pointer;
     width: 150px !important;
@@ -124,7 +201,8 @@ export default styled(SignCommand)`
     font-family: Nunito;
 }
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-    font-weight: 500 !important;
-    font-family: Nunito;
+    font-weight: 400 !important;
+    font-family: Nunito !important;
+    color:#01579B !important;
 }
 `;
