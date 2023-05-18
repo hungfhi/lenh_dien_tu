@@ -1,65 +1,88 @@
-import { EditOutlined } from "@ant-design/icons";
-import { Button, Modal, Pagination, Row, Tooltip } from "antd";
+import { EditOutlined, CloseCircleOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import { Button, Modal, Pagination, Row, Tooltip, Input, Form, message, Spin } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
 import PropTypes from "prop-types";
 import { memo, useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
-import ItemGroup from "./ItemGroup";
-import { category } from "configs";
+import ItemRow from "./ItemRow";
+import { category, command } from "configs";
 import _ from 'lodash'
+import moment from 'moment';
 const { confirm } = Modal;
+const { TextArea } = Input;
 
-const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList, itemSelected, setItemSelected, total }) => {
-  const [vehicle, setVehicle] = useState([]);
-  const [staffs, setStaffs] = useState([]);
+const TableList = memo(({ className, data, params, setParams, onRefreshList, itemSelected, setItemSelected, total }) => {
+  const [allMerchant, setAllMerchant] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [allDriver, setAllDriver] = useState([]);
+  const [idSelect, setIdSelect] = useState(undefined);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = (ids) => {
+    setIsModalOpen(true);
+    setIdSelect(ids)
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setIdSelect(undefined)
+    form.setFieldsValue({
+      reason: ""
+    })
+  };
+
+  const [form] = Form.useForm();
 
 
-  const getDataVehicle = useCallback(async () => {
-    category.getVehicle()
-      .then(res => {
-        if (res.status === 200) {
-          const dataSet = []
-          _.map(res?.data?.data, (items) => {
-            dataSet.push({
-              id: items.id,
-              name: items.license_plate,
-            });
+
+  const onGetData = useCallback(async (ids) => {
+    const payload = {
+      id: ids
+    };
+    setAllMerchant([])
+    setAllDriver([])
+    setLoading(true)
+    command.getCommandVehicles(payload).then(res => {
+      if (res.status === 200) {
+        const allMerchant = []
+        res?.data?.data.vehicles?.map(item => {
+          allMerchant.push({
+            ...item,
+            value: item?.id,
+            label: item?.license_plate,
           })
-          setVehicle(dataSet)
-        }
-      })
-      .catch(err => {
-      })
+        })
+        const allDriver = []
+        res?.data?.data.drivers?.map(item => {
+          allDriver.push({
+            ...item,
+            value: item?.id,
+            label: item?.first_name + " " + item?.last_name,
+          })
+        })
+        setAllMerchant(allMerchant)
+        setAllDriver(allDriver)
+        setLoading(false)
+      }
+    }).catch(err => {
+
+    })
   }, []);
 
-
-  const getDataStaffs = useCallback(async () => {
-    category.getPersons()
-      .then(res => {
-        if (res.status === 200) {
-          setStaffs(res?.data?.data)
-        }
-      })
-      .catch(err => {
-      })
-  }, []);
-
-  useEffect(() => {
-    getDataVehicle();
-    getDataStaffs();
-  }, [getDataVehicle, getDataStaffs]);
 
 
   const _handleSelectAll = async (selected, selectedRows, changeRows) => {
     if (!selected) {
       setItemSelected([])
     } else {
-      if (data.length === itemSelected.length) { // Trường hợp click vào xóa tất cả khi chưa full item
+      if (itemSelected.length !==0) { // Trường hợp click vào xóa tất cả khi chưa full item
         setItemSelected([])
       } else {
         let selectKeyNew = [];
-        await selectedRows.map((item) => {
+        const someArray = selectedRows.filter(item => item?.first_driver !== null && item?.vehicle !== null);
+        await someArray.map((item) => {
           selectKeyNew.push(item.id)
         })
         await setItemSelected(selectKeyNew);
@@ -80,86 +103,184 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
     }
   };
 
+  const onFinish = async (values) => {
+    const payload = {
+      id: idSelect,
+      reason: values?.reason
+    }
+
+    command.delCommand(payload)
+      .then(res => {
+        if (res.status === 200) {
+          message.success('Huỷ lệnh thành công.')
+          onRefreshList()
+          setIsModalOpen(false);
+        }
+      })
+      .catch(err => {
+        message.error('Có lỗi xảy ra!')
+      })
+  };
+
   const columns = [
     {
       title: "Ngày",
-      dataIndex: "code",
+      dataIndex: "departure_date",
       width: 150,
-      fixed: 'left'
+      fixed: 'left',
+      render: (value) => {
+        return (
+          <div>{value}</div>
+        )
+      }
     },
     {
       title: "Giờ XB",
-      dataIndex: "code",
+      dataIndex: "departure_time",
       width: 100,
+      render: (value) => {
+        return (
+          <div>{moment(value, 'HH:mm:ss').format('HH:mm')}</div>
+        )
+      }
     },
     {
       title: "Tuyến",
-      dataIndex: "slug",
+      dataIndex: "route",
       width: 180,
+      render: (value) => {
+        return (
+          <div>{value?.name}</div>
+        )
+      }
     },
     {
       title: "Chiều",
-      dataIndex: "code",
+      dataIndex: "direction",
       width: 80,
+      render: (value) => {
+        return (
+          <div style={{ textAlign: 'center' }}>{value?.code}</div>
+        )
+      }
     },
     {
       title: "Xe",
-      dataIndex: "slug",
+      dataIndex: "vehicle",
       width: 150,
       render: (text, record, row) => {
-        return (<div> {vehicle?.length !== 0 ? <ItemGroup nameColumn={"xe"} values={text} record={record} data={vehicle} params={params} onRefreshList={onRefreshList} /> : ""}
-        </div>
+        const ids = record?.id
+        return (
+          <div onClick={() => onGetData(ids)}>
+            <ItemRow
+              nameColumn={"vehicle"}
+              values={text}
+              record={record}
+              data={allMerchant}
+              params={params}
+              onRefreshList={onRefreshList}
+              loading={loading}
+              setItemSelected={setItemSelected}
+            />
+          </div>
         )
       }
     },
     {
       title: "Lái xe 1",
-      dataIndex: "code",
-      width: 170,
+      dataIndex: "first_driver",
+      width: 200,
       render: (text, record, row) => {
-        return (<div>
-          <ItemGroup nameColumn={"lx1"} values={text} record={record} data={staffs} params={params} onRefreshList={onRefreshList} />
-        </div>
+        const ids = record?.id
+        return (
+          <div onClick={() => onGetData(ids)}>
+            <ItemRow
+              nameColumn={"first_driver"}
+              values={text}
+              record={record}
+              data={allDriver}
+              params={params}
+              onRefreshList={onRefreshList}
+              loading={loading}
+              setItemSelected={setItemSelected}
+            />
+          </div>
+
         )
       }
     },
     {
       title: "Lái xe 2",
-      dataIndex: "code",
-      width: 170,
+      dataIndex: "second_driver",
+      width: 200,
       render: (text, record, row) => {
-        return (
-          <ItemGroup nameColumn={"lx2"} values={text} record={record} data={staffs} params={params} onRefreshList={onRefreshList} />
+        const ids = record?.id
+        return (<div onClick={() => onGetData(ids)}>
+          <ItemRow
+            nameColumn={"second_driver"}
+            values={text}
+            record={record}
+            data={allDriver}
+            params={params}
+            onRefreshList={onRefreshList}
+            loading={loading}
+            setItemSelected={setItemSelected}
+          />
+        </div>
         )
       }
     },
     {
       title: "Lái xe 3",
-      dataIndex: "code",
-      width: 170,
+      dataIndex: "third_driver",
+      width: 200,
       render: (text, record, row) => {
-        return (
-          <ItemGroup nameColumn={"lx3"} values={text} record={record} data={staffs} params={params} onRefreshList={onRefreshList} />
+        const ids = record?.id
+        return (<div onClick={() => onGetData(ids)}>
+          <ItemRow
+            nameColumn={"third_driver"}
+            values={text}
+            record={record}
+            data={allDriver}
+            params={params}
+            onRefreshList={onRefreshList}
+            loading={loading}
+            setItemSelected={setItemSelected}
+          />
+        </div>
         )
       }
     },
     {
       title: "Tiếp viên",
-      dataIndex: "code",
-      width: 170,
+      dataIndex: "attendant",
+      width: 200,
       render: (text, record, row) => {
+        const ids = record.id
         return (
-          <ItemGroup nameColumn={"tv"} values={text} record={record} data={staffs} params={params} onRefreshList={onRefreshList} />
+          <div onClick={() => onGetData(ids)}>
+            <ItemRow
+              nameColumn={"attendant"}
+              values={text}
+              record={record}
+              data={allDriver}
+              params={params}
+              onRefreshList={onRefreshList}
+              loading={loading}
+              setItemSelected={setItemSelected}
+            />
+          </div>
+
         )
       }
     },
     {
       title: "Trạng thái",
-      dataIndex: "code",
+      dataIndex: "status",
       width: 150,
       render: (text, record, row) => {
         return (
-          <div style={{ textAlign: 'center' }}>Chưa ký</div>
+          <div style={{ textAlign: 'center', color: '#F4511E' }}>{text?.name}</div>
         )
       }
     },
@@ -172,6 +293,13 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
         const ids = record.id
         return (
           <div style={{ textAlign: 'center' }}>
+            <Tooltip placement="topLeft">
+              <Button
+                type="link"
+                icon={<CloseCircleOutlined style={{ color: 'red' }} />}
+                onClick={() => showModal(ids)}
+              />
+            </Tooltip>
             <Tooltip placement="topLeft">
               <Button
                 type="link"
@@ -229,7 +357,48 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
         pagination={false}
       />
       {renderContent()}
-
+      <div style={{marginTop:-38,fontFamily:'Nunito', fontWeight: 600,color:'red'}}>Điều kiện để ký 1 lệnh: Có điều độ BKS + Lái xe 1</div>
+      <Modal title={<div style={{ fontFamily: 'Nunito', fontSize: 18, fontWeight: 700 }}>Huỷ lệnh</div>} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} closable={false} footer={null} destroyOnClose className={className}>
+        <Form
+          className={className}
+          onFinish={onFinish}
+          name="control-hooks"
+          initialValues={{
+            reason: '',
+          }}
+          form={form}
+        >
+          <Form.Item
+            name="reason"
+            rules={[{ required: true, message: 'Vui lòng nhập lí do!' }]}
+          >
+            <TextArea style={{ height: 80, resize: 'none' }}
+              placeholder="Nhập lý do huỷ . . ." />
+          </Form.Item>
+          <div
+            className="action"
+            style={{
+              position: "absolute",
+              right: 0,
+              width: "100%",
+              padding: "10px 9px",
+              background: "#fff",
+              textAlign: "left",
+            }}
+          >
+            <Button type="danger" style={{ height: 35 }} onClick={handleCancel}>
+              Thoát
+            </Button>
+            <Button
+              htmlType="submit"
+              type="primary"
+              style={{ height: 35, float: "right" }}
+            >
+              {itemSelected ? "Cập nhật" : "Thêm mới"}
+            </Button>
+          </div>
+        </Form>
+      </Modal>
     </div >
   );
 });
@@ -237,5 +406,20 @@ TableList.propTypes = {
   className: PropTypes.any,
 };
 export default styled(TableList)`
-  
+.ant-modal-body {
+  padding: 8px !important;
+  font-size: 14px;
+  line-height: 1.5715;
+  word-wrap: break-word;
+}
+.ant-form-item {
+  margin-bottom: 0px !important;
+}
+.ant-modal-header {
+  color: rgba(0, 0, 0, 0.85);
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 2px 2px 0 0;
+  text-align: center;
+}
 `;
