@@ -31,6 +31,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
   const [itemSelected, setItemSelected] = useState(undefined);
   const [mechants, setMechants] = useState([]);
   const [models, setModels] = useState([]);
+  const [idModel, setIdModel] = useState(undefined);
   const [stations, setStations] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fetching, setFetching] = useState(false);
@@ -102,7 +103,6 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
   }
 
   const onChangeInit = (value) => {
-    console.log('value', value?.stations)
     setModels(value?.models)
     setStations(value?.stations)
   }
@@ -314,9 +314,9 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                           filterOption={typeSearch === "local" ? localSearchFunc : false}
                           notFoundContent={fetching ? <Spin size="small" /> : "Không có dữ liệu"}
                           onSelect={(e, value) => {
-                            console.log('adasdasdasd', value?.models[0]?.id)
                             onChangeInit(value)
                             setItemSelected(value?.value)
+                            setIdModel(value?.models.length === 1 ? value?.models[0]?.id : '',)
                             form.setFieldsValue({
                               model: value?.models.length === 1 ? value?.models[0]?.id : '',
                               station: value?.models.length === 1 && value?.stations.length === 1 && value?.stations.length !== undefined ? value?.stations[0]?.id : ''
@@ -343,7 +343,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                           className={className}
                           filterOption={typeSearch === "local" ? localSearchFunc : false}
                           onSelect={(e, value) => {
-                            console.log('value', value)
+                            setIdModel(value?.value)
                             form.setFieldsValue({
                               station: stations.length === 1 && stations.length !== undefined ? stations[0]?.id : ''
                             })
@@ -358,11 +358,13 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <div>Bến xe</div>
+                      <div>Bến xe{idModel === 1 ? <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span> : ""} </div>
                       <Form.Item
                         name="station"
+                        rules={[{ required: idModel === 1 ? true : false, message: 'Vui lòng chọn bến' }]}
                       >
                         <Select
+                          allowClear
                           style={{ width: "100%" }}
                           placeholder="Bến xe"
                           showSearch
