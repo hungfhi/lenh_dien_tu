@@ -8,6 +8,7 @@ const Update = ({ className,
     onHiddenModalEdit,
     onRefreshList,
     itemSelected,
+    onRefresh,
     stations,
     province,
     allRoute }) => {
@@ -15,6 +16,7 @@ const Update = ({ className,
         <div className={className}>
             <FormEdit
                 itemSelected={itemSelected}
+                onRefreshList={onRefreshList}
                 // onSave={onSave}
                 onHiddenModal={onHiddenModalEdit}
                 stations={stations}

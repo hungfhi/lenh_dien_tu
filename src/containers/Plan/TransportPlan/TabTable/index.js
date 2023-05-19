@@ -1,11 +1,11 @@
-import { Tabs, Row, Col } from 'antd';
+import { Tabs, Row, Col, Button } from 'antd';
 import React from 'react';
 import styled from "styled-components";
 import Driver from './Driver';
 import Trip from './Trip';
 import Vehicle from './Vehicle';
 
-const TabTable = ({ className, itemSelected, allRoute }) => {
+const TabTable = ({ className, itemSelected, allRoute, onRefreshList }) => {
     const route = allRoute.find(x => x.id === itemSelected?.route?.id)?.name;
     const route_name = route.split("-");
     return (
@@ -22,13 +22,13 @@ const TabTable = ({ className, itemSelected, allRoute }) => {
                 <Tabs.TabPane tab={<div>Phương tiện</div>} key="2">
 
                     <Row gutter={[16,16]}>
-                        <Vehicle itemSelected={itemSelected} />
+                        <Vehicle itemSelected={itemSelected} onRefreshList={onRefreshList} />
                     </Row>
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={<div>Lái xe</div>} key="3">
 
                     <Row gutter={[16,16]}>
-                        <Driver />
+                        <Driver itemSelected={itemSelected} onRefreshList={onRefreshList} />
                     </Row>
                 </Tabs.TabPane>
             </Tabs>

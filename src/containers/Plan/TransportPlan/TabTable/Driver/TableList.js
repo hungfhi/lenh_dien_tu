@@ -2,41 +2,13 @@ import React from 'react';
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import DefineTable from 'components/DefineTable';
-import { Button, message, Popconfirm, Switch, Tooltip } from 'antd';
+import { Button, Popconfirm, Switch, Tooltip } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { plan } from 'configs';
-import _ from 'lodash';
-import { Ui } from 'utils/Ui';
-import { COLOR_GREEN, COLOR_RED } from 'theme/colors';
 
-const TableList = ({ className, data, setData, itemSelected, onEdit, onRefreshList }) => {
+const TableList = ({ className, data, setData, itemSelected }) => {
 
-    const onConfirm = (row) => {
-        onDelRow(row)
-    };
-
-    const cancel = (e) => {
-    };
-
-    const onDelRow = async (row) => {
-        // console.log(row);
-        // const departure_time = row?.departure_time.slice(0, 5);
-
-        // console.log(payload);
-        plan.deleteVehicle(row.id).then(res => {
-            if (res.status === 200) {
-                // console.log(res.data.message);
-                message.success(res.data.message ? res.data.message : res.data.data.message);
-                onRefreshList();
-            }
-        }).catch(err => {
-            if (err.response?.status === 422 && err.response?.data?.errors) {
-                message.error('Error!')
-            }
-        })
-    };
-
+    console.log(data);
 
     const columns = [
         {
@@ -53,41 +25,47 @@ const TableList = ({ className, data, setData, itemSelected, onEdit, onRefreshLi
             },
         },
         {
-            title: 'Biển kiểm soát',
+            title: 'Tên lái xe',
             width: 200,
             render: (text, record) => {
-                return record?.vehicle?.license_plate;
+                console.log(record);
+                return <div>{record?.staff?.first_name} {record?.staff?.last_name}</div>;
             }
         },
         {
-            title: 'Hạn phù hiệu',
+            title: 'Số điện thoại',
+            width: 150,
+            dataIndex: 'phone',
+            render: (text, record) => {
+                return record?.staff?.phone;
+            }
+        },
+        {
+            title: 'Hạng bằng lái',
+            dataIndex: 'expire_date',
+            width: 100,
+            align: 'center',
+            render: (text, record) => {
+                return record?.staff?.driving_license_rank_id?.name;
+            }
+        },
+        {
+            title: 'Hạn bằng lái',
             dataIndex: 'expire_date',
             width: 150,
             align: 'center',
             render: (text, record) => {
-                return moment(text).format('DD/MM/YYYY');
+                return moment(record?.staff?.driving_license_expire_date).format('DD/MM/YYYY');
             }
         },
         {
-            title: 'Ngày cấp',
-            dataIndex: 'updated_at',
+            title: 'Thời hạn',
+            dataIndex: 'expire_date',
             width: 150,
             align: 'center',
             render: (text, record) => {
-                return moment(record?.vehicle?.updated_at).format('DD/MM/YYYY');
+                return moment(record?.vehicle?.registration_expired_date).format('DD/MM/YYYY');
             }
-        },
-        {
-            title: "Trạng thái",
-            dataIndex: "is_active",
-            width: '100',
-            align: 'center',
-            render: (text, record) => {
-
-                return <span style={{ color: text == 1 ? COLOR_GREEN : COLOR_RED }}>{text == 1 ? 'Active' : 'In Active'}</span>;
-
-            },
-            width: 120,
         },
         {
             title: "Thao tác",
@@ -100,7 +78,7 @@ const TableList = ({ className, data, setData, itemSelected, onEdit, onRefreshLi
                         <Tooltip placement="topLeft">
                             <Button
                                 type="link"
-                                onClick={() => onEdit(record)}
+                                // onClick={() => onEdit(ids)}
                             >
                                 <i class="fa-regular fa-pen-to-square" style={{ color: '#01579B', fontSize: 20 }}></i>
                             </Button>
@@ -108,8 +86,8 @@ const TableList = ({ className, data, setData, itemSelected, onEdit, onRefreshLi
                         &nbsp;&nbsp;
                         <Popconfirm
                             title="Chắc chắn xoá phương tiện này?"
-                            onConfirm={() => onConfirm(record)}
-                            onCancel={cancel}
+                            // onConfirm={() => onConfirm(ids)}
+                            // onCancel={cancel}
                             okText="Xoá"
                             placement="topLeft"
                             cancelText="Huỷ"
@@ -124,16 +102,16 @@ const TableList = ({ className, data, setData, itemSelected, onEdit, onRefreshLi
         }
     ];
 
-    return (
-        <div className={className}>
-            <DefineTable
-                columns={columns}
-                dataSource={data}
-                scroll={{ y: "calc(100vh - 330px)" }}
-                pagination={false}
-            />
-        </div>
-    );
+return (
+    <div className={className}>
+        <DefineTable
+            columns={columns}
+            dataSource={data}
+            scroll={{ y: "calc(100vh - 330px)" }}
+            pagination={false}
+        />
+    </div>
+);
 };
 
 TableList.propTypes = {

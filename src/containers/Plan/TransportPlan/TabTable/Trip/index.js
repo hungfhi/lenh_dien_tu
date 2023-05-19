@@ -1,6 +1,7 @@
-import { Col } from 'antd';
-import React, { useState } from 'react';
+import { Col, Drawer, Spin } from 'antd';
+import React, { useCallback, useEffect, useState } from 'react';
 import TableList from './TableList';
+import Update from './Update';
 
 const Trip = ({ itemSelected }) => {
 
@@ -8,6 +9,32 @@ const Trip = ({ itemSelected }) => {
 
     const [dataA, setDataA] = useState(itemSelected?.node_a);
     const [dataB, setDataB] = useState(itemSelected?.node_b);
+    const [isShowModalTripPlan, setIsShowModalTripPlan] = useState(false);
+    const [itemTripSelected, setItemTripSelected] = useState(null);
+
+    const onTripPlan = useCallback(async (row) => {
+        setIsShowModalTripPlan(true);
+        setItemTripSelected(row);
+    }, []);
+
+    const onHiddenModalTripPlan = () => {
+        setIsShowModalTripPlan(false);
+        setItemTripSelected(null);
+    }
+
+    const onRefreshList = () => {
+        setDataA(dataA);
+        setDataB(dataB)
+    }
+
+    useEffect(() => {
+        setDataA(dataA);
+    }, [dataA]);
+    useEffect(() => {
+        setDataB(dataB);
+    }, [dataB]);
+
+    console.log(itemTripSelected);
 
     return (
         <>
@@ -27,6 +54,7 @@ const Trip = ({ itemSelected }) => {
                     data={dataA}
                     itemSelected={itemSelected}
                     setData={setDataA}
+                    onTripPlan={onTripPlan}
                 />
             </Col>
             <Col span={12}>
@@ -45,8 +73,33 @@ const Trip = ({ itemSelected }) => {
                     data={dataB}
                     itemSelected={itemSelected}
                     setData={setDataB}
+                    onTripPlan={onTripPlan}
                 />
             </Col>
+            <Drawer
+                destroyOnClose
+                width={"40%"}
+                title={"Lập kế hoạch chuyến đi"}
+                placement="right"
+                closable={true}
+                onClose={onHiddenModalTripPlan}
+                visible={isShowModalTripPlan}
+            >
+                {
+                    itemTripSelected ? (
+                        <Update
+                            onRefreshList={onRefreshList}
+                            onHiddenModalTripPlan={onHiddenModalTripPlan}
+                            itemTripSelected={itemTripSelected}
+                            isShowModalTripPlan={isShowModalTripPlan}
+                            data={itemTripSelected?.direction?.id == 1 ? dataA : dataB}
+                            setData={itemTripSelected?.direction?.id == 1 ? setDataA : setDataB}
+                            // allRoute={allRoute}
+                        />
+                    ) : <div><div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spin spinning /></div></div>
+                }
+
+            </Drawer>
         </>
     );
 };

@@ -1,34 +1,41 @@
-import { Button, Col, Form, Input, Row, InputNumber, Switch, Select } from "antd";
+import { Button, Col, Form, Input, Row, InputNumber, Switch, Select, TimePicker, Checkbox, DatePicker } from "antd";
+import moment from "moment";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { COLOR_RED } from "theme/colors";
 import { DIMENSION_PADDING_NORMAL, DIMENSION_PADDING_SMALL } from 'theme/dimensions';
-import TabTable from "./TabTable";
 
 const { TextArea } = Input;
 const FormEdit = ({
     className,
     itemSelected,
+    itemVehicleSelected,
     onSave,
     onHiddenModal,
-    onRefreshList,
+    isShowModalTripPlan,
     stations,
     province,
-    allRoute,
+    allVehicle,
     allUnit,
 }) => {
-    const [isActive, setActive] = useState(itemSelected ? (itemSelected?.is_active == 1 ? true : false) : true);
+    // const [isActive, setActive] = useState(itemSelected ? (itemSelected?.is_active == 1 ? true : false) : true);
 
     const [form] = Form.useForm();
+
     const onFinish = async (values) => {
         onSave(values)
     };
     const onFinishFailed = () => {
     };
 
-    const onActive = (value) => {
-        setActive(!value)
-    }
+    // const onActive = (value) => {
+    //     setActive(!value)
+    // }
+
+    console.log(itemVehicleSelected);
+
+
     return (
         <div className={className}>
             <Form
@@ -37,17 +44,44 @@ const FormEdit = ({
                 onFinish={onFinish}
                 name="control-hooks"
                 initialValues={{
-                    "route_id": itemSelected && itemSelected?.route?.id || '',
-                    "distance": itemSelected && itemSelected?.distance || '',
-                    "is_active": isActive,
+                    vehicle_id: itemVehicleSelected && itemVehicleSelected?.vehicle?.id || '',
+                    expire_date: itemVehicleSelected && moment(itemVehicleSelected?.expire_date) || ''
                 }}
                 form={form}
             >
                 <Row gutter={[16, 0]}>
                     <Col span={24}>
-                        <TabTable onRefreshList={onRefreshList} itemSelected={itemSelected} allRoute={allRoute} />
+                        <div>Chọn xe <span style={{ fontWeight: 'bold', color: COLOR_RED }}>*</span></div>
+                        <Form.Item
+                            name="vehicle_id"
+                            rules={[{ required: true, message: 'Vui lòng chọn xe' }]}
+                        >
+                            <Select
+                                showSearch
+                                placeholder="Chọn xe"
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                }
+                                options={allVehicle}
+                            />
+                        </Form.Item>
                     </Col>
-                    
+                    <Col span={24}>
+                        <div>Hạn phù hiệu <span style={{ fontWeight: 'bold', color: COLOR_RED }}>*</span></div>
+                        <Form.Item
+                            name="expire_date"
+                            rules={[{ required: true, message: 'Vui lòng nhập hạn phù hiệu' }]}
+                        >
+
+                            <DatePicker 
+                            style={{ width: '100%' }}
+                                placeholder="Hạn phù hiệu"
+                                format={'DD/MM/YYYY'}
+                            />
+                        </Form.Item>
+                    </Col>
+
                     {/* <div
                         className="action"
                         style={{
@@ -101,9 +135,9 @@ FormEdit.propTypes = {
 };
 export default styled(FormEdit)`
   .btn-add {
-    background-color: #08976d;
+    background-color: #01579B;
     color: #fff;
     border-radius: 3px;
-    border-color: #08976d;
+    border-color: #01579B;
   }
 `;

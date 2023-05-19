@@ -2,7 +2,7 @@ import { Modal, message, Popconfirm, Input, TimePicker, Button, Col, Tooltip } f
 import { EditOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
-import { category } from "configs";
+import { category, plan } from "configs";
 import PropTypes from "prop-types";
 import { memo, useCallback } from "react";
 import _ from "lodash"
@@ -11,7 +11,7 @@ import styled from "styled-components";
 const format = 'HH:mm';
 const { confirm } = Modal;
 let inputTimer = null;
-const TableList = ({ className, data, setData, params, total, itemSelected }) => {
+const TableList = ({ className, data, setData, params, total, itemSelected, onTripPlan }) => {
 
 
     // const onAdd = () => {
@@ -54,8 +54,8 @@ const TableList = ({ className, data, setData, params, total, itemSelected }) =>
     //     }, 2000);
     // }, [data]);
 
-    // const cancel = (e) => {
-    // };
+    const cancel = (e) => {
+    };
 
     // const onUpdate = useCallback(async (name, row) => {
     //     const payload = {
@@ -81,29 +81,32 @@ const TableList = ({ className, data, setData, params, total, itemSelected }) =>
     //     }, 2000);
     // }, [data]);
 
-    // const onConfirm = (ids) => {
-    //     onDelRow(ids)
-    // };
+    const onConfirm = (row) => {
+        onDelRow(row)
+    };
 
 
 
-    // const onDelRow = async (ids) => {
-    //     const payload = {
-    //         id: ids,
-    //     }
-    //     category.delPlace(payload)
-    //         .then(res => {
-    //             if (res.status === 200) {
-    //                 let dataClone = _.cloneDeep(data);
-    //                 setData(dataClone.filter(item => item.id !== ids));
-    //             }
-    //         })
-    //         .catch(err => {
-    //             if (err.response?.data) {
-    //                 message.error('Error!')
-    //             }
-    //         })
-    // };
+    const onDelRow = async (row) => {
+        console.log(row);
+        const departure_time = row?.departure_time.slice(0, 5);
+        const payload = {
+            direction_id: row?.direction?.id,
+            depature_time: departure_time,
+            merchant_route_id: row?.id
+        }
+        console.log(payload);
+        plan.deleteAssignTime(payload).then(res => {
+            if (res.status === 200) {
+                let dataClone = _.cloneDeep(data);
+                setData(dataClone.filter(item => item.id !== row?.id));
+            }
+        }).catch(err => {
+            if (err.response?.status === 422 && err.response?.data?.errors) {
+                message.error('Error!')
+            }
+        })
+    };
 
     const columns = [
         {
@@ -118,9 +121,19 @@ const TableList = ({ className, data, setData, params, total, itemSelected }) =>
             title: "Kế hoạch",
             dataIndex: "name",
             render: (text, record) => {
+                // const newRecordSchedule = [...record?.schedule].sort((a, b) =>
+                //     a > b ? 1 : -1
+                // );
+
                 return (
                     <div style={{ display: 'flex' }}>
                         <Col style={{ display: 'flex', alignItems: 'center' }} span={23}>
+                            {/* <div>
+                                {record?.type_apply?.name} {newRecordSchedule && '-'} {newRecordSchedule?.map((item, index) => {
+
+                                    return item + (index == (newRecordSchedule.length - 1) ? '' : ', ');
+                                })}
+                            </div> */}
                             <div>
                                 {record?.type_apply?.name} {record?.schedule && '-'} {record?.schedule?.map((item, index) => {
 
@@ -130,8 +143,8 @@ const TableList = ({ className, data, setData, params, total, itemSelected }) =>
                         </Col>
                         <Popconfirm
                             title="Chắc chắn xoá ?"
-                            // onConfirm={() => onConfirm(ids)}
-                            // onCancel={cancel}
+                            onConfirm={() => onConfirm(record)}
+                            onCancel={cancel}
                             style={{ justifyContent: 'end' }}
                             okText="Xoá"
                             placement="topLeft"
@@ -155,11 +168,11 @@ const TableList = ({ className, data, setData, params, total, itemSelected }) =>
                     <div style={{ textAlign: 'center' }}>
                         <Tooltip placement="topLeft">
                             <Button
-                                style={{ width: '100%' }}
                                 type="link"
-                                icon={<EditOutlined />}
-                            // onClick={() => onEdit(record?.id)}
-                            />
+                                onClick={() => onTripPlan(record)}
+                            >
+                                <i class="fa-regular fa-pen-to-square" style={{ color: '#01579B', fontSize: 20 }}></i>
+                            </Button>
                         </Tooltip>
                     </div>
                 )

@@ -54,7 +54,7 @@ const Index = ({ className }) => {
             }
         }).catch(err => {
             Ui.showError({ message: err?.response?.data?.message });
-        })
+        });
     }, []);
 
     const getAllRoutes = useCallback(async () => {
@@ -111,6 +111,7 @@ const Index = ({ className }) => {
     }, []);
 
     const onHiddenModalEdit = useCallback(() => {
+        onRefreshList();
         setItemSelected(null);
         setShowModalEdit(false);
     });
@@ -165,7 +166,7 @@ const Index = ({ className }) => {
                 {
                     itemSelected ? (
                         <Update
-                            onRefreshList={onRefreshList}
+                            onRefresh={onRefreshList}
                             onHiddenModalEdit={onHiddenModalEdit}
                             itemSelected={itemSelected}
                             allRoute={allRoute}
