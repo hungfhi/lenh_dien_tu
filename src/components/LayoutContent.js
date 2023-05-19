@@ -291,14 +291,14 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                 >
                   <Row>
                     <Col span={24}>
-                      <div>Nhà xe<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                      <div>Đơn vị vận tải<span style={{ color: '#dc2d2d' }}>(*)</span></div>
                       <Form.Item
                         name="merchant"
                         rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                       >
                         <Select
                           style={{ width: "100%" }}
-                          placeholder="Nhà xe"
+                          placeholder="Đơn vị vận tải"
                           showSearch
                           className={className}
                           loading={fetching}
@@ -322,14 +322,14 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <div>Bến xe<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                      <div>Loại hình kinh doanh<span style={{ color: '#dc2d2d' }}>(*)</span></div>
                       <Form.Item
                         name="model"
                         rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                       >
                         <Select
                           style={{ width: "100%" }}
-                          placeholder="Bến xe"
+                          placeholder="Loại hình kinh doanh"
                           showSearch
                           className={className}
                           filterOption={typeSearch === "local" ? localSearchFunc : false}
@@ -343,7 +343,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <div>Nhà xe<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                      <div>Bến xe<span style={{ color: '#dc2d2d' }}>(*)</span></div>
                       <Form.Item
                         name="station"
                         rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
