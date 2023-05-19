@@ -10,7 +10,7 @@ const TabTable = ({ className, itemSelected, allRoute, onRefreshList }) => {
     const route_name = route.split("-");
     return (
         <div className={className} >
-            <Tabs defaultActiveKey="2">
+            <Tabs defaultActiveKey="1">
                 <Tabs.TabPane tab={<div>Chuyến đi</div>} key="1">
                     <Row gutter={[16,16]}>
                         <Trip 
