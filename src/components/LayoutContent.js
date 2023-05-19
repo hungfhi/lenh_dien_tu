@@ -276,7 +276,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                 </Button>
               </Popover> : ''}
 
-              <Modal title="Thay đổi nhà xe" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ height: 320 }} destroyOnClose>
+              <Modal title="Thay đổi cấu hình" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ height: 320 }} destroyOnClose>
                 <Form
                   onFinishFailed={onFinishFailed}
                   className={className}
