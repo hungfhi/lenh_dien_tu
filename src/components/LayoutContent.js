@@ -102,6 +102,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
   }
 
   const onChangeInit = (value) => {
+    console.log('value', value?.stations)
     setModels(value?.models)
     setStations(value?.stations)
   }
@@ -128,7 +129,15 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
     setIsModalOpen(false);
   };
   const handleCancel = () => {
+    setModels([])
+    setStations([])
     setIsModalOpen(false);
+    form.setFieldsValue({
+      merchant: dataCurrent && dataCurrent.merchant_used?.id || '',
+      model: dataCurrent && dataCurrent.model_used?.id || '',
+      station: dataCurrent && dataCurrent.station_used?.id || '',
+    })
+
   };
 
   const onFinish = async (values) => {
@@ -171,6 +180,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
       ),
     },
   ];
+
 
   return (
     <Layout
@@ -285,16 +295,15 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                   initialValues={{
                     merchant: dataCurrent && dataCurrent.merchant_used?.id || '',
                     model: dataCurrent && dataCurrent.model_used?.id || '',
-                    station: dataCurrent && dataCurrent.station_used || '',
+                    station: dataCurrent && dataCurrent.station_used?.id || '',
                   }}
                   form={form}
                 >
                   <Row>
                     <Col span={24}>
-                      <div>Đơn vị vận tải<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                      <div>Đơn vị vận tải</div>
                       <Form.Item
                         name="merchant"
-                        rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                       >
                         <Select
                           style={{ width: "100%" }}
@@ -305,11 +314,12 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                           filterOption={typeSearch === "local" ? localSearchFunc : false}
                           notFoundContent={fetching ? <Spin size="small" /> : "Không có dữ liệu"}
                           onSelect={(e, value) => {
+                            console.log('adasdasdasd', value?.models[0]?.id)
                             onChangeInit(value)
                             setItemSelected(value?.value)
                             form.setFieldsValue({
-                              model: '',
-                              station: ''
+                              model: value?.models.length === 1 ? value?.models[0]?.id : '',
+                              station: value?.models.length === 1 && value?.stations.length === 1 && value?.stations.length !== undefined ? value?.stations[0]?.id : ''
                             })
                           }}
                         >
@@ -322,10 +332,9 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <div>Loại hình kinh doanh<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                      <div>Loại hình kinh doanh</div>
                       <Form.Item
                         name="model"
-                        rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                       >
                         <Select
                           style={{ width: "100%" }}
@@ -333,9 +342,15 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                           showSearch
                           className={className}
                           filterOption={typeSearch === "local" ? localSearchFunc : false}
+                          onSelect={(e, value) => {
+                            console.log('value', value)
+                            form.setFieldsValue({
+                              station: stations.length === 1 && stations.length !== undefined ? stations[0]?.id : ''
+                            })
+                          }}
                         >
                           {_.map(models, (item, itemId) => (
-                            <Select.Option stations={item?.stations} models={item?.models} key={itemId} value={item.id}>
+                            <Select.Option key={itemId} value={item.id}>
                               {item.name}
                             </Select.Option>
                           ))}
@@ -343,10 +358,9 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <div>Bến xe<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                      <div>Bến xe</div>
                       <Form.Item
                         name="station"
-                        rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                       >
                         <Select
                           style={{ width: "100%" }}
