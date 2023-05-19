@@ -9,20 +9,19 @@ import { command } from "configs";
 const localSearchFunc = (input, option) =>
     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 
-const ItemRow = memo(({ className, nameColumn, values,setItemSelected, record, data, onRefreshList, typeSearch = "local",loading }) => {
+const ItemRow = memo(({ className, nameColumn, values, setItemSelected, record, data, onRefreshList, typeSearch = "local", loading, datas }) => {
 
     const [loadding, setLoadding] = useState(false);
     const valuedefault = (nameColumn) => {
+        const check = data.find(x => x.id === values?.id);
         if (nameColumn === 'vehicle') {
-            return values?.license_plate
+            return check !== undefined ? values?.id : values?.license_plate
         } else {
             if (values?.first_name !== undefined && values?.last_name !== undefined) {
-                return values?.first_name + " " + values?.last_name
+                return check !== undefined ? values?.id : values?.first_name + " " + values?.last_name
             }
         }
     }
-
-
 
     const onChange = async (value) => {
         let payload = {}
@@ -102,7 +101,7 @@ const ItemRow = memo(({ className, nameColumn, values,setItemSelected, record, d
                 allowClear
                 style={{ width: "100%" }}
                 showSearch
-                value={data.length === 0 ? valuedefault(nameColumn) : values?.id}
+                value={valuedefault(nameColumn)}
                 className={className}
                 data={data}
                 bordered={false}
