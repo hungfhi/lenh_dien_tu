@@ -1,81 +1,189 @@
-import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import { EditOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { Button, Modal, Pagination, Row, Tooltip } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
-import moment from "moment";
 import PropTypes from "prop-types";
-import React, { memo } from "react";
+import { memo, useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
-import { COLOR_GREEN, COLOR_RED } from "theme/colors";
-import { Ui } from "utils/Ui";
-
+import { category } from "configs";
+import _ from 'lodash'
+import moment from 'moment';
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList, total }) => {
+const TableList = memo(({ className, data, params, setParams, onEdit, allDriver, onRefreshList, setIdRow, itemSelected, setItemSelected, total, allMerchant }) => {
+  const [vehicle, setVehicle] = useState([]);
 
-  const onChange = async (e, value, row) => {
-    const params = {
-      active: value ? 0 : 1,
-    };
-  };
 
-  const onActive = (e, value, row) => {
-    let name = ''
-    if (e == false) {
-      name = 'Bạn muốn bỏ active nhóm tuyến này không?'
+  const getDataVehicle = useCallback(async () => {
+    category.getVehicle()
+      .then(res => {
+        if (res.status === 200) {
+          const dataSet = []
+          _.map(res?.data?.data, (items) => {
+            dataSet.push({
+              id: items.id,
+              name: items.license_plate,
+            });
+          })
+          setVehicle(dataSet)
+        }
+      })
+      .catch(err => {
+      })
+  }, []);
+
+
+  useEffect(() => {
+    getDataVehicle();
+  }, [getDataVehicle]);
+
+  const onRow = (id) => {
+    setIdRow(id)
+  }
+
+
+  const _handleSelectAll = async (selected, selectedRows, changeRows) => {
+    if (!selected) {
+      setItemSelected([])
     } else {
-      name = 'Bạn muốn active nhóm tuyến này không?'
+      if (data.length === itemSelected.length) { // Trường hợp click vào xóa tất cả khi chưa full item
+        setItemSelected([])
+      } else {
+        let selectKeyNew = [];
+        await selectedRows.map((item) => {
+          selectKeyNew.push(item.id)
+        })
+        await setItemSelected(selectKeyNew);
+      }
     }
-    confirm({
-      title: `Thông báo`,
-      icon: <ExclamationCircleOutlined />,
-      content: `${name}`,
-      okText: "Có",
-      cancelText: "Không",
-      onOk() {
-        onChange(e, value, row);
-      },
-      onCancel() { },
-    });
+  }
+
+  const _handleSelect = (record, status) => {
+    if (!itemSelected.includes(record?.id)) {
+      const selectKeyNew = [...itemSelected]
+      selectKeyNew.push(record?.id)
+      setItemSelected(selectKeyNew)
+    } else {
+      const selectKeyNew = [...itemSelected]
+      const index = selectKeyNew.indexOf(record.id);
+      selectKeyNew.splice(index, 1);
+      setItemSelected(selectKeyNew)
+    }
   };
 
   const columns = [
     {
-      title: "#",
-      dataIndex: "index",
-      width: 60,
-      fixed: "left",
-      align: 'center',
-      render: (value, row, index) => {
-        const stringIndex = `${((params.page - 1) * params.size + index)}`;
+      title: "Lệnh VC",
+      dataIndex: "departure_time",
+      fixed: 'left',
+      width: 100,
+      render: (value) => {
         return (
-          <h5 style={{ textAlign: 'center' }}>{params.page === 1 ? index + 1 : parseInt(stringIndex) + 1}</h5>
-        );
-      },
-    },
-    {
-      title: "Mã vùng",
-      dataIndex: "code",
-      width: 150,
-    },
-    {
-      title: "Tên quận/ huyện",
-      dataIndex: "name",
-      width: 300,
-    },
-    {
-      title: "Slug",
-      dataIndex: "slug",
-      width: 300,
-    },
-    {
-      title: "Tỉnh/ Thành phố",
-      dataIndex: "name",
-      width: 300,
-      render: (text, record) => {
-        return record?.province?.name;
+          <div>{value}</div>
+        )
       }
     },
+    {
+      title: "Ngày",
+      dataIndex: "departure_date",
+      width: 150,
+      render: (value) => {
+        return (
+          <div>{value}</div>
+        )
+      }
+    },
+    {
+      title: "Giờ XB",
+      dataIndex: "departure_time",
+      width: 100,
+      render: (value) => {
+        return (
+          <div>{moment(value, 'HH:mm:ss').format('HH:mm')}</div>
+        )
+      }
+    },
+    {
+      title: "Tuyến",
+      dataIndex: "route",
+      width: 180,
+      render: (value) => {
+        return (
+          <div>{value?.name}</div>
+        )
+      }
+    },
+    {
+      title: "Chiều",
+      dataIndex: "direction",
+      width: 80,
+      render: (value) => {
+        return (
+          <div style={{textAlign:'center'}}>{value?.code}</div>
+        )
+      }
+    },
+    {
+      title: "Xe",
+      dataIndex: "vehicle",
+      width: 150,
+      render: (text, record, row) => {
+        return (<div>{text?.license_plate}</div>)
+      }
+    },
+    {
+      title: "Lái xe 1",
+      dataIndex: "first_driver",
+      width: 170,
+      render: (text, record, row) => {
+        return (<div>{`${text?.first_name} ${text?.last_name}`}</div>)
+      }
+    },
+    {
+      title: "Lái xe 2",
+      dataIndex: "second_driver",
+      width: 170,
+      render: (text, record, row) => {
+        return (<div>{`${text?.first_name} ${text?.last_name}`}</div>)
+      }
+    },
+    {
+      title: "Lái xe 3",
+      dataIndex: "code",
+      width: 170,
+      render: (text, record, row) => {
+        return (<div>{`${text?.first_name} ${text?.last_name}`}</div>)
+      }
+    },
+    {
+      title: "Tiếp viên",
+      dataIndex: "attendant",
+      width: 170,
+      render: (text, record, row) => {
+        return (<div>{`${text?.first_name} ${text?.last_name}`}</div>)
+      }
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "code",
+      width: 150,
+      render: (text, record, row) => {
+        return (
+          <div style={{ textAlign: 'center', color: '#F4511E' }}>Chưa ký</div>
+        )
+      }
+    },
+    {
+      title: "Lý do",
+      dataIndex: "reason_canceled",
+      width: 200,
+      render: (text, record, row) => {
+        return (
+          <div>{text}</div>
+        )
+      }
+    },
+
   ];
 
   const renderContent = () => {
@@ -109,6 +217,12 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
   return (
     <div className={className}>
       <DefineTable
+        rowSelection={{
+          selectedRowKeys: itemSelected,
+          onSelect: _handleSelect,
+          onSelectAll: _handleSelectAll,
+        }}
+        rowKey="id"
         columns={columns}
         dataSource={data}
         scroll={{ y: "calc(100vh - 330px)" }}

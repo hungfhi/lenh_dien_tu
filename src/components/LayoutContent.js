@@ -31,6 +31,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
   const [itemSelected, setItemSelected] = useState(undefined);
   const [mechants, setMechants] = useState([]);
   const [models, setModels] = useState([]);
+  const [idModel, setIdModel] = useState(undefined);
   const [stations, setStations] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fetching, setFetching] = useState(false);
@@ -128,7 +129,15 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
     setIsModalOpen(false);
   };
   const handleCancel = () => {
+    setModels([])
+    setStations([])
     setIsModalOpen(false);
+    form.setFieldsValue({
+      merchant: dataCurrent && dataCurrent.merchant_used?.id || '',
+      model: dataCurrent && dataCurrent.model_used?.id || '',
+      station: dataCurrent && dataCurrent.station_used?.id || '',
+    })
+
   };
 
   const onFinish = async (values) => {
@@ -171,6 +180,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
       ),
     },
   ];
+
 
   return (
     <Layout
@@ -276,7 +286,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                 </Button>
               </Popover> : ''}
 
-              <Modal title="Thay đổi nhà xe" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ height: 320 }} destroyOnClose>
+              <Modal title="Thay đổi cấu hình" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ height: 320 }} destroyOnClose>
                 <Form
                   onFinishFailed={onFinishFailed}
                   className={className}
@@ -285,20 +295,19 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                   initialValues={{
                     merchant: dataCurrent && dataCurrent.merchant_used?.id || '',
                     model: dataCurrent && dataCurrent.model_used?.id || '',
-                    station: dataCurrent && dataCurrent.station_used || '',
+                    station: dataCurrent && dataCurrent.station_used?.id || '',
                   }}
                   form={form}
                 >
                   <Row>
                     <Col span={24}>
-                      <div>Nhà xe<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                      <div>Đơn vị vận tải</div>
                       <Form.Item
                         name="merchant"
-                        rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                       >
                         <Select
                           style={{ width: "100%" }}
-                          placeholder="Nhà xe"
+                          placeholder="Đơn vị vận tải"
                           showSearch
                           className={className}
                           loading={fetching}
@@ -307,9 +316,10 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                           onSelect={(e, value) => {
                             onChangeInit(value)
                             setItemSelected(value?.value)
+                            setIdModel(value?.models.length === 1 ? value?.models[0]?.id : '',)
                             form.setFieldsValue({
-                              model: '',
-                              station: ''
+                              model: value?.models.length === 1 ? value?.models[0]?.id : '',
+                              station: value?.models.length === 1 && value?.stations.length === 1 && value?.stations.length !== undefined ? value?.stations[0]?.id : ''
                             })
                           }}
                         >
@@ -322,20 +332,25 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <div>Bến xe<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                      <div>Loại hình kinh doanh</div>
                       <Form.Item
                         name="model"
-                        rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                       >
                         <Select
                           style={{ width: "100%" }}
-                          placeholder="Bến xe"
+                          placeholder="Loại hình kinh doanh"
                           showSearch
                           className={className}
                           filterOption={typeSearch === "local" ? localSearchFunc : false}
+                          onSelect={(e, value) => {
+                            setIdModel(value?.value)
+                            form.setFieldsValue({
+                              station: stations.length === 1 && stations.length !== undefined ? stations[0]?.id : ''
+                            })
+                          }}
                         >
                           {_.map(models, (item, itemId) => (
-                            <Select.Option stations={item?.stations} models={item?.models} key={itemId} value={item.id}>
+                            <Select.Option key={itemId} value={item.id}>
                               {item.name}
                             </Select.Option>
                           ))}
@@ -343,12 +358,13 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <div>Nhà xe<span style={{ color: '#dc2d2d' }}>(*)</span></div>
+                      <div>Bến xe{idModel === 1 ? <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span> : ""} </div>
                       <Form.Item
                         name="station"
-                        rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        rules={[{ required: idModel === 1 ? true : false, message: 'Vui lòng chọn bến' }]}
                       >
                         <Select
+                          allowClear
                           style={{ width: "100%" }}
                           placeholder="Bến xe"
                           showSearch

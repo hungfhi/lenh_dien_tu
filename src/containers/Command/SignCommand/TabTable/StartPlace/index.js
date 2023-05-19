@@ -1,34 +1,23 @@
 import { Col, Row, Spin, message } from "antd";
 import { apis } from "configs";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import TableList from './TableList';
 
 
-const datas = [
-  {
-    id: 1,
-    name: 'John Brown',
-    time: '11:20',
-  },
-  {
-    id: 2,
-    name: 'Jim Green',
-    time: '11:20',
-  },
-];
-
-const StartPlace = ({ className,itemSelected,setItemSelected }) => {
-  const [data, setData] = useState(datas);
+const StartPlace = ({ className, itemSelected, setItemSelected, nodeA }) => {
+  const [data, setData] = useState(nodeA?.nodes);
   const [items, setItems] = useState([]);
   const [loadding, setLoading] = useState(false);
-
+  useEffect(() => {
+    setData(nodeA?.nodes)
+  }, [nodeA]);
   return (
     <Row className={className} gutter={[16, 16]}>
       <Spin spinning={loadding}>
         <Col span={24}>
-          <div className="banner">Xuất phát từ bến xe Mỹ Đình</div>
+          <div className="banner">Xuất phát từ bến xe {nodeA?.name}</div>
           <TableList
             data={data}
             items={items}

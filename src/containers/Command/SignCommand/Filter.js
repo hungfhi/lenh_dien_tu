@@ -1,96 +1,151 @@
-import { Button, Col, DatePicker, Input, Row, Select, Spin } from "antd";
-import PropTypes from "prop-types";
-import { useCallback, useState } from "react";
+import React, { useCallback } from "react";
+import { Row, Col, Select, Button, DatePicker } from "antd";
 import styled from "styled-components";
-import _ from "lodash";
-const { RangePicker } = DatePicker;
+import PropTypes from "prop-types";
+import moment from "moment";
 const { Option } = Select;
 
-let inputTimer = null;
+const Filter = ({ className, setParams, params, allRoute, onSign }) => {
 
-const Filter = ({ className, setParams, params, setShowModal, stations }) => {
-  const [fetching, setFetching] = useState(false);
-  const [search, setSearch] = useState(false);
-  const getQuery = useCallback(
-    (value, name) => {
-      setParams((preState) => {
-        let nextState = { ...preState };
-        nextState[name] = value;
-        return nextState;
-      });
-    },
-    [params]
-  );
 
-  const _handleSearch = useCallback((input) => {
-    setTimeout(() => {
-      setSearch(input || "");
-    }, 666000)
-  }, []);
-
-  const localSearchFunc = (input, option) =>
-    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-  const _changeQuery = useCallback(
-    (payload) => {
-      if (inputTimer) {
-        clearTimeout(inputTimer);
+  function disableDateRanges(range = { startDate: false, endDate: false }) {
+    const { startDate, endDate } = range;
+    return function disabledDate(current) {
+      let startCheck = true;
+      let endCheck = true;
+      if (startDate) {
+        startCheck = current && current < moment(startDate, 'YYYY-MM-DD');
       }
-      inputTimer = setTimeout(() => {
-        setParams((prevState) => {
-          let nextState = { ...prevState };
-          nextState[payload.name] = payload.value;
-          return nextState;
-        });
-      }, 900);
-    },
-    [setParams]
-  );
+      if (endDate) {
+        endCheck = current && current > moment(endDate, 'YYYY-MM-DD');
+      }
+      return (startDate && startCheck) || (endDate && endCheck);
+    };
+  }
 
   return (
     <div className={className}>
-      <Row gutter={[8, 8]}>
+      <Row gutter={15} style={{ marginBottom: 25 }}>
         <Col span={4}>
-          <div>Tên đơn vị vận tải</div>
-          <Input
-            allowClear
-            placeholder={"Tên đơn vị vận tải"}
-            onChange={(e) => {
-              _changeQuery({ name: "merchant_name", value: e.target.value });
+          <div>Từ ngày</div>
+          <DatePicker
+            allowClear={false}
+            disabledDate={(current) => {
+              let customDate = moment().format("YYYY-MM-DD");
+              return current && current < moment(customDate, "YYYY-MM-DD");
             }}
+            onChange={(date) => {
+              if (date > params.date_to) {
+                setParams((prevState) => {
+                  let nextState = { ...prevState };
+                  nextState.date_from = date;
+                  nextState.date_to = date;
+                  return nextState;
+                });
+              }
+              else {
+                setParams((prevState) => {
+                  let nextState = { ...prevState };
+                  nextState.date_from = date;
+                  return nextState;
+                });
+              }
+            }}
+            style={{ width: '100%' }}
+            value={params.date_from}
+            format={'DD-MM-YYYY'}
           />
         </Col>
         <Col span={4}>
-          <div>Bến quản lý</div>
+          <div>Đến ngày</div>
+          <DatePicker
+            allowClear={false}
+            disabledDate={disableDateRanges({ startDate: moment(params.date_from).format("YYYY-MM-DD") })}
+            onChange={(date) => {
+              setParams((prevState) => {
+                let nextState = { ...prevState };
+                nextState.date_to = date;
+                return nextState;
+              });
+            }}
+            style={{ width: '100%' }}
+            value={params.date_to}
+            format={'DD-MM-YYYY'}
+          />
+        </Col>
+
+        <Col span={4}>
+          <div>Tuyến</div>
           <Select
-            size="default"
-            style={{ width: "100%" }}
-            placeholder="Chọn bến xe"
-            allowClear
-            loadOnMount
             showSearch
-            className={className}
-            loading={fetching}
-            notFoundContent={fetching ? <Spin size="small" /> : "Không có dữ liệu"}
-            onSearch={_handleSearch}
-            filterOption={localSearchFunc}
+            placeholder="Tuyến"
+            optionFilterProp="children"
+            allowClear
+            style={{ width: '100%' }}
             onChange={(data) => {
               setParams((prevState) => {
                 let nextState = { ...prevState };
-                nextState.station_id = data;
+                nextState.route = data;
+                return nextState;
+              });
+            }}
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
+            options={allRoute}
+          />
+        </Col>
+        <Col span={4}>
+          <div>Chiều</div>
+          <Select
+            size="default"
+            showSearch
+            className={className}
+            allowClear
+            loadOnMount
+            style={{ width: "100%" }}
+            placeholder="Chiều"
+            onChange={(e) => {
+              setParams((prevState) => {
+                let nextState = { ...prevState };
+                nextState.direction = e;
                 return nextState;
               });
             }}
           >
-            {_.map(stations, (item, itemId) => (
-              <Select.Option key={itemId} value={item.code}>
-                {item.name}
-              </Select.Option>
-            ))}
+            <Option key={1}>Chiều A</Option>
+            <Option key={2}>Chiều B</Option>
           </Select>
         </Col>
-        <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>
-          <Button className="btn-add" onClick={() => setShowModal(true)} > Thêm mới</Button>
-        </Col>
+        {
+          params?.status !== '2' ? null : <Col span={4}>
+            <div>Trạng thái</div>
+            <Select
+              size="default"
+              showSearch
+              className={className}
+              allowClear
+              loadOnMount
+              style={{ width: "100%" }}
+              placeholder="Trạng thái"
+              onChange={(e) => {
+                setParams((prevState) => {
+                  let nextState = { ...prevState };
+                  nextState.direction = e;
+                  return nextState;
+                });
+              }}
+            >
+              <Option key={1}>Chiều A</Option>
+              <Option key={2}>Chiều B</Option>
+            </Select>
+          </Col>
+        }
+        {
+          params?.status === '2' ? null : <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', marginTop: 20 }}>
+            <Button onClick={() => onSign()} style={{ backgroundColor: '#F57F17', color: '#fff', borderRadius: 6, height: 35, width: 120 }}> Ký lệnh </Button>
+          </Col>
+        }
       </Row>
     </div>
   );
