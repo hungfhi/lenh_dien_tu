@@ -45,7 +45,6 @@ const Update = ({
             <FormAddEdit
                 itemStaffSelected={itemStaffSelected}
                 onSave={onSave}
-                // onHiddenModal={onHiddenModal}
                 allStaff={allStaff}
             />
         </div>
