@@ -554,7 +554,37 @@ const FormEdit = ({
                             <Col span={8}>
                                 <div>
                                     <Checkbox
-                                        // defaultChecked={scheduleTrip[0] == 2 && true}
+                                        defaultChecked={(
+                                            scheduleTrip[0] == 1 ||
+                                            scheduleTrip[1] == 1 ||
+                                            scheduleTrip[2] == 1 ||
+                                            scheduleTrip[3] == 1 ||
+                                            scheduleTrip[4] == 1 ||
+                                            scheduleTrip[5] == 1 ||
+                                            scheduleTrip[6] == 1
+                                        ) && true}
+                                        onClick={e => {
+                                            var updatedList = [...scheduleTrip];
+                                            if (e.target.checked) {
+                                                updatedList = [...scheduleTrip, 1];
+                                            } else {
+                                                updatedList.splice(scheduleTrip.indexOf(1), 1);
+                                            }
+                                            setScheduleTrip(updatedList);
+                                        }} value={1}
+                                    >Thứ 2</Checkbox>
+                                </div>
+                                <div>
+                                    <Checkbox
+                                        defaultChecked={(
+                                            scheduleTrip[0] == 2 ||
+                                            scheduleTrip[1] == 2 ||
+                                            scheduleTrip[2] == 2 ||
+                                            scheduleTrip[3] == 2 ||
+                                            scheduleTrip[4] == 2 ||
+                                            scheduleTrip[5] == 2 ||
+                                            scheduleTrip[6] == 2
+                                        ) && true}
                                         onClick={e => {
                                             var updatedList = [...scheduleTrip];
                                             if (e.target.checked) {
@@ -564,11 +594,19 @@ const FormEdit = ({
                                             }
                                             setScheduleTrip(updatedList);
                                         }} value={2}
-                                    >Thứ 2</Checkbox>
+                                    >Thứ 3</Checkbox>
                                 </div>
                                 <div>
                                     <Checkbox
-                                        // defaultChecked={scheduleTrip[1] == 3 && true}
+                                        defaultChecked={(
+                                            scheduleTrip[0] == 3 ||
+                                            scheduleTrip[1] == 3 ||
+                                            scheduleTrip[2] == 3 ||
+                                            scheduleTrip[3] == 3 ||
+                                            scheduleTrip[4] == 3 ||
+                                            scheduleTrip[5] == 3 ||
+                                            scheduleTrip[6] == 3
+                                        ) && true}
                                         onClick={e => {
                                             var updatedList = [...scheduleTrip];
                                             if (e.target.checked) {
@@ -578,11 +616,19 @@ const FormEdit = ({
                                             }
                                             setScheduleTrip(updatedList);
                                         }} value={3}
-                                    >Thứ 3</Checkbox>
+                                    >Thứ 4</Checkbox>
                                 </div>
                                 <div>
                                     <Checkbox
-                                        // defaultChecked={scheduleTrip[2] == 4 && true}
+                                        defaultChecked={(
+                                            scheduleTrip[0] == 4 ||
+                                            scheduleTrip[1] == 4 ||
+                                            scheduleTrip[2] == 4 ||
+                                            scheduleTrip[3] == 4 ||
+                                            scheduleTrip[4] == 4 ||
+                                            scheduleTrip[5] == 4 ||
+                                            scheduleTrip[6] == 4
+                                        ) && true}
                                         onClick={e => {
                                             var updatedList = [...scheduleTrip];
                                             if (e.target.checked) {
@@ -592,11 +638,19 @@ const FormEdit = ({
                                             }
                                             setScheduleTrip(updatedList);
                                         }} value={4}
-                                    >Thứ 4</Checkbox>
+                                    >Thứ 5</Checkbox>
                                 </div>
                                 <div>
                                     <Checkbox
-                                        // defaultChecked={scheduleTrip[3] == 5 && true}
+                                        defaultChecked={(
+                                            scheduleTrip[0] == 5 ||
+                                            scheduleTrip[1] == 5 ||
+                                            scheduleTrip[2] == 5 ||
+                                            scheduleTrip[3] == 5 ||
+                                            scheduleTrip[4] == 5 ||
+                                            scheduleTrip[5] == 5 ||
+                                            scheduleTrip[6] == 5
+                                        ) && true}
                                         onClick={e => {
                                             var updatedList = [...scheduleTrip];
                                             if (e.target.checked) {
@@ -606,11 +660,19 @@ const FormEdit = ({
                                             }
                                             setScheduleTrip(updatedList);
                                         }} value={5}
-                                    >Thứ 5</Checkbox>
+                                    >Thứ 6</Checkbox>
                                 </div>
                                 <div>
                                     <Checkbox
-                                        // defaultChecked={scheduleTrip[4] == 6 && true}
+                                        defaultChecked={(
+                                            scheduleTrip[0] == 6 ||
+                                            scheduleTrip[1] == 6 ||
+                                            scheduleTrip[2] == 6 ||
+                                            scheduleTrip[3] == 6 ||
+                                            scheduleTrip[4] == 6 ||
+                                            scheduleTrip[5] == 6 ||
+                                            scheduleTrip[6] == 6
+                                        ) && true}
                                         onClick={e => {
                                             var updatedList = [...scheduleTrip];
                                             if (e.target.checked) {
@@ -620,34 +682,28 @@ const FormEdit = ({
                                             }
                                             setScheduleTrip(updatedList);
                                         }} value={6}
-                                    >Thứ 6</Checkbox>
+                                    >Thứ 7</Checkbox>
                                 </div>
                                 <div>
                                     <Checkbox
-                                        // defaultChecked={scheduleTrip[5] == 7 && true}
+                                        defaultChecked={(
+                                            scheduleTrip[0] == 7 ||
+                                            scheduleTrip[1] == 7 ||
+                                            scheduleTrip[2] == 7 ||
+                                            scheduleTrip[3] == 7 ||
+                                            scheduleTrip[4] == 7 ||
+                                            scheduleTrip[5] == 7 ||
+                                            scheduleTrip[6] == 7
+                                        ) && true}
                                         onClick={e => {
                                             var updatedList = [...scheduleTrip];
                                             if (e.target.checked) {
                                                 updatedList = [...scheduleTrip, 7];
                                             } else {
-                                                updatedList.splice(scheduleTrip.indexOf(7), 1);
+                                                updatedList.splice(scheduleTrip.indexOf(6), 1);
                                             }
                                             setScheduleTrip(updatedList);
                                         }} value={7}
-                                    >Thứ 7</Checkbox>
-                                </div>
-                                <div>
-                                    <Checkbox
-                                        // defaultChecked={scheduleTrip[6] == 8 && true}
-                                        onClick={e => {
-                                            var updatedList = [...scheduleTrip];
-                                            if (e.target.checked) {
-                                                updatedList = [...scheduleTrip, 8];
-                                            } else {
-                                                updatedList.splice(scheduleTrip.indexOf(8), 1);
-                                            }
-                                            setScheduleTrip(updatedList);
-                                        }} value={8}
                                     >Chủ nhật</Checkbox>
                                 </div>
 
