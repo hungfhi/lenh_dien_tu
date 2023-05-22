@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Spin } from 'antd';
+import { Button, Col, Drawer, message, Spin } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import TableList from './TableList';
 import PropTypes from 'prop-types';
@@ -13,28 +13,52 @@ const Driver = ({ className, itemSelected }) => {
     const [data, setData] = useState(itemSelected?.merchant_route_drivers);
     const [loading, setLoading] = useState(false);
     const [isShowModal, setShowModal] = useState(false);
-    const [itemVehicleSelected, setItemVehicleSelected] = useState(null);
+    const [itemStaffSelected, setItemStaffSelected] = useState(null);
     const [isShowModalEdit, setShowModalEdit] = useState(false);
-
-    useEffect(() => {
-        // getAllVehicle();
-    }, []);
+    const [allStaff, setAllStaff] = useState([]);
 
     const onHiddenModal = () => {
         setShowModal(false);
     }
 
     const onHiddenModalEdit = () => {
-        setItemVehicleSelected(null)
+        setItemStaffSelected(null)
         setShowModalEdit(false)
     }
 
     const onEdit = useCallback(async (row) => {
         setShowModalEdit(true);
-        setItemVehicleSelected(row);
+        setItemStaffSelected(row);
     });
 
-    const detailVehicleTab = useCallback(async () => {
+    const getAllStaff = useCallback(async () => {
+        // setLoading(true);
+        category.getPersons().then(res => {
+            if (res.status === 200) {
+
+                const newAllStaff = []
+                res?.data?.data.map(item => {
+                    newAllStaff.push({
+                        // ...item,
+                        value: item?.id,
+                        label: item?.staff_code + ' - ' + item?.first_name + item?.last_name + ' - ' + item?.position?.name,
+                    })
+                })
+                setAllStaff(newAllStaff);
+            }
+        }).catch(err => {
+            if (err.response?.status === 422 && err.response?.data?.errors) {
+                message.warn(err.response.data?.errors[0].msg)
+                message.error('Error!')
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        getAllStaff();
+    }, []);
+
+    const detailStaffTab = useCallback(async () => {
         setLoading(true);
         category.getDetailMerchantRoutes(itemSelected?.id).then(res => {
             if (res.status === 200) {
@@ -47,11 +71,11 @@ const Driver = ({ className, itemSelected }) => {
     });
 
     useEffect(() => {
-        detailVehicleTab();
+        detailStaffTab();
     }, []);
 
     const onRefreshList = () => {
-        detailVehicleTab();
+        detailStaffTab();
     }
 
     return (
@@ -77,6 +101,8 @@ const Driver = ({ className, itemSelected }) => {
                         data={data}
                         setData={setData}
                         itemSelected={itemSelected}
+                        onEdit={onEdit}
+                        onRefreshList={onRefreshList}
                     />
                 </Spin>
 
@@ -93,9 +119,8 @@ const Driver = ({ className, itemSelected }) => {
                 <Create
                     onRefreshList={onRefreshList}
                     onHiddenModal={onHiddenModal}
-                    // allVehicle={allVehicle}
+                    allStaff={allStaff}
                     itemSelected={itemSelected}
-                // allUnit={allUnit}
                 />
             </Drawer>
 
@@ -109,15 +134,13 @@ const Driver = ({ className, itemSelected }) => {
                 visible={isShowModalEdit}
             >
                 <Update
-                    // onRefreshList={onRefreshList}
                     onHiddenModal={onHiddenModalEdit}
                     onRefreshList={onRefreshList}
                     data={data}
                     itemSelected={itemSelected}
-                    // allVehicle={allVehicle}
-                    itemVehicleSelected={itemVehicleSelected}
-                    setItemVehicleSelected={setItemVehicleSelected}
-                // allUnit={allUnit}
+                    allStaff={allStaff}
+                    itemStaffSelected={itemStaffSelected}
+                    setItemStaffSelected={setItemStaffSelected}
                 />
             </Drawer>
         </div>

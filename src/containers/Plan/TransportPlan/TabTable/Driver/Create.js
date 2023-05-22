@@ -13,7 +13,7 @@ const Create = ({
     itemSelected,
     stations,
     province,
-    allVehicle,
+    allStaff,
     allUnit
 }) => {
     const [form] = Form.useForm();
@@ -21,14 +21,13 @@ const Create = ({
     };
     const onSave = async (values) => {
         const payload = {
-            vehicle_id: values?.vehicle_id,
-            is_active: 1,
+            staff_id: values?.staff_id,
             expire_date: moment(values?.expire_date).format('YYYY-MM-DD')
         }
-        console.log(payload);
-        plan.assignVehicle(itemSelected?.id, payload).then(res => {
+        // console.log(payload, itemSelected);
+        plan.assignStaff(itemSelected?.id, payload).then(res => {
             Ui.showSuccess({ message: "Thành công" });
-            // onRefreshList();
+            onRefreshList();
             onHiddenModal();
         }).catch(err => {
             Ui.showError({ message: 'Có lỗi xảy ra' });
@@ -44,7 +43,7 @@ const Create = ({
                 // province={province}
                 onSave={onSave}
                 onHiddenModal={onHiddenModal}
-                allVehicle={allVehicle}
+                allStaff={allStaff}
                 // allUnit={allUnit}
             />
         </div>

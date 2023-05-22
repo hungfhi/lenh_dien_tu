@@ -21,12 +21,11 @@ const Update = ({
     setItemVehicleSelected,
 }) => {
     const [form] = Form.useForm();
-    // console.log(itemVehicleSelected);
+
     const onFinishFailed = () => {
     };
     const onSave = async (values) => {
-        // console.log(values);
-        onHiddenModal();
+
         const payload = {
             vehicle_id: values?.vehicle_id,
             expire_date: moment(values?.expire_date).format('YYYY-MM-DD'),
@@ -48,12 +47,8 @@ const Update = ({
         <div className={className}>
             <FormAddEdit
                 itemVehicleSelected={itemVehicleSelected}
-                // stations={stations}
-                // province={province}
                 onSave={onSave}
-                // onHiddenModal={onHiddenModal}
                 allVehicle={allVehicle}
-            // allUnit={allUnit}
             />
         </div>
     );

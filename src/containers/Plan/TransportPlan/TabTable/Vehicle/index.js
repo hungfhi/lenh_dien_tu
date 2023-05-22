@@ -18,8 +18,6 @@ const Vehicle = ({ className, itemSelected }) => {
     const [allVehicle, setAllVehicle] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // console.log(itemSelected);
-
     const onHiddenModal = () => {
         setShowModal(false);
     }
@@ -55,12 +53,6 @@ const Vehicle = ({ className, itemSelected }) => {
             }
         });
     }, []);
-
-    // console.log(itemVehicleSelected);
-
-    useEffect(() => {
-        setData(data);
-    }, [data]);
 
     useEffect(() => {
         getAllVehicle();
@@ -129,7 +121,6 @@ const Vehicle = ({ className, itemSelected }) => {
                     onHiddenModal={onHiddenModal}
                     allVehicle={allVehicle}
                     itemSelected={itemSelected}
-                // allUnit={allUnit}
                 />
             </Drawer>
 
@@ -143,7 +134,6 @@ const Vehicle = ({ className, itemSelected }) => {
                 visible={isShowModalEdit}
             >
                 <Update
-                    // onRefreshList={onRefreshList}
                     onHiddenModal={onHiddenModalEdit}
                     onRefreshList={onRefreshList}
                     data={data}
@@ -151,7 +141,6 @@ const Vehicle = ({ className, itemSelected }) => {
                     allVehicle={allVehicle}
                     itemVehicleSelected={itemVehicleSelected}
                     setItemVehicleSelected={setItemVehicleSelected}
-                // allUnit={allUnit}
                 />
             </Drawer>
         </div>

@@ -10,13 +10,13 @@ const { TextArea } = Input;
 const FormEdit = ({
     className,
     itemSelected,
-    itemVehicleSelected,
+    itemStaffSelected,
     onSave,
     onHiddenModal,
     isShowModalTripPlan,
     stations,
     province,
-    allVehicle,
+    allStaff,
     allUnit,
 }) => {
     // const [isActive, setActive] = useState(itemSelected ? (itemSelected?.is_active == 1 ? true : false) : true);
@@ -33,9 +33,6 @@ const FormEdit = ({
     //     setActive(!value)
     // }
 
-    console.log(itemVehicleSelected);
-
-
     return (
         <div className={className}>
             <Form
@@ -44,39 +41,39 @@ const FormEdit = ({
                 onFinish={onFinish}
                 name="control-hooks"
                 initialValues={{
-                    vehicle_id: itemVehicleSelected && itemVehicleSelected?.vehicle?.id || '',
-                    expire_date: itemVehicleSelected && moment(itemVehicleSelected?.expire_date) || ''
+                    staff_id: itemStaffSelected && itemStaffSelected?.staff?.id || '',
+                    expire_date: itemStaffSelected && moment(itemStaffSelected?.expire_date) || ''
                 }}
                 form={form}
             >
                 <Row gutter={[16, 0]}>
                     <Col span={24}>
-                        <div>Chọn xe <span style={{ fontWeight: 'bold', color: COLOR_RED }}>*</span></div>
+                        <div>Chọn lái xe <span style={{ fontWeight: 'bold', color: COLOR_RED }}>*</span></div>
                         <Form.Item
-                            name="vehicle_id"
-                            rules={[{ required: true, message: 'Vui lòng chọn xe' }]}
+                            name="staff_id"
+                            rules={[{ required: true, message: 'Vui lòng chọn lái xe' }]}
                         >
                             <Select
                                 showSearch
-                                placeholder="Chọn xe"
+                                placeholder="Chọn lái xe"
                                 optionFilterProp="children"
                                 filterOption={(input, option) =>
                                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
-                                options={allVehicle}
+                                options={allStaff}
                             />
                         </Form.Item>
                     </Col>
                     <Col span={24}>
-                        <div>Hạn phù hiệu <span style={{ fontWeight: 'bold', color: COLOR_RED }}>*</span></div>
+                        <div>Thời hạn <span style={{ fontWeight: 'bold', color: COLOR_RED }}>*</span></div>
                         <Form.Item
                             name="expire_date"
-                            rules={[{ required: true, message: 'Vui lòng nhập hạn phù hiệu' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập thời hạn' }]}
                         >
 
                             <DatePicker 
                             style={{ width: '100%' }}
-                                placeholder="Hạn phù hiệu"
+                                placeholder="Thời hạn"
                                 format={'DD/MM/YYYY'}
                             />
                         </Form.Item>

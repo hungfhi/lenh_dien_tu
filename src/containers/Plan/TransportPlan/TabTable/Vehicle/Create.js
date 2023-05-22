@@ -20,7 +20,6 @@ const Create = ({
     const onFinishFailed = () => {
     };
     const onSave = async (values) => {
-        // console.log(values);
         const payload = {
             vehicle_id: values?.vehicle_id,
             is_active: values.is_active ? 1 : 0,
@@ -41,12 +40,9 @@ const Create = ({
             <FormAddEdit
                 itemSelected={itemSelected}
                 itemVehicleSelected={null}
-                // stations={stations}
-                // province={province}
                 onSave={onSave}
                 onHiddenModal={onHiddenModal}
                 allVehicle={allVehicle}
-                // allUnit={allUnit}
             />
         </div>
     );

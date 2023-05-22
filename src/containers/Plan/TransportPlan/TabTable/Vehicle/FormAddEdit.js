@@ -33,8 +33,6 @@ const FormEdit = ({
     //     setActive(!value)
     // }
 
-    // console.log(itemVehicleSelected);
-
     const onActive = (value) => {
         setActive(!value);
     }

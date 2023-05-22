@@ -20,13 +20,10 @@ const TableList = ({ className, data, setData, itemSelected, onEdit, onRefreshLi
     };
 
     const onDelRow = async (row) => {
-        // console.log(row);
-        // const departure_time = row?.departure_time.slice(0, 5);
 
-        // console.log(payload);
         plan.deleteVehicle(row.id).then(res => {
             if (res.status === 200) {
-                // console.log(res.data.message);
+
                 message.success(res.data.message ? res.data.message : res.data.data.message);
                 onRefreshList();
             }

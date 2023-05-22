@@ -2,13 +2,34 @@ import React from 'react';
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import DefineTable from 'components/DefineTable';
-import { Button, Popconfirm, Switch, Tooltip } from 'antd';
+import { Button, message, Popconfirm, Switch, Tooltip } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import { plan } from 'configs';
 
-const TableList = ({ className, data, setData, itemSelected }) => {
+const TableList = ({ className, data, setData, itemSelected, onEdit, onRefreshList }) => {
 
-    console.log(data);
+    const onConfirm = (row) => {
+        onDelRow(row)
+    };
+
+    const cancel = (e) => {
+    };
+
+    const onDelRow = async (row) => {
+
+        plan.deleteStaff(row.id).then(res => {
+            if (res.status === 200) {
+                // console.log(res.data.message);
+                message.success(res.data.message ? res.data.message : res.data.data.message);
+                onRefreshList();
+            }
+        }).catch(err => {
+            if (err.response?.status === 422 && err.response?.data?.errors) {
+                message.error('Error!')
+            }
+        });
+    };
 
     const columns = [
         {
@@ -28,7 +49,6 @@ const TableList = ({ className, data, setData, itemSelected }) => {
             title: 'Tên lái xe',
             width: 200,
             render: (text, record) => {
-                console.log(record);
                 return <div>{record?.staff?.first_name} {record?.staff?.last_name}</div>;
             }
         },
@@ -78,7 +98,7 @@ const TableList = ({ className, data, setData, itemSelected }) => {
                         <Tooltip placement="topLeft">
                             <Button
                                 type="link"
-                                // onClick={() => onEdit(ids)}
+                                onClick={() => onEdit(record)}
                             >
                                 <i class="fa-regular fa-pen-to-square" style={{ color: '#01579B', fontSize: 20 }}></i>
                             </Button>
@@ -86,8 +106,8 @@ const TableList = ({ className, data, setData, itemSelected }) => {
                         &nbsp;&nbsp;
                         <Popconfirm
                             title="Chắc chắn xoá phương tiện này?"
-                            // onConfirm={() => onConfirm(ids)}
-                            // onCancel={cancel}
+                            onConfirm={() => onConfirm(record)}
+                            onCancel={cancel}
                             okText="Xoá"
                             placement="topLeft"
                             cancelText="Huỷ"
@@ -102,16 +122,16 @@ const TableList = ({ className, data, setData, itemSelected }) => {
         }
     ];
 
-return (
-    <div className={className}>
-        <DefineTable
-            columns={columns}
-            dataSource={data}
-            scroll={{ y: "calc(100vh - 330px)" }}
-            pagination={false}
-        />
-    </div>
-);
+    return (
+        <div className={className}>
+            <DefineTable
+                columns={columns}
+                dataSource={data}
+                scroll={{ y: "calc(100vh - 330px)" }}
+                pagination={false}
+            />
+        </div>
+    );
 };
 
 TableList.propTypes = {

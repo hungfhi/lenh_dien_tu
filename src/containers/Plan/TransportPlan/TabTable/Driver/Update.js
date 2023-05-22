@@ -11,48 +11,42 @@ const Update = ({
     className,
     onHiddenModal,
     onRefreshList,
-    itemVehicleSelected,
-    stations,
-    province,
-    allVehicle,
+    itemStaffSelected,
+    allStaff,
     itemSelected,
     data,
-    allUnit,
-    setItemVehicleSelected,
+    setItemStaffSelected,
 }) => {
     const [form] = Form.useForm();
-    console.log(data);
+
     const onFinishFailed = () => {
     };
+    
     const onSave = async (values) => {
-        console.log(values);
-        onHiddenModal();
         const payload = {
-            vehicle_id: values?.vehicle_id,
+            staff_id: values?.staff_id,
             expire_date: moment(values?.expire_date).format('YYYY-MM-DD'),
-            is_active: 1
         }
-        // plan.assignVehicle(itemSelected?.id, payload).then(res => {
-        //     // let dataClone = _.cloneDeep(data);
-        //     // dataClone.find(item => item?.id === itemVehicleSelected?.id && (item?.vehicle_id = res.data.data.vehicle_id, item.expire_date = res.data.data.expire_date));
-        //     // setItemVehicleSelected(dataClone)
-        // }).catch(err => {
-        //     if (err.response?.data) {
-        //         message.error(err.response?.data?.message)
-        //     }
-        // });
+        // console.log(payload);
+        plan.updateAssignStaff(itemStaffSelected?.id, payload).then(res => {
+            if (res.status === 200) {
+                onRefreshList();
+                onHiddenModal();
+            }
+        }).catch(err => {
+            if (err.response?.data) {
+                message.error(err.response?.data?.message)
+            }
+        });
 
     }
     return (
         <div className={className}>
             <FormAddEdit
-                itemVehicleSelected={itemVehicleSelected}
-                // stations={stations}
-                // province={province}
+                itemStaffSelected={itemStaffSelected}
                 onSave={onSave}
                 // onHiddenModal={onHiddenModal}
-                allVehicle={allVehicle}
-            // allUnit={allUnit}
+                allStaff={allStaff}
             />
         </div>
     );
