@@ -31,6 +31,8 @@ const TableList = ({ className, data, setData, itemSelected, onEdit, onRefreshLi
         });
     };
 
+    console.log(data);
+
     const columns = [
         {
             title: 'STT',
@@ -84,7 +86,7 @@ const TableList = ({ className, data, setData, itemSelected, onEdit, onRefreshLi
             width: 150,
             align: 'center',
             render: (text, record) => {
-                return moment(record?.vehicle?.registration_expired_date).format('DD/MM/YYYY');
+                return moment(record?.expire_date).format('DD/MM/YYYY');
             }
         },
         {
