@@ -41,7 +41,7 @@ const Driver = ({ className, itemSelected }) => {
                     newAllStaff.push({
                         // ...item,
                         value: item?.id,
-                        label: item?.staff_code + ' - ' + item?.first_name + item?.last_name + ' - ' + item?.position?.name,
+                        label: item?.staff_code + ' - ' + item?.first_name +  ' ' + item?.last_name + ' - ' + item?.position?.name,
                     })
                 })
                 setAllStaff(newAllStaff);
