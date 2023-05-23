@@ -1,191 +1,292 @@
-import { Checkbox, Dropdown, Pagination, Row, Space, Menu } from "antd";
-import "antd/dist/antd.css";
-import PropTypes from "prop-types";
-import moment from 'moment';
-import React, { memo, useState } from "react";
+import {
+  Checkbox,
+  DatePicker,
+  Dropdown,
+  Input,
+  InputNumber,
+  Menu,
+  Modal,
+  TimePicker
+} from "antd";
+import { DefineTable } from "components";
+import _ from "lodash"
+import { useState, useEffect, useCallback } from "react";
+import moment from "moment";
 import styled from "styled-components";
-import { DefinePagination, DefineTable } from "components";
-const OTPList = memo(({ className, data, params, total, setParams, setTotal }) => {
+import { EditOutlined } from "@ant-design/icons";
+const format = 'HH:mm';
+let inputTimer = null;
+const { RangePicker } = DatePicker;
+const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, setTime, startDate, endDate }) => {
+
+  function disableDateRanges(range = { startDate: true, endDate: false }) {
+    const { startDate, endDate } = range;
+    return function disabledDate(current) {
+      let startCheck = true;
+      let endCheck = true;
+      if (startDate) {
+        startCheck = current && current < moment(startDate, 'YYYY-MM-DD');
+      }
+      if (endDate) {
+        endCheck = current && current > moment(endDate, 'YYYY-MM-DD');
+      }
+      return (startDate && startCheck) || (endDate && endCheck);
+    };
+  }
+
+
+  const _handleSelectAll = async (selected, selectedRows, changeRows) => {
+    if (!selected) {
+      setItemTime([])
+    } else {
+      if (data.length === itemTime.length) { // Trường hợp click vào xóa tất cả khi chưa full item
+        setItemTime([])
+      } else {
+        let selectKeyNew = [];
+        await selectedRows.map((item) => {
+          selectKeyNew.push(item.id)
+        })
+        await setItemTime(selectKeyNew);
+      }
+    }
+  }
+
+  const _handleSelect = (record, status) => {
+    if (!itemTime.includes(record.id)) {
+      const selectKeyNew = [...itemTime]
+      selectKeyNew.push(record.id)
+      setItemTime(selectKeyNew)
+    } else {
+      const selectKeyNew = [...itemTime]
+      const index = selectKeyNew.indexOf(record.id);
+      selectKeyNew.splice(index, 1);
+      setItemTime(selectKeyNew)
+    }
+  };
+
+  const onChange = useCallback((id, nameColumn, e) => {
+    let dataClone = _.cloneDeep(data);
+    if (inputTimer) {
+      clearTimeout(inputTimer);
+    }
+
+    if (nameColumn === 'start_date') {
+      let startDate = e && e.length > 0 ? moment(e[0].startOf("day")) : undefined;
+      let endDate = e && e.length > 0 ? moment(e[1].endOf("day")) : undefined;
+      dataClone.find(p => p.id === id && (p.start_date = moment(startDate).format("YYYY-MM-DD"), true));
+      dataClone.find(p => p.id === id && (p.end_date = moment(endDate).format("YYYY-MM-DD"), true));
+      setData(dataClone)
+      setTime(dataClone)
+    }
+    if (nameColumn === 'end_date') {
+      dataClone.find(p => p.id === id && (p.end_date = moment(e).format("YYYY-MM-DD"), true));
+      setData(dataClone)
+      setTime(dataClone)
+    }
+    if (nameColumn === 'trip_number') {
+      inputTimer = setTimeout(() => {
+        dataClone.find(p => p.id === id && (p.trip_number = e, true));
+        setData(dataClone)
+        setTime(dataClone)
+      }, 400);
+    }
+    if (nameColumn === 'status') {
+      dataClone.find(p => p.id === id && (p.status = e.target.checked === true ? 1 : 0, true));
+      setData(dataClone)
+      setTime(dataClone)
+    }
+    if (nameColumn === 'start_date_stop') {
+      let startDate = e && e.length > 0 ? moment(e[0].startOf("day")) : undefined;
+      let endDate = e && e.length > 0 ? moment(e[1].endOf("day")) : undefined;
+      dataClone.find(p => p.id === id && (p.start_date_stop = moment(startDate).format("YYYY-MM-DD"), true));
+      dataClone.find(p => p.id === id && (p.end_date_stop = moment(endDate).format("YYYY-MM-DD"), true));
+      setData(dataClone)
+      setTime(dataClone)
+    }
+    if (nameColumn === 'note') {
+      inputTimer = setTimeout(() => {
+        dataClone.find(p => p.id === id && (p.note = e, true));
+        setData(dataClone)
+        setTime(dataClone)
+      }, 400);
+    }
+  }, [data]);
 
 
 
-  const menu = (
-    <Menu
-      items={[
-        {
-          key: '1',
-          label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com" style={{ color: '#01579B', textAlign: 'center', display: 'flex', justifyContent: 'center', fontWeight: 600 }}>
-              Duyệt
-            </a>
-          ),
-        },
-        {
-          key: '1',
-          label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com" style={{ color: '#01579B', textAlign: 'center', display: 'flex', justifyContent: 'center', fontWeight: 600 }}>
-              Xem hoá đơn
-            </a>
-          ),
-        },
-      ]}
-    />
-  );
-
-
-
-  const columns = [
+  let columns = [
     {
-      title: "#",
-      dataIndex: "index",
-      width: 60,
-      fixed: "left",
-      align: 'center',
-      render: (value, row, index) => {
-        const stringIndex = `${((params.page - 1) * params.size + index)}`;
-        return (
-          <h5 style={{ textAlign: 'center' }}>{params.page === 1 ? index + 1 : parseInt(stringIndex) + 1}</h5>
-        );
+      title: "Mã tuyến",
+      width: 80,
+      dataIndex: "merchant_route_id",
+      fixed: 'left',
+      render: (text, record, index) => {
+        const name = allRoute.find(item => item?.id === text)?.route_code;
+        return {
+          children: <div>{name}</div>,
+        };
       },
     },
     {
-      title: "Mã tuyến",
-      dataIndex: "phone",
-      width: 200,
-    },
-    {
       title: "Tên tuyến",
-      dataIndex: "content",
-      width: 200,
+      dataIndex: "merchant_route_id",
+      width: 160,
+      render: (text, record, index) => {
+        const name = allRoute.find(item => item?.id === text)?.name;
+        return {
+          children: <div>{name}</div>,
+        };
+      },
     },
     {
-      title: "Biển kiểm soát",
-      dataIndex: "otp",
-      width: 110,
-    },
-    {
-      title: "Thời hạn",
-      dataIndex: "otp",
-      width: 110,
+      title: "Thời gian",
+      dataIndex: "start_date",
+      width: 245,
+      render: (text, record, index) => {
+        const id = record.id
+        const nameColumn = "start_date"
+        return (
+          <RangePicker
+            bordered={false}
+            placeholder={["Từ", "Đến"]}
+            style={{ width: '100%' }}
+            allowClear={false}
+            format={'DD-MM-YYYY'}
+            onChange={(dates) => {
+              onChange(id, nameColumn, dates)
+            }}
+          />
+        )
+      },
     },
     {
       title: "Số chuyến",
-      dataIndex: "otp",
-      width: 110,
+      dataIndex: "trip_number",
+      width: 120,
+      align: "center",
+      render: (text, record, index) => {
+        const id = record.id
+        const nameColumn = "trip_number"
+        return (
+          <InputNumber bordered={false}
+            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+            onChange={(e) => onChange(id, nameColumn, e)}
+            defaultValue={text}
+            placeholder="Chuyến..."
+            style={{ width: '100%', color: '#01579B', fontWeight: 700, fontFamily: 'Nunito' }}
+            addonAfter={<EditOutlined style={{ color: "#01579B" }} />} />
+        )
+      },
     },
     {
-      title: "Sô ghế",
-      dataIndex: "otp",
-      width: 110,
+      title: "Thời gian",
+      dataIndex: "departure_time",
+      width: 100,
+      render: (text, record, index) => {
+        return (
+          <div style={{ textAlign: 'center' }}>{moment(text, 'HH:mm:ss').format("HH:mm")}</div>
+        )
+      },
     },
     {
-      title: "Giá dịch vụ",
-      dataIndex: "otp",
-      width: 110,
+      title: "Dừng",
+      dataIndex: "status",
+      width: 80,
+      render: (text, record, index) => {
+        const id = record.id
+        const nameColumn = "status"
+        return (
+          <div style={{ textAlign: 'center' }}>
+            <Checkbox onChange={(e) => { onChange(id, nameColumn, e) }} />
+          </div>
+        )
+      },
     },
     {
-      title: "Trạng thái",
-      dataIndex: "otp",
-      width: 110,
+      title: "Thời gian",
+      dataIndex: "start_date_stop",
+      width: 245,
+      render: (text, record, index) => {
+        const id = record.id
+        const nameColumn = "start_date_stop"
+        return (
+          <RangePicker
+            bordered={false}
+            placeholder={["Từ", "Đến"]}
+            style={{ width: '100%' }}
+            allowClear={false}
+            format={'DD-MM-YYYY'}
+            onChange={(dates) => {
+              onChange(id, nameColumn, dates)
+            }}
+          />
+        )
+      },
     },
     {
-      title: "Trả sau",
-      dataIndex: "otp",
-      width: 110,
-      render: () => {
-        return <div style={{textAlign:'center' }}>
-          <Checkbox></Checkbox>
-        </div>
-      }
-    },
-    {
-      title: "Thao tác",
-      dataIndex: "otp",
-      width: 110,
-      render: () => {
-        return <div style={{ textAlign: 'center', justifyContent: 'center', }}>
-          <Dropdown overlay={menu} >
-            <a>
-              <i class="fa-solid fa-ellipsis"></i>
-            </a>
-          </Dropdown>
-        </div>
-      }
+      title: "Ghi chú",
+      dataIndex: "note",
+      width: 180,
+      render: (text, record, index) => {
+        const id = record.id
+        const nameColumn = "note"
+        return (
+          <Input bordered={false}
+            onChange={(e) => onChange(id, nameColumn, e.target.value)}
+            defaultValue={text}
+            placeholder="Ghi chú..."
+            style={{ width: '100%', color: '#01579B', fontWeight: 700, fontFamily: 'Nunito' }}
+            suffix={<EditOutlined />} />
+        )
+      },
     },
   ];
-
-  // const renderContent = () => {
-  //   return (
-  //     <Row justify="end" style={{ marginBottom: 5, marginTop: 5 }}>
-  //       <Pagination
-  //         onShowSizeChange={(current, size) => {
-  //           setParams((prevState) => {
-  //             let nextState = { ...prevState };
-  //             nextState.page = 1;
-  //             nextState.size = size;
-  //             return nextState;
-  //           });
-  //         }}
-  //         onChange={(page, pageSize) => {
-  //           setParams((prevState) => {
-  //             let nextState = { ...prevState };
-  //             nextState.page = page;
-  //             return nextState;
-  //           });
-  //         }}
-  //         total={total}
-  //         current={params.page}
-  //         pageSize={params.size}
-  //         showSizeChanger
-  //       />
-  //     </Row>
-  //   );
-  // };
-
   return (
     <div className={className}>
       <DefineTable
+        bordered
+        rowSelection={{
+          selectedRowKeys: itemTime,
+          onSelect: _handleSelect,
+          onSelectAll: _handleSelectAll,
+        }}
+        rowKey="id"
         columns={columns}
         dataSource={data}
-        rowKey="id"
+        scroll={{ x: 'calc(700px + 10%)', y: 240 }}
         pagination={false}
-        scroll={{ x: "calc(700px + 50%)" }}
-      />
-      {/* {renderContent()} */}
 
-    </div >
+      />
+    </div>
   );
-});
-OTPList.propTypes = {
-  className: PropTypes.any,
 };
-export default styled(OTPList)`
-// .ant-table-thead > tr > th {
-//   background-color: rgba(233,195,43);
-//   padding-top: 5px !important;
-//   padding-bottom: 5px !important;
-//   padding-left: 5px !important;
-//   padding-right: 5px !important;
-// }
-  .ant-table-thead > tr > th {
-    border-top: 1px solid rgb(130 126 126 / 12%) !important;
+
+export default styled(Social)`
+.customer {
+  .anticon-plus-circle {
+    font-size: 26px !important;
+    color: green;
   }
-  .ant-table-cell {
-  border-left: 1px solid rgb(130 126 126 / 12%) !important;
+}
+.customerClose {
+  .anticon-close-circle {
+    font-size: 26px !important;
+    color: red;
   }
-  .fix_drawer{
-    padding-left : 100px
-  }
-  .ant-table-summary {
-    font-weight: bold;
-    text-align: right;
-    .ant-table-cell {
-        background-color: rgb(242,243,248);
-        position: sticky;
-        z-index: 10000;
-        bottom: 0;
-    }
-  }
-  
-  
+}
+.ant-input-number-group-addon {
+  position: relative;
+  padding: 0 11px;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: normal;
+  font-size: 14px;
+  text-align: center;
+  background-color: transparent !important;
+  border: 0px !important;
+  transition: all 0.3s;
+  border-radius: 0px !important;
+}
+.ant-input-number-handler-wrap { 
+visibility: hidden !important;
+}
 `;

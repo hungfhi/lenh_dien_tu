@@ -116,7 +116,6 @@ const Index = ({ className, profile }) => {
   });
 
   const onEdit = useCallback(async (ids) => {
-    console.log('vào đâyyayayyayay')
     setShowModalEdit(true);
     station.getDetailContract(ids)
       .then(res => {
@@ -173,8 +172,6 @@ const Index = ({ className, profile }) => {
           />
         </Spin>
       </Col>
-
-
       <Drawer
         destroyOnClose
         width={"100%"}

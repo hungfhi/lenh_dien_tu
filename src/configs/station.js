@@ -19,7 +19,19 @@ const station = {
     updateTransport(payload){
         return axios.put(`${domain.ServiceAddress}/merchants/${payload?.uuid}`, payload)
     },
+    createTabContract(payload){
+        return axios.post(`${domain.ServiceAddress}/contract/car-contract`, payload)
+    },
+    getRoute() {
+        return axios.get(`${domain.ServiceAddress}/routes`);
+    },
 
+    addCarCreate(payload) {
+        return axios.post(`${domain.ServiceAddress}/contract/add-car-contract`, payload);
+    },
+    addTimeCreate(payload) {
+        return axios.post(`${domain.ServiceAddress}/contract/add-node-contract`, payload);
+    },
 }
 
 export default station
