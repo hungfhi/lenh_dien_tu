@@ -21,7 +21,7 @@ const FormEdit = ({
 
     const [typeApply, setTypeApply] = useState(itemTripSelected && itemTripSelected?.type_apply?.id);
     const [buttonChooseByDay, setButtonChooseByDay] = useState(null);
-    const [scheduleTrip, setScheduleTrip] = useState(typeApply == 1 ? (itemTripSelected && itemTripSelected?.schedule) : []);
+    const [scheduleTrip, setScheduleTrip] = useState(itemTripSelected && itemTripSelected?.schedule);
 
     // console.log(scheduleTrip);
     const [buttonItem, setButtonItem] = useState({
