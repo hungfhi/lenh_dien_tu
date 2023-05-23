@@ -55,7 +55,7 @@ const Trip = ({ itemSelected }) => {
     }, []);
 
     const onRefreshList = () => {
-        getDataTable();
+        // getDataTable();
     }
 
     console.log(itemTripSelected);
