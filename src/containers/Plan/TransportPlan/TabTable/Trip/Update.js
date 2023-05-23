@@ -32,7 +32,7 @@ const Update = ({ className,
             Ui.showSuccess({ message: "Thành công" });
             onHiddenModalTripPlan();
             let dataClone = _.cloneDeep(data);
-            dataClone.find(item => item.id === itemTripSelected?.id && (item.schedule = payload?.schedule, true));
+            dataClone.find(item => item.id === itemTripSelected?.id && (item.schedule = payload?.schedule, true) && (item.type_apply.id = payload?.type_apply, true));
             setData(dataClone)
         }).catch(err => {
             Ui.showError({ message: 'Có lỗi xảy ra' });

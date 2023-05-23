@@ -151,6 +151,7 @@ const TableList = ({ className, data, setData, params, total, itemSelected, onTr
             title: "Kế hoạch",
             dataIndex: "name",
             render: (text, record) => {
+                // console.log(record);
                 const newRecordSchedule = [...record?.schedule].sort((a, b) =>
                     a > b ? 1 : -1
                 );
@@ -158,19 +159,21 @@ const TableList = ({ className, data, setData, params, total, itemSelected, onTr
                 return (
                     <div style={{ display: 'flex' }}>
                         <Col style={{ display: 'flex', alignItems: 'center' }} span={23}>
-                            {record?.type_apply?.id == 1 ?
+                            {record?.type_apply?.id == 1 &&
                                 <div>
                                     {record?.type_apply?.name} {newRecordSchedule && '-'} {newRecordSchedule?.map((item, index) => {
 
                                         return item + (index == (newRecordSchedule.length - 1) ? '' : ', ');
                                     })}
-                                </div> :
-                                <div>
-                                    {record?.type_apply?.name} {newRecordSchedule && '-'} {newRecordSchedule?.map((item, index) => {
-
-                                        return renderItem(item) + (index == (newRecordSchedule.length - 1) ? '' : ', ');
-                                    })}
                                 </div>
+                            }
+                            {record?.type_apply?.id == 2 &&
+                            <div>
+                                {record?.type_apply?.name} {newRecordSchedule && '-'} {newRecordSchedule?.map((item, index) => {
+
+                                    return renderItem(item) + (index == (newRecordSchedule.length - 1) ? '' : ', ');
+                                })}
+                            </div>
                             }
                         </Col>
                         <Popconfirm
