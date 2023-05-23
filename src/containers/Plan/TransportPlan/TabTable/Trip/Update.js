@@ -23,21 +23,20 @@ const Update = ({ className,
 
     const onSave = useCallback(async (values) => {
         console.log(values);
-        // const payload = {
-        //     merchant_route_node_id: itemTripSelected && itemTripSelected?.id,
-        //     schedule: values?.schedule,
-        //     type_apply: values?.type_apply
-        // };
-        // console.log(payload);
-        // plan.updateAssignNode(payload).then(res => {
-        //     Ui.showSuccess({ message: "Thành công" });
-        //     onHiddenModalTripPlan();
-        //     let dataClone = _.cloneDeep(data);
-        //     dataClone.find(item => item.id === itemTripSelected?.id && (item.schedule = payload?.schedule, true));
-        //     setData(dataClone)
-        // }).catch(err => {
-        //     Ui.showError({ message: 'Có lỗi xảy ra' });
-        // });
+        const payload = {
+            schedule: values?.schedule,
+            type_apply: values?.type_apply
+        };
+        console.log(payload);
+        plan.updateAssignNode(itemTripSelected?.id, payload).then(res => {
+            Ui.showSuccess({ message: "Thành công" });
+            onHiddenModalTripPlan();
+            let dataClone = _.cloneDeep(data);
+            dataClone.find(item => item.id === itemTripSelected?.id && (item.schedule = payload?.schedule, true));
+            setData(dataClone)
+        }).catch(err => {
+            Ui.showError({ message: 'Có lỗi xảy ra' });
+        });
     });
 
     return (

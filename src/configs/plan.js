@@ -5,8 +5,8 @@ import qs from 'qs'
 const plan = {
     // Kế hoạch vận tải
     // Gán ngày chạy cho node
-    updateAssignNode(payload) {
-        return axios.post(`${domain.ServiceAddress}/merchantRoutes/assign-node/${payload.merchant_route_node_id}`, payload);
+    updateAssignNode(id, payload) {
+        return axios.post(`${domain.ServiceAddress}/merchantRoutes/assign-node/${id}`, payload);
     },
     deleteAssignTime(payload) {
         return axios.delete(`${domain.ServiceAddress}/merchantRoutes/assign-time/${payload.merchant_route_id}`, payload);

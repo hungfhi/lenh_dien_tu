@@ -460,14 +460,14 @@ const FormEdit = ({
                             name="type_apply"
                         >
                             <Select
-                                // defaultValue={typeApply}
+                                defaultValue={typeApply}
                                 onChange={e => {
                                     onChangeTypeApply(e);
                                     setScheduleTrip([]);
                                 }}
                             >
                                 <Select.Option value={1}>Theo ngày</Select.Option>
-                                <Select.Option value={2}>Theo thứ</Select.Option>
+                                <Select.Option value={2}>Theo tuần</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
