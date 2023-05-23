@@ -74,7 +74,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, allDriver,
   const columns = [
     {
       title: "Lệnh VC",
-      dataIndex: "departure_time",
+      dataIndex: "command_code",
       fixed: 'left',
       width: 100,
       render: (value) => {

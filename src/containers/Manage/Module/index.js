@@ -62,7 +62,6 @@ const Index = ({ className, profile }) => {
                 }
               })
             });
-
           })
           setData(dataSet)
         }

@@ -30,10 +30,6 @@ const Filter = ({ className, setParams, params, allRoute, onSign }) => {
           <div>Từ ngày</div>
           <DatePicker
             allowClear={false}
-            disabledDate={(current) => {
-              let customDate = moment().format("YYYY-MM-DD");
-              return current && current < moment(customDate, "YYYY-MM-DD");
-            }}
             onChange={(date) => {
               if (date > params.date_to) {
                 setParams((prevState) => {
