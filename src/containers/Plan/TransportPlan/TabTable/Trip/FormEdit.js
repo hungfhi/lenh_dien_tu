@@ -23,7 +23,7 @@ const FormEdit = ({
     const [buttonChooseByDay, setButtonChooseByDay] = useState(null);
     const [scheduleTrip, setScheduleTrip] = useState(typeApply == 1 ? (itemTripSelected && itemTripSelected?.schedule) : []);
 
-    console.log(scheduleTrip);
+    // console.log(scheduleTrip);
     const [buttonItem, setButtonItem] = useState({
         item: null,
         choosed: false
@@ -45,7 +45,7 @@ const FormEdit = ({
     }
 
     const pushAllDay = (month, year) => {
-        console.log(month, year);
+        // console.log(month, year);
         let newSchedule = [];
 
         switch (month) {
@@ -139,7 +139,7 @@ const FormEdit = ({
     }
 
     const pushEvenDay = (month, year) => {
-        console.log(month, year);
+        // console.log(month, year);
         let newSchedule = [];
 
         switch (month) {
@@ -256,7 +256,7 @@ const FormEdit = ({
     }
 
     const pushOddDay = (month, year) => {
-        console.log(month, year);
+        // console.log(month, year);
         let newSchedule = [];
 
         switch (month) {
@@ -423,7 +423,7 @@ const FormEdit = ({
         setScheduleTrip(scheduleTrip);
     }, [scheduleTrip]);
 
-    console.log(scheduleTrip);
+    // console.log(scheduleTrip);
 
     return (
         <div className={className}>

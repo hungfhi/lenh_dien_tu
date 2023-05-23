@@ -40,7 +40,7 @@ const Trip = ({ itemSelected }) => {
         // setLoading(true);
         category.getMerchantRoutes().then(res => {
             if (res.status === 200) {
-                console.log(res);
+                // console.log(res);
                 // setData(res?.data?.data);
                 // setTotal(res?.data?.meta?.total);
             }
@@ -58,7 +58,7 @@ const Trip = ({ itemSelected }) => {
         // getDataTable();
     }
 
-    console.log(itemTripSelected);
+    // console.log(itemTripSelected);
 
     return (
         <>

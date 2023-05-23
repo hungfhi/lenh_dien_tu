@@ -19,15 +19,15 @@ const Update = ({ className,
     data,
     allRoute }) => {
 
-    console.log(data);
+    // console.log(data);
 
     const onSave = useCallback(async (values) => {
-        console.log(values);
+        // console.log(values);
         const payload = {
             schedule: values?.schedule,
             type_apply: values?.type_apply
         };
-        console.log(payload);
+        // console.log(payload);
         plan.updateAssignNode(itemTripSelected?.id, payload).then(res => {
             Ui.showSuccess({ message: "Thành công" });
             onHiddenModalTripPlan();
