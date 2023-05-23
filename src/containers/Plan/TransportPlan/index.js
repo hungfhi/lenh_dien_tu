@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from "prop-types";
 import _ from "lodash"
 import styled from "styled-components";
-import { Col, message, Row, Spin } from 'antd';
+import { Col, Drawer, message, Row, Spin } from 'antd';
 import Filter from './Filter';
 import TableList from './TableList';
 import { category } from 'configs';
 import { Ui } from 'utils/Ui';
+import Update from './Update';
 
 const Index = ({ className }) => {
 
@@ -47,15 +48,13 @@ const Index = ({ className }) => {
 
     const onEdit = useCallback(async (ids) => {
         setShowModalEdit(true);
-        category.getDetailMerchantRoutes(ids)
-            .then(res => {
-                if (res.status === 200) {
-                    setItemSelected(res?.data?.data)
-                }
-            })
-            .catch(err => {
-                Ui.showError({ message: err?.response?.data?.message });
-            })
+        category.getDetailMerchantRoutes(ids).then(res => {
+            if (res.status === 200) {
+                setItemSelected(res?.data?.data)
+            }
+        }).catch(err => {
+            Ui.showError({ message: err?.response?.data?.message });
+        });
     }, []);
 
     const getAllRoutes = useCallback(async () => {
@@ -111,6 +110,13 @@ const Index = ({ className }) => {
 
     }, []);
 
+    const onHiddenModalEdit = useCallback(() => {
+        onRefreshList();
+        setItemSelected(null);
+        setShowModalEdit(false);
+    });
+
+
     useEffect(() => {
         getAllRoutes();
         getStation();
@@ -147,6 +153,28 @@ const Index = ({ className }) => {
                 </Spin>
 
             </Col>
+
+            <Drawer
+                destroyOnClose
+                width={"80%"}
+                title={"Cập nhật"}
+                placement="right"
+                closable={true}
+                onClose={onHiddenModalEdit}
+                visible={isShowModalEdit}
+            >
+                {
+                    itemSelected ? (
+                        <Update
+                            onRefresh={onRefreshList}
+                            onHiddenModalEdit={onHiddenModalEdit}
+                            itemSelected={itemSelected}
+                            allRoute={allRoute}
+                        />
+                    ) : <div><div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spin spinning /></div></div>
+                }
+
+            </Drawer>
         </Row>
     );
 };
