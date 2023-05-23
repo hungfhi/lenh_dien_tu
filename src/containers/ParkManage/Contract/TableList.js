@@ -135,7 +135,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                   let _renderTT = (
                     <>
                       <td
-                        className={`tg-73oq customerBorderRight borderLeft  borderBottom`}
+                        className={`tg-73oq customerBorderRight border borderBottom`}
                         style={{
                           minWidth: "125px", color: 'rgba(0, 0, 0, 0.85)'
                         }}
@@ -172,7 +172,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                         rowSpan="1"
                         key={`${index}-4`}
                       >
-                        <div className="d-flex">{moment(item?.start_date).format("DD/MM/YYYY")} - {moment(item?.end_date).format("DD/MM/YYYY")}</div>
+                        <div className="d-flex">{item?.start_date} - {item?.end_date}</div>
                       </td>
                       <td
                         className={`tg-73oq text-center customerBorderRight borderLeft fixLeft borderBottom`}
@@ -221,7 +221,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                               type="link"
                               onClick={() => onEdit(item?.id)}
                             >
-                            <i class="fa-regular fa-pen-to-square" style={{ color: '#01579B', fontSize: 20 }}></i>
+                              <i class="fa-regular fa-pen-to-square" style={{ color: '#01579B', fontSize: 20 }}></i>
                             </Button>
                           </Tooltip>
                         </div>
@@ -279,10 +279,7 @@ table {
  	position:relative;
  	max-width:100%;
   width: 100%;
- 	border-left:1px solid #red;
 }
-
-
 .table-wrap {
  	width:100%;
  	overflow: scroll;
@@ -303,6 +300,7 @@ td:first-child, th:first-child {
   position:sticky;
   left:0;
   z-index:1;
+  border-right: 1px solid #e5e5e8 !important;
 }
 td:last-child, th:last-child {
   position:sticky;
@@ -311,7 +309,7 @@ td:last-child, th:last-child {
   border-left:1px solid #e5e5e8;
 }
 .tg {
-  border-color: rgb(242, 243, 248);
+  border-color: #e5e5e8;
   width: 100%;
   border-collapse: separate;
   border-spacing: 0px;

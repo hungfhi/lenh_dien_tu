@@ -18,7 +18,7 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue','Nunito',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -184,9 +184,24 @@ input[type=number] {
     align-items: center;
   }
 }
+.ant-table-container {
+  font-family: Nunito !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+}
+.main-table {
+  font-family: Nunito !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+}
+
+
+
+
+
 .ant-table-thead > tr > th {
   color: #fff !important;
-  font-family: 'NotoSans-Bold';
+  font-family: Nunito !important;
   font-size: 16px;
 }
 .ant-pagination {

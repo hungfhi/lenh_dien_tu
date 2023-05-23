@@ -92,7 +92,7 @@ const Filter = ({ className, setParams, params, setShowModal, transport }) => {
           </Select>
         </Col>
         <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>
-          <Button className="btn-add" onClick={() => setShowModal(true)} > Thêm mới</Button>
+          <Button className="btn-add" onClick={() => setShowModal(true)} style={{ backgroundColor: '#01579B', color: '#fff', borderRadius: 6, height: 35, width: 120 }}> Thêm mới</Button>
         </Col>
       </Row>
     </div>

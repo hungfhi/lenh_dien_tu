@@ -15,8 +15,7 @@ const Create = ({
   const [form] = Form.useForm();
   const onFinishFailed = () => {
   };
-  const onSave = async (values) => {
-
+  const onSave = async (values, update_car_contract, update_node_contract) => {
     const payload = {
       name: values?.name,
       contract_number: values?.contract_number,
@@ -29,20 +28,43 @@ const Create = ({
       end_date: moment(values?.end_date).format("YYYY-MM-DD"),
       is_full_package: values?.is_full_package === true ? 1 : false,
       stations: values?.stations,
+      overnight_price: values?.overnight_price,
+      status: 1,
     }
+    const car = {
+      update_car_contract: update_car_contract
+    }
+    const time = {
+      update_node_contract: update_node_contract
+    }
+
     station.createContract(payload)
       .then(res => {
         if (res.status === 200) {
-          Ui.showSuccess({ message: "Thành công" });
-          onRefreshList()
+          station.addCarCreate(car)
+            .then(res => {
+              if (res.status === 200) {
+              }
+            })
+            .catch(err => {
+              message.error("Có lỗi xảy ra khi gán xe")
+            })
+          station.addTimeCreate(time)
+            .then(res => {
+              if (res.status === 200) {
+              }
+            })
+            .catch(err => {
+              message.error("Có lỗi xảy ra khi gán thời gian xe xb!")
+            })
           onHiddenModal()
+          onRefreshList()
         }
       })
       .catch(err => {
-        if (err.response?.status === 422 && err.response?.data?.errors) {
-          message.warn(err.response.data?.errors[0].msg)
-        }
+        message.error("Có lỗi xảy ra!")
       })
+
   }
   return (
     <div className={className}>
