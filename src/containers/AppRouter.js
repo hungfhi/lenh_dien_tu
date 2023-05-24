@@ -40,6 +40,7 @@ import QualityStandard from './Category/QualityStandard';
 
 import SignCommand from './Command/SignCommand';
 import TransportPlan from './Plan/TransportPlan';
+import ContractDetail from './ParkManage/Contract/ContractDetail';
 
 
 const AppRouter = () => {
@@ -286,7 +287,20 @@ const AppRouter = () => {
             </PrivateRoute>
           }
         />
+
+        <Route
+          path="/contract-detail"
+          element={
+            <PrivateRoute>
+              <ContractDetail />
+            </PrivateRoute>
+          }
+        />
+
       </Routes>
+
+
+
     </BrowserRouter>
   );
 };

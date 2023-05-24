@@ -32,6 +32,18 @@ const station = {
     addTimeCreate(payload) {
         return axios.post(`${domain.ServiceAddress}/contract/add-node-contract`, payload);
     },
+    updateCar(payload) {
+        return axios.patch(`${domain.ServiceAddress}/contract/update-car-contract/${payload?.id}`, payload);
+    },
+    updateTime(payload) {
+        return axios.patch(`${domain.ServiceAddress}/contract/update-node-contract/${payload?.id}`, payload);
+    },
+    addCarEdit(payload) {
+        return axios.post(`${domain.ServiceAddress}/contract/add-car-to-contract/${payload?.id}`, payload);
+    },
+    addTimeEdit(payload) {
+        return axios.post(`${domain.ServiceAddress}/contract/add-node-to-contract/${payload?.id}`, payload);
+    },
 }
 
 export default station

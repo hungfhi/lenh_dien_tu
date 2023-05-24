@@ -1,9 +1,9 @@
-import { Button, Col, Row, Spin } from "antd";
+import { Col, Row, Button } from "antd";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import TableList from './TableList';
-const ContractCar = ({ className, car, setItemCar, setCar, itemCar, allRoute,startDate,endDate }) => {
+const ContractCar = ({ className, car, setItemCar, setCar, itemCar, allRoute, startDate, endDate }) => {
 
   const [data, setData] = useState(car);
   const [total, setTotal] = useState(0);
@@ -20,6 +20,9 @@ const ContractCar = ({ className, car, setItemCar, setCar, itemCar, allRoute,sta
 
   return (
     <Row className={className} gutter={[16, 16]}>
+      <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', marginTop:-70 }}>
+        <Button className="btn-add" style={{ backgroundColor: '#01579B', color: '#fff', borderRadius: 6, height: 35, width: 120 }}> Thêm xe</Button>
+      </Col>
       <Col span={24} style={{ width: 'calc(100% - 10px)' }}>
         <TableList
           data={data}

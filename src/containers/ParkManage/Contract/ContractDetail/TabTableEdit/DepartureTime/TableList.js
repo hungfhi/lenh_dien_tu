@@ -6,7 +6,8 @@ import {
   InputNumber,
   Menu,
   Modal,
-  TimePicker
+  TimePicker,
+  message
 } from "antd";
 import { DefineTable } from "components";
 import _ from "lodash"
@@ -14,6 +15,7 @@ import { useState, useEffect, useCallback } from "react";
 import moment from "moment";
 import styled from "styled-components";
 import { EditOutlined } from "@ant-design/icons";
+import { station } from "configs";
 const format = 'HH:mm';
 let inputTimer = null;
 const { RangePicker } = DatePicker;
@@ -35,90 +37,63 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
   }
 
 
-  const _handleSelectAll = async (selected, selectedRows, changeRows) => {
-    if (!selected) {
-      setItemTime([])
-    } else {
-      if (data.length === itemTime.length) { // Trường hợp click vào xóa tất cả khi chưa full item
-        setItemTime([])
-      } else {
-        let selectKeyNew = [];
-        await selectedRows.map((item) => {
-          selectKeyNew.push(item.id)
-        })
-        await setItemTime(selectKeyNew);
-      }
-    }
-  }
-
-  const _handleSelect = (record, status) => {
-    if (!itemTime.includes(record.id)) {
-      const selectKeyNew = [...itemTime]
-      selectKeyNew.push(record.id)
-      setItemTime(selectKeyNew)
-    } else {
-      const selectKeyNew = [...itemTime]
-      const index = selectKeyNew.indexOf(record.id);
-      selectKeyNew.splice(index, 1);
-      setItemTime(selectKeyNew)
-    }
-  };
-
   const onChange = useCallback((id, nameColumn, e) => {
-    let dataClone = _.cloneDeep(data);
-    if (inputTimer) {
-      clearTimeout(inputTimer);
+    let payload = {
+      id: id
     }
-
     if (nameColumn === 'start_date') {
       let startDate = e && e.length > 0 ? moment(e[0].startOf("day")) : undefined;
       let endDate = e && e.length > 0 ? moment(e[1].endOf("day")) : undefined;
-      dataClone.find(p => p.id === id && (p.start_date = moment(startDate).format("YYYY-MM-DD"), true));
-      dataClone.find(p => p.id === id && (p.end_date = moment(endDate).format("YYYY-MM-DD"), true));
-      setData(dataClone)
-      setTime(dataClone)
-    }
-    if (nameColumn === 'end_date') {
-      dataClone.find(p => p.id === id && (p.end_date = moment(e).format("YYYY-MM-DD"), true));
-      setData(dataClone)
-      setTime(dataClone)
+      payload = { ...payload, start_date: moment(startDate).format("YYYY-MM-DD"), end_date: moment(endDate).format("YYYY-MM-DD") };
     }
     if (nameColumn === 'trip_number') {
-      inputTimer = setTimeout(() => {
-        dataClone.find(p => p.id === id && (p.trip_number = e, true));
-        setData(dataClone)
-        setTime(dataClone)
-      }, 400);
+      payload = { ...payload, trip_number: e };
     }
     if (nameColumn === 'status') {
-      dataClone.find(p => p.id === id && (p.status = e.target.checked === true ? 2 : 1, true));
-      setData(dataClone)
-      setTime(dataClone)
+      payload = { ...payload, status: e.target.checked === true ? 2 : 1 };
     }
     if (nameColumn === 'start_date_stop') {
       let startDate = e && e.length > 0 ? moment(e[0].startOf("day")) : undefined;
       let endDate = e && e.length > 0 ? moment(e[1].endOf("day")) : undefined;
-      dataClone.find(p => p.id === id && (p.start_date_stop = moment(startDate).format("YYYY-MM-DD"), true));
-      dataClone.find(p => p.id === id && (p.end_date_stop = moment(endDate).format("YYYY-MM-DD"), true));
-      setData(dataClone)
-      setTime(dataClone)
+      payload = { ...payload, start_date_stop: moment(startDate).format("YYYY-MM-DD"), end_date_stop: moment(endDate).format("YYYY-MM-DD") };
     }
     if (nameColumn === 'note') {
-      inputTimer = setTimeout(() => {
-        dataClone.find(p => p.id === id && (p.note = e, true));
-        setData(dataClone)
-        setTime(dataClone)
-      }, 400);
+      payload = { ...payload, note: e };
     }
+    if (inputTimer) {
+      clearTimeout(inputTimer);
+    }
+    inputTimer = setTimeout(() => {
+      station.updateTime(payload)
+        .then(res => {
+          if (res.status === 200) {
+          }
+        })
+        .catch(err => {
+          message.error("Có lỗi xảy ra !")
+        })
+    }, 500);
+
   }, [data]);
 
 
 
   let columns = [
     {
+      title: "STT",
+      width: 60,
+      dataIndex: "id",
+      fixed: 'left',
+      render: (text, record, index) => {
+        return {
+          children: <div style={{textAlign:'center'}}>{index + 1}</div>,
+        };
+      },
+    },
+    {
       title: "Mã tuyến",
       width: 80,
-      dataIndex: "merchant_route_id",
+      dataIndex: "route_id",
       fixed: 'left',
       render: (text, record, index) => {
         const name = allRoute.find(item => item?.id === text)?.route_code;
@@ -129,7 +104,7 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
     },
     {
       title: "Tên tuyến",
-      dataIndex: "merchant_route_id",
+      dataIndex: "route_id",
       width: 160,
       render: (text, record, index) => {
         const name = allRoute.find(item => item?.id === text)?.name;
@@ -149,9 +124,11 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
           <RangePicker
             bordered={false}
             placeholder={["Từ", "Đến"]}
+            defaultValue={record.start_date !== null ? [moment(record.start_date), moment(record.end_date)] : ''}
             style={{ width: '100%' }}
             allowClear={false}
             format={'DD-MM-YYYY'}
+            disabledDate={disableDateRanges({ startDate: moment(startDate).format("YYYY-MM-DD"), endDate: moment(endDate).format("YYYY-MM-DD") })}
             onChange={(dates) => {
               onChange(id, nameColumn, dates)
             }}
@@ -172,7 +149,7 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
             parser={value => value.replace(/\$\s?|(,*)/g, '')}
             onChange={(e) => onChange(id, nameColumn, e)}
             defaultValue={text}
-            placeholder="Chuyến..."
+            placeholder="Chuyến"
             style={{ width: '100%', color: '#01579B', fontWeight: 700, fontFamily: 'Nunito' }}
             addonAfter={<EditOutlined style={{ color: "#01579B" }} />} />
         )
@@ -180,11 +157,12 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
     },
     {
       title: "Thời gian",
-      dataIndex: "departure_time",
-      width: 100,
+      dataIndex: "node",
+      width: 130,
       render: (text, record, index) => {
+        const time = (text?.departure_time).substring(0, 5);
         return (
-          <div style={{ textAlign: 'center' }}>{moment(text, 'HH:mm:ss').format("HH:mm")}</div>
+          <div style={{ textAlign: 'center' }}>{time}</div>
         )
       },
     },
@@ -197,7 +175,7 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
         const nameColumn = "status"
         return (
           <div style={{ textAlign: 'center' }}>
-            <Checkbox onChange={(e) => { onChange(id, nameColumn, e) }} />
+            <Checkbox defaultChecked={text?.value !== 1 ? true : false} onChange={(e) => { onChange(id, nameColumn, e) }} />
           </div>
         )
       },
@@ -211,10 +189,11 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
         const nameColumn = "start_date_stop"
         return (
           <RangePicker
-            bordered={false}
+            allowClear={record?.status == 1 ? false : true}
             placeholder={["Từ", "Đến"]}
+            defaultValue={record.start_date_stop !== null ? [moment(record.start_date_stop), moment(record.end_date_stop)] : ''}
+            bordered={false}
             style={{ width: '100%' }}
-            allowClear={false}
             format={'DD-MM-YYYY'}
             onChange={(dates) => {
               onChange(id, nameColumn, dates)
@@ -245,11 +224,6 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
     <div className={className}>
       <DefineTable
         bordered
-        rowSelection={{
-          selectedRowKeys: itemTime,
-          onSelect: _handleSelect,
-          onSelectAll: _handleSelectAll,
-        }}
         rowKey="id"
         columns={columns}
         dataSource={data}
