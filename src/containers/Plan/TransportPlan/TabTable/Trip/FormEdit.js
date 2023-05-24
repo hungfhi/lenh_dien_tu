@@ -369,7 +369,7 @@ const FormEdit = ({
         }
     }
 
-    console.log(scheduleTrip);
+    // console.log(scheduleTrip);
 
     // const changeColor = (item) => {
     //     item && setButtonItem(!buttonItem)
@@ -391,8 +391,8 @@ const FormEdit = ({
 
                         return (
                             <Button
+                                disabled={(scheduleTrip.includes(item)) && true}
                                 onClick={e => {
-                                    console.log(e);
                                     let newButtonItem = [...scheduleTrip];
 
                                     newButtonItem.push(item);
@@ -410,7 +410,7 @@ const FormEdit = ({
                                     borderRadius: 0,
                                     background: (scheduleTrip.includes(item)) && '#01579B'
                                 }}
-                                defaultValue={(buttonItem.choosed && item == buttonItem.item) && item}
+                            // defaultValue={(buttonItem.choosed && item == buttonItem.item) && item}
                             >
                                 {item}
                             </Button>
@@ -539,7 +539,7 @@ const FormEdit = ({
                                     disabled={buttonChooseByDay == 4 && true}
                                     onClick={e => {
                                         setButtonChooseByDay(4);
-                                        setScheduleTrip([]);
+                                        // setScheduleTrip([]);
                                     }}
                                     style={{
                                         width: '100%',
@@ -555,7 +555,18 @@ const FormEdit = ({
                         </>
                     }
                     {typeApply == 1 && buttonChooseByDay == 4 &&
-                        renderButtonAllDay()
+                        <>
+                            {renderButtonAllDay()}
+                            <Col span={10}></Col>
+                            <Col span={4}>
+                                <Button
+                                style={{ background: '#ffc20e', color: '#000', borderColor: '#ffc20e' }}
+                                    onClick={e => setScheduleTrip([])}
+                                >Làm mới</Button>
+                            </Col>
+                            <Col span={10}></Col>
+                        </>
+                        
                     }
 
                     {typeApply == 2 &&
