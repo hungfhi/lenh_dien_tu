@@ -137,7 +137,7 @@ const ContractDetail = ({ className }) => {
             email: values?.email,
             start_date: moment(values?.start_date).format("YYYY-MM-DD"),
             end_date: moment(values?.end_date).format("YYYY-MM-DD"),
-            is_full_package: values?.is_full_package === true ? 1 : false,
+            is_full_package: values?.is_full_package === true ? 1 : 0,
             stations: values?.stations,
             overnight_price: values?.overnight_price,
             status: 1,

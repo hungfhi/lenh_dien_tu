@@ -155,7 +155,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
     {
       title: "Mã tuyến",
       width: 80,
-      dataIndex: "merchant_route_id",
+      dataIndex: "route_id",
       fixed: 'left',
       render: (text, record, index) => {
         const name = allRoute.find(item => item?.id === text)?.route_code;
@@ -166,7 +166,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
     },
     {
       title: "Tên tuyến",
-      dataIndex: "merchant_route_id",
+      dataIndex: "route_id",
       width: 160,
       render: (text, record, index) => {
         const name = allRoute.find(item => item?.id === text)?.name;

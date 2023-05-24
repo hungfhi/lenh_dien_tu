@@ -137,7 +137,7 @@ useEffect(() => {
           start_date: isEdit && moment((date(isEdit?.start_date))) || moment(),
           end_date: isEdit && moment((date(isEdit?.end_date))) || moment(new Date()).endOf('year'),
           stations: station_id,
-          is_full_package: is_full_package === 1 ? true : false || true,
+          is_full_package: is_full_package,
           status: 1,
           overnight_price: isEdit && isEdit.overnight_price || '',
         }}

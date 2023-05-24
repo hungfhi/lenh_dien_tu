@@ -16,6 +16,7 @@ const Create = ({
   const onFinishFailed = () => {
   };
   const onSave = async (values, update_car_contract, update_node_contract) => {
+
     const payload = {
       name: values?.name,
       contract_number: values?.contract_number,
@@ -26,11 +27,14 @@ const Create = ({
       email: values?.email,
       start_date: moment(values?.start_date).format("YYYY-MM-DD"),
       end_date: moment(values?.end_date).format("YYYY-MM-DD"),
-      is_full_package: values?.is_full_package === true ? 1 : false,
+      is_full_package: values?.is_full_package === true ? 1 : 0,
       stations: values?.stations,
       overnight_price: values?.overnight_price,
       status: 1,
     }
+
+    console.log("dasdasdasda",payload)
+
     const car = {
       update_car_contract: update_car_contract
     }

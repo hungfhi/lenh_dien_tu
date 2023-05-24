@@ -1,4 +1,4 @@
-import { Col, Row, Button, Drawer, message } from "antd";
+import { Col, Row, Button, Drawer, message, Spin } from "antd";
 import PropTypes from "prop-types";
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
@@ -8,6 +8,8 @@ import _ from "lodash";
 import { station } from "configs";
 const ContractCar = ({ className, car, setCar, allRoute, startDate, endDate, isEdit, onRefreshList }) => {
   const [data, setData] = useState(car);
+  const [isActive, setIsActive] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
   const [addCar, setAddCar] = useState();
   const [itemCar, setItemCar] = useState([]);
   const [params, setParams] = useState({
@@ -26,10 +28,10 @@ const ContractCar = ({ className, car, setCar, allRoute, startDate, endDate, isE
     const payload = {
       merchant_id: isEdit?.merchant_id,
       stations: arr,
-      contract_id: isEdit?.id,
+      contract_id: !isActive ? isEdit?.id : undefined,
       // route:undefined,
-
     }
+    setIsLoad(true)
     station.createTabContract(payload)
       .then(res => {
         if (res.status === 200) {
@@ -42,18 +44,20 @@ const ContractCar = ({ className, car, setCar, allRoute, startDate, endDate, isE
           _.map(res?.data?.data, (item) => {
             Array.prototype.push.apply(departureTime, item?.merchant_route_nodes);
           })
+          setItemCar([])
           setAddCar(contractCar)
+          setIsLoad(false)
         }
       })
       .catch(err => {
         message.error("Có lỗi xảy ra!")
       })
 
-  }, []);
+  }, [isActive, isEdit]);
 
   const onRefreshModal = () => {
     getDataAll();
-}
+  }
 
   const onUpdate = useCallback(async (itemCar) => {
     const payload = {
@@ -69,7 +73,7 @@ const ContractCar = ({ className, car, setCar, allRoute, startDate, endDate, isE
         }
       })
       .catch(err => {
-        message.error("Có lỗi xảy ra hehehehe!")
+        message.error("Có lỗi xảy ra !")
       })
   }, [itemCar]);
 
@@ -80,6 +84,7 @@ const ContractCar = ({ className, car, setCar, allRoute, startDate, endDate, isE
   }, [car, setData, getDataAll]);
 
 
+
   return (
     <div className={className}>
       <Row gutter={[16, 16]}>
@@ -87,14 +92,14 @@ const ContractCar = ({ className, car, setCar, allRoute, startDate, endDate, isE
           <Button className="btn-add" onClick={() => setShowModal(true)} style={{ backgroundColor: '#01579B', color: '#fff', borderRadius: 6, height: 35, width: 120 }}> Thêm xe</Button>
         </Col>
         <Col span={24} style={{ width: 'calc(100% - 10px)' }}>
-          <TableList
-            data={data}
-            setCar={setCar}
-            allRoute={allRoute}
-            setData={setData}
-            startDate={startDate}
-            endDate={endDate}
-          />
+            <TableList
+              data={data}
+              setCar={setCar}
+              allRoute={allRoute}
+              setData={setData}
+              startDate={startDate}
+              endDate={endDate}
+            />
         </Col>
         <Drawer
           destroyOnClose
@@ -115,6 +120,9 @@ const ContractCar = ({ className, car, setCar, allRoute, startDate, endDate, isE
             itemCar={itemCar}
             allRoute={allRoute}
             onHiddenModal={onHiddenModal}
+            setIsActive={setIsActive}
+            isActive={isActive}
+            isLoad={isLoad}
           />
         </Drawer>
       </Row>

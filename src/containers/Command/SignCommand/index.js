@@ -5,7 +5,7 @@
 //   const [refuse , setRefuse ] = useState([]);         //từ chối
 
 
-import { Tabs, message, Col, Button, Drawer, Spin } from 'antd';
+import { Tabs, message, Col, Button, Drawer, Spin, Modal } from 'antd';
 import React, { useState, useCallback, useEffect } from 'react';
 import styled from "styled-components";
 import Expected from './Expected';
@@ -20,10 +20,13 @@ const SignCommand = ({
     className,
 }) => {
     const [isShowModal, setShowModal] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [itemSelected, setItemSelected] = useState([]);
     const [allData, setAllData] = useState([]);
     const [allRoute, setAllRoute] = useState([]);
+
+
 
     const [params, setParams] = useState({
         date_from: moment(),
@@ -37,6 +40,16 @@ const SignCommand = ({
     const onHiddenModal = useCallback(() => {
         setShowModal(false);
     });
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
 
     const getAllData = useCallback(async () => {
         const payload = {
@@ -95,10 +108,15 @@ const SignCommand = ({
         });
     };
 
-    const onSign = useCallback(async () => {
+    const onSignAll = useCallback(async () => {
+        const payload = {
+            ids: itemSelected
+        }
         if (itemSelected.length > 0) {
-            command.getCommand(itemSelected).then(res => {
+            command.signCommand(payload).then(res => {
                 if (res.status === 200) {
+                    onRefreshList()
+                    handleCancel()
                 }
             }).catch(err => {
                 message.error("Có lỗi xảy ra !")
@@ -109,6 +127,23 @@ const SignCommand = ({
         }
     }, [itemSelected]);
 
+
+
+    const onSign = useCallback(async (ids) => {
+        var arr = [];
+        arr.push(ids);
+        const payload = {
+            ids: arr
+        }
+        command.signCommand(payload).then(res => {
+            if (res.status === 200) {
+                onRefreshList()
+                message.success("Kí lệnh thành công.");
+            }
+        }).catch(err => {
+            message.error("Có lỗi xảy ra !")
+        })
+    }, []);
 
 
     const onRefreshList = () => {
@@ -128,7 +163,7 @@ const SignCommand = ({
             </div>
             <Tabs defaultActiveKey="1" style={{ width: '100%' }} onChange={onChange}>
                 <Tabs.TabPane tab="Dự kiến" key="1">
-                    <Filter params={params} setParams={setParams} allRoute={allRoute} onSign={onSign} />
+                    <Filter params={params} setParams={setParams} allRoute={allRoute} showModal={showModal} />
                     <Expected
                         data={allData}
                         params={params}
@@ -137,6 +172,7 @@ const SignCommand = ({
                         itemSelected={itemSelected}
                         onRefreshList={onRefreshList}
                         loading={loading}
+                        onSign={onSign}
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Đang thực hiện" key="2">
@@ -148,10 +184,11 @@ const SignCommand = ({
                         setItemSelected={setItemSelected}
                         itemSelected={itemSelected}
                         loading={loading}
+                        onRefreshList={onRefreshList}
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Từ chối" key="3">
-                    <Filter params={params} setParams={setParams} allRoute={allRoute} onSign={onSign} />
+                    <Filter params={params} setParams={setParams} allRoute={allRoute} />
                     <Refuse
                         data={allData}
                         params={params}
@@ -162,6 +199,30 @@ const SignCommand = ({
                     />
                 </Tabs.TabPane>
             </Tabs>
+            <Modal title="Thông báo" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
+                <div style={{ textAlign: 'center', fontSize: 16, fontFamily: 'Nunito', fontWeight: 600 }}>Bạn có chắc chắn muốn ký những lệnh này không ?</div>
+                <div
+                    className="action"
+                    style={{
+                        width: "100%",
+                        background: "#fff",
+                        textAlign: "center",
+                        marginTop:20
+                    }}
+                >
+                    <Button type="danger" style={{ color: '#fff', borderRadius: 6, height: 35, width: 120 }} onClick={handleCancel}>
+                        Thoát
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                        onClick={onSignAll}
+                        type="primary"
+                        style={{ color: '#fff', borderRadius: 6, height: 35, width: 120 }}
+                    >
+                        Ký lệnh
+                    </Button>
+                </div>
+            </Modal>
             <Drawer
                 destroyOnClose
                 width={"80%"}
@@ -205,4 +266,5 @@ export default styled(SignCommand)`
     font-family: Nunito !important;
     color:#01579B !important;
 }
+
 `;
