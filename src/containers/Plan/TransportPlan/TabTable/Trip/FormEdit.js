@@ -392,10 +392,14 @@ const FormEdit = ({
                         return (
                             <Button
                                 onClick={e => {
+                                    console.log(e);
                                     let newButtonItem = [...scheduleTrip];
 
                                     newButtonItem.push(item);
-                                    setScheduleTrip(newButtonItem);
+                                    const newRecordSchedule = [...newButtonItem].sort((a, b) =>
+                                        a > b ? 1 : -1
+                                    );
+                                    setScheduleTrip(newRecordSchedule);
                                 }}
                                 style={{
                                     width: 40,
@@ -404,7 +408,7 @@ const FormEdit = ({
                                     borderColor: '#3f3f3f',
                                     color: '#000',
                                     borderRadius: 0,
-                                    // background: (buttonItem.choosed && item == buttonItem.item) && '#01579B'
+                                    background: (scheduleTrip.includes(item)) && '#01579B'
                                 }}
                                 defaultValue={(buttonItem.choosed && item == buttonItem.item) && item}
                             >
