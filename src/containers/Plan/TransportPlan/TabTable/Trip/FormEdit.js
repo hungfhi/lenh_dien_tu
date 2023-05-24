@@ -406,7 +406,7 @@ const FormEdit = ({
                                     padding: 0,
                                     height: 40,
                                     borderColor: '#3f3f3f',
-                                    color: '#000',
+                                    color: (scheduleTrip.includes(item)) ? '#fff' : '#000',
                                     borderRadius: 0,
                                     background: (scheduleTrip.includes(item)) && '#01579B'
                                 }}
