@@ -25,6 +25,13 @@ const category = {
     delCommand(payload) {
         return axios.delete(`${domain.ServiceAddress}/commands/${payload?.id}`,{ data:payload});
     },
+    signCommand(payload) {
+        return axios.post(`${domain.ServiceAddress}/commands/merchant-sign`,payload);
+    },
+    
+    viewCommand(payload) {
+        return axios.get(`${domain.ServiceAddress}/commands/${payload?.ids}/view`,payload);
+    }
 }
 
 export default category

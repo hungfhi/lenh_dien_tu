@@ -9,6 +9,7 @@ import FormAddTime from "./FormAddTime";
 const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,onRefreshList }) => {
 
   const [data, setData] = useState(time);
+  const [isActive, setIsActive] = useState(false);
   const [itemTime, setItemTime] = useState([]);
   const [addTime, setAddTime] = useState();
   const [params, setParams] = useState({
@@ -30,7 +31,7 @@ const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,
     const payload = {
       merchant_id: isEdit?.merchant_id,
       stations: arr,
-      contract_id: isEdit?.id,
+      contract_id: !isActive ? isEdit?.id : undefined,
       // route:undefined,
 
     }
@@ -53,7 +54,7 @@ const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,
         message.error("Có lỗi xảy ra!")
       })
 
-  }, []);
+  }, [isEdit,isActive]);
 
   const onRefreshModal = () => {
     getDataAll();
@@ -118,6 +119,8 @@ const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,
             itemTime={itemTime}
             allRoute={allRoute}
             onHiddenModal={onHiddenModal}
+            isActive={isActive}
+            setIsActive={setIsActive}
           />
         </Drawer>
     </Row>

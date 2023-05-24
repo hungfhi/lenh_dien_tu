@@ -8,7 +8,7 @@ import TableList from './TableList';
 import _ from "lodash"
 import moment from 'moment';
 
-const Expected = ({ className, allRoute, data, params, setParams, onRefreshList, setIdRow,loading, setItemSelected, itemSelected }) => {
+const Expected = ({ className, allRoute, data, params, setParams, onRefreshList, setIdRow,loading, setItemSelected, itemSelected,onSign }) => {
 
     const [total, setTotal] = useState(0);
     return (
@@ -19,6 +19,7 @@ const Expected = ({ className, allRoute, data, params, setParams, onRefreshList,
                         params={params}
                         data={data}
                         total={total}
+                        onSign={onSign}
                         onRefreshList={onRefreshList}
                         setParams={setParams}
                         setItemSelected={setItemSelected}

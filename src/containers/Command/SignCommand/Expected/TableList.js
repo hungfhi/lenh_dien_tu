@@ -12,7 +12,8 @@ import moment from 'moment';
 const { confirm } = Modal;
 const { TextArea } = Input;
 
-const TableList = memo(({ className, data, params, setParams, onRefreshList, itemSelected, setItemSelected, total }) => {
+const TableList = memo(({ className, data, params, setParams, onRefreshList, itemSelected, setItemSelected, total, onSign }) => {
+  const [form] = Form.useForm();
   const [allMerchant, setAllMerchant] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allDriver, setAllDriver] = useState([]);
@@ -33,7 +34,7 @@ const TableList = memo(({ className, data, params, setParams, onRefreshList, ite
     })
   };
 
-  const [form] = Form.useForm();
+
 
 
 
@@ -77,7 +78,7 @@ const TableList = memo(({ className, data, params, setParams, onRefreshList, ite
     if (!selected) {
       setItemSelected([])
     } else {
-      if (itemSelected.length !==0) { // Trường hợp click vào xóa tất cả khi chưa full item
+      if (itemSelected.length !== 0) { // Trường hợp click vào xóa tất cả khi chưa full item
         setItemSelected([])
       } else {
         let selectKeyNew = [];
@@ -308,7 +309,8 @@ const TableList = memo(({ className, data, params, setParams, onRefreshList, ite
               <Button
                 type="link"
                 icon={<EditOutlined />}
-              // onClick={() => onEdit(ids)}
+                disabled={record?.first_driver?.id !== undefined && record?.vehicle?.id !== undefined ? false : true}
+                onClick={() => onSign(ids)}
               />
             </Tooltip>
           </div>
@@ -361,7 +363,7 @@ const TableList = memo(({ className, data, params, setParams, onRefreshList, ite
         pagination={false}
       />
       {renderContent()}
-      <div style={{marginTop:-38,fontFamily:'Nunito', fontWeight: 600,color:'red'}}>Điều kiện để ký 1 lệnh: Có điều độ BKS + Lái xe 1</div>
+      <div style={{ marginTop: -38, fontFamily: 'Nunito', fontWeight: 600, color: 'red' }}>Điều kiện để ký 1 lệnh: Có điều độ BKS + Lái xe 1</div>
       <Modal title={<div style={{ fontFamily: 'Nunito', fontSize: 18, fontWeight: 700 }}>Huỷ lệnh</div>} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} closable={false} footer={null} destroyOnClose className={className}>
         <Form
           className={className}

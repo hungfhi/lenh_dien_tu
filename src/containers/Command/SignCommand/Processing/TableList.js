@@ -1,18 +1,34 @@
-import { EditOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { Button, Modal, Pagination, Row, Tooltip } from "antd";
+import { EyeOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { Button, Modal, Pagination, Row, Tooltip, Form, message, Input } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
 import PropTypes from "prop-types";
 import { memo, useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
-import { category } from "configs";
+import { category, command } from "configs";
 import _ from 'lodash'
 import moment from 'moment';
 const { confirm } = Modal;
-
-const TableList = memo(({ className, data, params, setParams, onEdit, allDriver, onRefreshList, setIdRow, itemSelected, setItemSelected, total, allMerchant }) => {
+const { TextArea } = Input;
+const TableList = memo(({ className, data, params, onView, setParams, onEdit, allDriver, onRefreshList, setIdRow, itemSelected, setItemSelected, total, allMerchant }) => {
+  const [form] = Form.useForm();
   const [vehicle, setVehicle] = useState([]);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [idSelect, setIdSelect] = useState(undefined);
+  const showModal = (ids) => {
+    setIsModalOpen(true);
+    setIdSelect(ids)
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setIdSelect(undefined)
+    form.setFieldsValue({
+      reason: ""
+    })
+  };
 
   const getDataVehicle = useCallback(async () => {
     category.getVehicle()
@@ -37,38 +53,23 @@ const TableList = memo(({ className, data, params, setParams, onEdit, allDriver,
     getDataVehicle();
   }, [getDataVehicle]);
 
-  const onRow = (id) => {
-    setIdRow(id)
-  }
 
-
-  const _handleSelectAll = async (selected, selectedRows, changeRows) => {
-    if (!selected) {
-      setItemSelected([])
-    } else {
-      if (data.length === itemSelected.length) { // Trường hợp click vào xóa tất cả khi chưa full item
-        setItemSelected([])
-      } else {
-        let selectKeyNew = [];
-        await selectedRows.map((item) => {
-          selectKeyNew.push(item.id)
-        })
-        await setItemSelected(selectKeyNew);
-      }
+  const onFinish = async (values) => {
+    const payload = {
+      id: idSelect,
+      reason: values?.reason
     }
-  }
-
-  const _handleSelect = (record, status) => {
-    if (!itemSelected.includes(record?.id)) {
-      const selectKeyNew = [...itemSelected]
-      selectKeyNew.push(record?.id)
-      setItemSelected(selectKeyNew)
-    } else {
-      const selectKeyNew = [...itemSelected]
-      const index = selectKeyNew.indexOf(record.id);
-      selectKeyNew.splice(index, 1);
-      setItemSelected(selectKeyNew)
-    }
+    command.delCommand(payload)
+      .then(res => {
+        if (res.status === 200) {
+          message.success('Huỷ lệnh thành công.')
+          onRefreshList()
+          setIsModalOpen(false);
+        }
+      })
+      .catch(err => {
+        message.error('Có lỗi xảy ra!')
+      })
   };
 
   const columns = [
@@ -119,7 +120,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, allDriver,
       width: 80,
       render: (value) => {
         return (
-          <div style={{textAlign:'center'}}>{value?.code}</div>
+          <div style={{ textAlign: 'center' }}>{value?.code}</div>
         )
       }
     },
@@ -144,7 +145,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, allDriver,
       dataIndex: "second_driver",
       width: 170,
       render: (text, record, row) => {
-        return (<div>{`${text?.first_name} ${text?.last_name}`}</div>)
+        return (<div>{`${text?.first_name !== undefined ? text?.first_name : ''} ${text?.last_name !== undefined ? text?.last_name : ''}`}</div>)
       }
     },
     {
@@ -152,7 +153,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, allDriver,
       dataIndex: "code",
       width: 170,
       render: (text, record, row) => {
-        return (<div>{`${text?.first_name} ${text?.last_name}`}</div>)
+        return (<div>{`${text?.first_name !== undefined ? text?.first_name : ''} ${text?.last_name !== undefined ? text?.last_name : ''}`}</div>)
       }
     },
     {
@@ -160,29 +161,48 @@ const TableList = memo(({ className, data, params, setParams, onEdit, allDriver,
       dataIndex: "attendant",
       width: 170,
       render: (text, record, row) => {
-        return (<div>{`${text?.first_name} ${text?.last_name}`}</div>)
+        return (<div>{`${text?.first_name !== undefined ? text?.first_name : ''} ${text?.last_name !== undefined ? text?.last_name : ''}`}</div>)
       }
     },
     {
       title: "Trạng thái",
-      dataIndex: "code",
+      dataIndex: "status",
       width: 150,
       render: (text, record, row) => {
         return (
-          <div style={{ textAlign: 'center', color: '#F4511E' }}>Chưa ký</div>
+          <div style={{ textAlign: 'center', color: '#F4511E' }}>{text?.name}</div>
         )
       }
     },
     {
-      title: "Lý do",
-      dataIndex: "reason_canceled",
-      width: 200,
+      title: "Thao tác",
+      width: 80,
+      dataIndex: "active",
+      fixed: "right",
       render: (text, record, row) => {
+        const ids = record.id
+        const command_code = record.command_code
+        
         return (
-          <div>{text}</div>
+          <div style={{ textAlign: 'center' }}>
+            <Tooltip placement="topLeft">
+              <Button
+                type="link"
+                icon={<CloseCircleOutlined style={{ color: 'red' }} />}
+                onClick={() => showModal(ids)}
+              />
+            </Tooltip>
+            <Tooltip placement="topLeft">
+              <Button
+                type="link"
+                icon={<EyeOutlined />}
+                onClick={() => onView(command_code)}
+              />
+            </Tooltip>
+          </div>
         )
       }
-    },
+    }
 
   ];
 
@@ -217,11 +237,6 @@ const TableList = memo(({ className, data, params, setParams, onEdit, allDriver,
   return (
     <div className={className}>
       <DefineTable
-        rowSelection={{
-          selectedRowKeys: itemSelected,
-          onSelect: _handleSelect,
-          onSelectAll: _handleSelectAll,
-        }}
         rowKey="id"
         columns={columns}
         dataSource={data}
@@ -229,7 +244,47 @@ const TableList = memo(({ className, data, params, setParams, onEdit, allDriver,
         pagination={false}
       />
       {renderContent()}
-
+      <Modal title={<div style={{ fontFamily: 'Nunito', fontSize: 18, fontWeight: 700 }}>Huỷ lệnh</div>} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} closable={false} footer={null} destroyOnClose className={className}>
+        <Form
+          className={className}
+          onFinish={onFinish}
+          name="control-hooks"
+          initialValues={{
+            reason: '',
+          }}
+          form={form}
+        >
+          <Form.Item
+            name="reason"
+            rules={[{ required: true, message: 'Vui lòng nhập lí do!' }]}
+          >
+            <TextArea style={{ height: 80, resize: 'none' }}
+              placeholder="Nhập lý do huỷ . . ." />
+          </Form.Item>
+          <div
+            className="action"
+            style={{
+              position: "absolute",
+              right: 0,
+              width: "100%",
+              padding: "10px 9px",
+              background: "#fff",
+              textAlign: "left",
+            }}
+          >
+            <Button type="danger" style={{ height: 35 }} onClick={handleCancel}>
+              Thoát
+            </Button>
+            <Button
+              htmlType="submit"
+              type="primary"
+              style={{ height: 35, float: "right" }}
+            >
+              {itemSelected ? "Cập nhật" : "Thêm mới"}
+            </Button>
+          </div>
+        </Form>
+      </Modal>
     </div >
   );
 });
@@ -237,5 +292,20 @@ TableList.propTypes = {
   className: PropTypes.any,
 };
 export default styled(TableList)`
-  
+.ant-modal-body {
+  padding: 8px !important;
+  font-size: 14px;
+  line-height: 1.5715;
+  word-wrap: break-word;
+}
+.ant-form-item {
+  margin-bottom: 0px !important;
+}
+.ant-modal-header {
+  color: rgba(0, 0, 0, 0.85);
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 2px 2px 0 0;
+  text-align: center;
+}
 `;

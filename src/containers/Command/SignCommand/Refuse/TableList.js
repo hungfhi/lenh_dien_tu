@@ -165,11 +165,11 @@ const TableList = memo(({ className, data, params, setParams, onEdit, allDriver,
     },
     {
       title: "Trạng thái",
-      dataIndex: "code",
+      dataIndex: "status",
       width: 150,
       render: (text, record, row) => {
         return (
-          <div style={{ textAlign: 'center', color: '#F4511E' }}>Chưa ký</div>
+          <div style={{ textAlign: 'center', color: '#F4511E' }}>{text?.name}</div>
         )
       }
     },
@@ -217,11 +217,11 @@ const TableList = memo(({ className, data, params, setParams, onEdit, allDriver,
   return (
     <div className={className}>
       <DefineTable
-        rowSelection={{
-          selectedRowKeys: itemSelected,
-          onSelect: _handleSelect,
-          onSelectAll: _handleSelectAll,
-        }}
+        // rowSelection={{
+        //   selectedRowKeys: itemSelected,
+        //   onSelect: _handleSelect,
+        //   onSelectAll: _handleSelectAll,
+        // }}
         rowKey="id"
         columns={columns}
         dataSource={data}

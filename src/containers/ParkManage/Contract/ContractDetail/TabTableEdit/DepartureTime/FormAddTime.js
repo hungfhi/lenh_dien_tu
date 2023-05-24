@@ -1,4 +1,4 @@
-import { Button, Modal, Pagination, Row, Col, Select } from "antd";
+import { Button, Modal, Pagination, Row, Col, Select, Checkbox } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
 import PropTypes from "prop-types";
@@ -9,7 +9,10 @@ import { Ui } from "utils/Ui";
 let inputTimer = null;
 const { confirm } = Modal;
 
-const TableList = memo(({ className, params, addTime, allRoute, itemTime, setItemTime, onHiddenModal, setParams, onUpdate }) => {
+const TableList = memo(({ className, params, addTime, allRoute, itemTime, setItemTime, onHiddenModal, setParams, onUpdate,isActive,setIsActive }) => {
+    const onChange = (e) => {
+        setIsActive(e.target.checked)
+    };
 
     const _changeQuery = useCallback(
         (payload) => {
@@ -68,7 +71,7 @@ const TableList = memo(({ className, params, addTime, allRoute, itemTime, setIte
         {
             title: "Mã tuyến",
             width: 80,
-            dataIndex: "merchant_route_id",
+            dataIndex: "route_id",
             fixed: 'left',
             render: (text, record, index) => {
                 const name = allRoute.find(item => item?.id === text)?.route_code;
@@ -79,7 +82,7 @@ const TableList = memo(({ className, params, addTime, allRoute, itemTime, setIte
         },
         {
             title: "Tên tuyến",
-            dataIndex: "merchant_route_id",
+            dataIndex: "route_id",
             width: 160,
             render: (text, record, index) => {
                 const name = allRoute.find(item => item?.id === text)?.name;
@@ -117,8 +120,6 @@ const TableList = memo(({ className, params, addTime, allRoute, itemTime, setIte
                         options={allRoute}
                     />
                 </Col>
-                <Col span={4}>
-                </Col>
                 <Col span={10}>
                     <div>Biển kiểm sát</div>
                     <Select
@@ -134,6 +135,11 @@ const TableList = memo(({ className, params, addTime, allRoute, itemTime, setIte
                         options={allRoute}
                     />
                 </Col>
+                <Col span={4}>
+                        <div style={{ marginTop: 25 }}>
+                            <Checkbox onChange={onChange} />&nbsp; Trùng lặp
+                        </div>
+                    </Col>
             </Row>
             <DefineTable
                 rowSelection={{
