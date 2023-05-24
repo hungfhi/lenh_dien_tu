@@ -8,6 +8,7 @@ import { memo, useCallback } from "react";
 import _ from "lodash"
 import moment from "moment";
 import styled from "styled-components";
+import { Ui } from "utils/Ui";
 const format = 'HH:mm';
 const { confirm } = Modal;
 let inputTimer = null;
@@ -88,14 +89,14 @@ const TableList = ({ className, data, setData, params, total, itemSelected, onTr
 
 
     const onDelRow = async (row) => {
-        console.log(row);
+        // console.log(row);
         const departure_time = row?.departure_time.slice(0, 5);
         const payload = {
             direction_id: row?.direction?.id,
             depature_time: departure_time,
             merchant_route_id: row?.id
         }
-        console.log(payload);
+        // console.log(payload);
         plan.deleteAssignTime(payload).then(res => {
             if (res.status === 200) {
                 let dataClone = _.cloneDeep(data);
@@ -107,6 +108,35 @@ const TableList = ({ className, data, setData, params, total, itemSelected, onTr
             }
         })
     };
+
+    const renderItem = (item) => {
+        switch (item) {
+            case 1:
+                return 'Thứ 2'
+                break;
+            case 2:
+                return 'Thứ 3'
+                break;
+            case 3:
+                return 'Thứ 4'
+                break;
+            case 4:
+                return 'Thứ 5'
+                break;
+            case 5:
+                return 'Thứ 6'
+                break;
+            case 6:
+                return 'Thứ 7'
+                break;
+            case 8:
+                return 'Chủ nhật'
+                break;
+
+            default:
+                break;
+        }
+    }
 
     const columns = [
         {
@@ -121,32 +151,36 @@ const TableList = ({ className, data, setData, params, total, itemSelected, onTr
             title: "Kế hoạch",
             dataIndex: "name",
             render: (text, record) => {
-                // const newRecordSchedule = [...record?.schedule].sort((a, b) =>
-                //     a > b ? 1 : -1
-                // );
+                // console.log(record);
+                const newRecordSchedule = record?.schedule && [...record?.schedule].sort((a, b) =>
+                    a > b ? 1 : -1
+                );
 
                 return (
                     <div style={{ display: 'flex' }}>
                         <Col style={{ display: 'flex', alignItems: 'center' }} span={23}>
-                            {/* <div>
+                            {record?.type_apply?.id == 1 &&
+                                <div>
+                                    {record?.type_apply?.name} {newRecordSchedule && '-'} {newRecordSchedule?.map((item, index) => {
+
+                                        return item + (index == (newRecordSchedule.length - 1) ? '' : ', ');
+                                    })}
+                                </div>
+                            }
+                            {record?.type_apply?.id == 2 &&
+                            <div>
                                 {record?.type_apply?.name} {newRecordSchedule && '-'} {newRecordSchedule?.map((item, index) => {
 
-                                    return item + (index == (newRecordSchedule.length - 1) ? '' : ', ');
-                                })}
-                            </div> */}
-                            <div>
-                                {record?.type_apply?.name} {record?.schedule && '-'} {record?.schedule?.map((item, index) => {
-
-                                    return item + (index == (record?.schedule.length - 1) ? '' : ', ');
+                                    return renderItem(item) + (index == (newRecordSchedule.length - 1) ? '' : ', ');
                                 })}
                             </div>
+                            }
                         </Col>
                         <Popconfirm
                             title="Chắc chắn xoá ?"
                             onConfirm={() => onConfirm(record)}
                             onCancel={cancel}
                             style={{ justifyContent: 'end' }}
-                            okText="Xoá"
                             placement="topLeft"
                             cancelText="Huỷ"
                         >

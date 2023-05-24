@@ -93,6 +93,7 @@ const TableList = ({ className, data, params, setParams, onEdit, onRefreshList, 
                     <div style={{ textAlign: 'center' }}>
                         <Tooltip placement="topLeft">
                             <Button
+                            style={{ width: '100%' }}
                                 type="link"
                                 icon={<EditOutlined />}
                                 onClick={() => onEdit(record?.id)}

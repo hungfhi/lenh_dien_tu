@@ -1,5 +1,7 @@
 import { Col, Drawer, Spin } from 'antd';
+import { category } from 'configs';
 import React, { useCallback, useEffect, useState } from 'react';
+import { Ui } from 'utils/Ui';
 import TableList from './TableList';
 import Update from './Update';
 
@@ -22,19 +24,41 @@ const Trip = ({ itemSelected }) => {
         setItemTripSelected(null);
     }
 
+    // const onRefreshList = () => {
+    //     setDataA(dataA);
+    //     setDataB(dataB)
+    // }
+
+    // useEffect(() => {
+    //     setDataA(dataA);
+    // }, [dataA]);
+    // useEffect(() => {
+    //     setDataB(dataB);
+    // }, [dataB]);
+
+    const getDataTable = useCallback(async () => {
+        // setLoading(true);
+        category.getMerchantRoutes().then(res => {
+            if (res.status === 200) {
+                // console.log(res);
+                // setData(res?.data?.data);
+                // setTotal(res?.data?.meta?.total);
+            }
+            // setLoading(false);
+        }).catch(err => {
+            // if (err.response?.status === 422 && err.response?.data?.errors) {
+            //     message.warn(err.response.data?.errors[0].msg)
+            //     message.error('Error!')
+            // }
+            Ui.showError({ message: 'Có lỗi xảy ra' });
+        });
+    }, []);
+
     const onRefreshList = () => {
-        setDataA(dataA);
-        setDataB(dataB)
+        // getDataTable();
     }
 
-    useEffect(() => {
-        setDataA(dataA);
-    }, [dataA]);
-    useEffect(() => {
-        setDataB(dataB);
-    }, [dataB]);
-
-    console.log(itemTripSelected);
+    // console.log(itemTripSelected);
 
     return (
         <>
@@ -94,7 +118,7 @@ const Trip = ({ itemSelected }) => {
                             isShowModalTripPlan={isShowModalTripPlan}
                             data={itemTripSelected?.direction?.id == 1 ? dataA : dataB}
                             setData={itemTripSelected?.direction?.id == 1 ? setDataA : setDataB}
-                            // allRoute={allRoute}
+                        // allRoute={allRoute}
                         />
                     ) : <div><div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spin spinning /></div></div>
                 }

@@ -19,7 +19,8 @@ const FormEdit = ({
     allVehicle,
     allUnit,
 }) => {
-    const [isActive, setActive] = useState(itemSelected ? (itemSelected?.is_active == 1 ? true : false) : true);
+
+    const [isActive, setActive] = useState(itemVehicleSelected ? (itemVehicleSelected?.is_active == 1 ? true : false) : true);
 
     const [form] = Form.useForm();
 
@@ -140,7 +141,7 @@ const FormEdit = ({
                             type="primary"
                             style={{ height: 35, float: "right" }}
                         >
-                            {itemSelected ? "Cập nhật" : "Thêm mới"}
+                            {itemVehicleSelected ? "Cập nhật" : "Thêm mới"}
                         </Button>
                     </div>
                 </Row>

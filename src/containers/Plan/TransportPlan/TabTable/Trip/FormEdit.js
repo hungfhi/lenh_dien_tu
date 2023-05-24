@@ -21,13 +21,10 @@ const FormEdit = ({
 
     const [typeApply, setTypeApply] = useState(itemTripSelected && itemTripSelected?.type_apply?.id);
     const [buttonChooseByDay, setButtonChooseByDay] = useState(null);
-    const [scheduleTrip, setScheduleTrip] = useState(typeApply == 1 ? (itemTripSelected && itemTripSelected?.schedule) : []);
+    const [scheduleTrip, setScheduleTrip] = useState(itemTripSelected && itemTripSelected?.schedule);
 
-    console.log(scheduleTrip);
-    const [buttonItem, setButtonItem] = useState({
-        item: null,
-        choosed: false
-    })
+    // console.log(scheduleTrip);
+    const [buttonItem, setButtonItem] = useState(false)
 
     const [form] = Form.useForm();
     const onFinish = async (values) => {
@@ -45,7 +42,7 @@ const FormEdit = ({
     }
 
     const pushAllDay = (month, year) => {
-        console.log(month, year);
+        // console.log(month, year);
         let newSchedule = [];
 
         switch (month) {
@@ -139,7 +136,7 @@ const FormEdit = ({
     }
 
     const pushEvenDay = (month, year) => {
-        console.log(month, year);
+        // console.log(month, year);
         let newSchedule = [];
 
         switch (month) {
@@ -256,7 +253,7 @@ const FormEdit = ({
     }
 
     const pushOddDay = (month, year) => {
-        console.log(month, year);
+        // console.log(month, year);
         let newSchedule = [];
 
         switch (month) {
@@ -372,6 +369,12 @@ const FormEdit = ({
         }
     }
 
+    console.log(scheduleTrip);
+
+    // const changeColor = (item) => {
+    //     item && setButtonItem(!buttonItem)
+    // }
+
     const renderButtonAllDay = () => {
         const date = new Date();
         const newDate = [];
@@ -384,12 +387,13 @@ const FormEdit = ({
             <>
                 <Col span={6}></Col>
                 <Col style={{ justifyContent: 'center', marginTop: 20 }} span={12}>
-                    {newDate.map(item => {
-                        let newButtonItem = [];
+                    {newDate.map((item, index) => {
 
                         return (
                             <Button
                                 onClick={e => {
+                                    let newButtonItem = [...scheduleTrip];
+
                                     newButtonItem.push(item);
                                     setScheduleTrip(newButtonItem);
                                 }}
@@ -400,7 +404,7 @@ const FormEdit = ({
                                     borderColor: '#3f3f3f',
                                     color: '#000',
                                     borderRadius: 0,
-                                    background: (buttonItem.choosed && item == buttonItem.item) && '#01579B'
+                                    // background: (buttonItem.choosed && item == buttonItem.item) && '#01579B'
                                 }}
                                 defaultValue={(buttonItem.choosed && item == buttonItem.item) && item}
                             >
@@ -423,7 +427,7 @@ const FormEdit = ({
         setScheduleTrip(scheduleTrip);
     }, [scheduleTrip]);
 
-    console.log(scheduleTrip);
+    // console.log(scheduleTrip);
 
     return (
         <div className={className}>
@@ -460,14 +464,14 @@ const FormEdit = ({
                             name="type_apply"
                         >
                             <Select
-                                // defaultValue={typeApply}
+                                defaultValue={typeApply}
                                 onChange={e => {
                                     onChangeTypeApply(e);
                                     setScheduleTrip([]);
                                 }}
                             >
                                 <Select.Option value={1}>Theo ngày</Select.Option>
-                                <Select.Option value={2}>Theo thứ</Select.Option>
+                                <Select.Option value={2}>Theo tuần</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -543,10 +547,11 @@ const FormEdit = ({
                                 >Chọn ngày trong tháng</Button>
                             </Col>
 
-                            {buttonChooseByDay == 4 &&
-                                renderButtonAllDay()
-                            }
+
                         </>
+                    }
+                    {typeApply == 1 && buttonChooseByDay == 4 &&
+                        renderButtonAllDay()
                     }
 
                     {typeApply == 2 &&

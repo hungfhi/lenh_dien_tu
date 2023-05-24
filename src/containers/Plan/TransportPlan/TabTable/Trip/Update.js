@@ -19,25 +19,24 @@ const Update = ({ className,
     data,
     allRoute }) => {
 
-    console.log(data);
+    // console.log(data);
 
     const onSave = useCallback(async (values) => {
-        console.log(values);
-        // const payload = {
-        //     merchant_route_node_id: itemTripSelected && itemTripSelected?.id,
-        //     schedule: values?.schedule,
-        //     type_apply: values?.type_apply
-        // };
+        // console.log(values);
+        const payload = {
+            schedule: values?.schedule,
+            type_apply: values?.type_apply
+        };
         // console.log(payload);
-        // plan.updateAssignNode(payload).then(res => {
-        //     Ui.showSuccess({ message: "Thành công" });
-        //     onHiddenModalTripPlan();
-        //     let dataClone = _.cloneDeep(data);
-        //     dataClone.find(item => item.id === itemTripSelected?.id && (item.schedule = payload?.schedule, true));
-        //     setData(dataClone)
-        // }).catch(err => {
-        //     Ui.showError({ message: 'Có lỗi xảy ra' });
-        // });
+        plan.updateAssignNode(itemTripSelected?.id, payload).then(res => {
+            Ui.showSuccess({ message: "Thành công" });
+            onHiddenModalTripPlan();
+            let dataClone = _.cloneDeep(data);
+            dataClone.find(item => item.id === itemTripSelected?.id && (item.schedule = payload?.schedule, true) && (item.type_apply.id = payload?.type_apply, true));
+            setData(dataClone)
+        }).catch(err => {
+            Ui.showError({ message: 'Có lỗi xảy ra' });
+        });
     });
 
     return (
