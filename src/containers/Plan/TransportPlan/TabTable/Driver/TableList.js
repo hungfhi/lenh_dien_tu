@@ -31,7 +31,7 @@ const TableList = ({ className, data, setData, itemSelected, onEdit, onRefreshLi
         });
     };
 
-    console.log(data);
+    // console.log(data);
 
     const columns = [
         {

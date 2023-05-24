@@ -83,7 +83,8 @@ const FormEdit = ({
                             Thoát
                         </Button>
                         <Button
-                            htmlType="submit"
+                            // htmlType="submit"
+                            onClick={onHiddenModal}
                             type="primary"
                             style={{ height: 35, float: "right" }}
                         >

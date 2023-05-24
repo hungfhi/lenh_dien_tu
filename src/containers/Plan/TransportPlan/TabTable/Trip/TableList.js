@@ -129,7 +129,7 @@ const TableList = ({ className, data, setData, params, total, itemSelected, onTr
             case 6:
                 return 'Thứ 7'
                 break;
-            case 8:
+            case 7:
                 return 'Chủ nhật'
                 break;
 
@@ -152,26 +152,26 @@ const TableList = ({ className, data, setData, params, total, itemSelected, onTr
             dataIndex: "name",
             render: (text, record) => {
                 // console.log(record);
-                const newRecordSchedule = record?.schedule && [...record?.schedule].sort((a, b) =>
-                    a > b ? 1 : -1
-                );
+                // const newRecordSchedule = record?.schedule && [...record?.schedule].sort((a, b) =>
+                //     a > b ? 1 : -1
+                // );
 
                 return (
                     <div style={{ display: 'flex' }}>
                         <Col style={{ display: 'flex', alignItems: 'center' }} span={23}>
                             {record?.type_apply?.id == 1 &&
                                 <div>
-                                    {record?.type_apply?.name} {newRecordSchedule && '-'} {newRecordSchedule?.map((item, index) => {
+                                    {record?.type_apply?.name} {record?.schedule && '-'} {record?.schedule?.map((item, index) => {
 
-                                        return item + (index == (newRecordSchedule.length - 1) ? '' : ', ');
+                                        return item + (index == (record?.schedule.length - 1) ? '' : ', ');
                                     })}
                                 </div>
                             }
                             {record?.type_apply?.id == 2 &&
                             <div>
-                                {record?.type_apply?.name} {newRecordSchedule && '-'} {newRecordSchedule?.map((item, index) => {
+                                {record?.type_apply?.name} {record?.schedule && '-'} {record?.schedule?.map((item, index) => {
 
-                                    return renderItem(item) + (index == (newRecordSchedule.length - 1) ? '' : ', ');
+                                    return renderItem(item) + (index == (record?.schedule.length - 1) ? '' : ', ');
                                 })}
                             </div>
                             }

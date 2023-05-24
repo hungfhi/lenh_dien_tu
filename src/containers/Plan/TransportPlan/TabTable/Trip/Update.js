@@ -31,9 +31,10 @@ const Update = ({ className,
         plan.updateAssignNode(itemTripSelected?.id, payload).then(res => {
             Ui.showSuccess({ message: "Thành công" });
             onHiddenModalTripPlan();
-            let dataClone = _.cloneDeep(data);
-            dataClone.find(item => item.id === itemTripSelected?.id && (item.schedule = payload?.schedule, true) && (item.type_apply.id = payload?.type_apply, true));
-            setData(dataClone)
+            // let dataClone = _.cloneDeep(data);
+            // dataClone.find(item => item.id === itemTripSelected?.id && (item.schedule = payload?.schedule, true) && (item.type_apply.id = payload?.type_apply, true));
+            // setData(dataClone)
+            onRefreshList();
         }).catch(err => {
             Ui.showError({ message: 'Có lỗi xảy ra' });
         });
