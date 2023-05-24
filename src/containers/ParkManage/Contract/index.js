@@ -15,8 +15,6 @@ const { TabPane } = Tabs;
 const Index = ({ className, profile }) => {
 
 
-  const user = useSelector((state) => state?.rootReducer?.user);
-
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [stations, setStations] = useState([]);
@@ -44,6 +42,7 @@ const Index = ({ className, profile }) => {
     station.getContract(params)
       .then(res => {
         if (res.status === 200) {
+          setLoading(false);
           setTotal(res?.data?.meta?.total)
           manage.getStation(payload)
             .then(res1 => {
@@ -84,7 +83,6 @@ const Index = ({ className, profile }) => {
           message.error('Error!')
         }
       })
-    await setLoading(false);
   }, [params]);
   const getTransports = useCallback(async () => {
       const payload = {

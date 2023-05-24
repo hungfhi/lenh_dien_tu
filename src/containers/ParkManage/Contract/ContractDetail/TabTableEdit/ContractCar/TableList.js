@@ -6,6 +6,7 @@ import {
   InputNumber,
   Menu,
   Modal,
+  message,
   TimePicker
 } from "antd";
 import { DefineTable } from "components";
@@ -14,10 +15,11 @@ import { useState, useEffect, useCallback } from "react";
 import moment from "moment";
 import styled from "styled-components";
 import { EditOutlined } from "@ant-design/icons";
+import { station } from "configs";
 const format = 'HH:mm';
 let inputTimer = null;
 const { RangePicker } = DatePicker;
-const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCar, startDate, endDate }) => {
+const Social = ({ className, data, allRoute,startDate, endDate }) => {
 
   function disableDateRanges(range = { startDate: false, endDate: false }) {
     const { startDate, endDate } = range;
@@ -36,126 +38,77 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
   }
 
 
-  const _handleSelectAll = async (selected, selectedRows, changeRows) => {
-    if (!selected) {
-      setItemCar([])
-    } else {
-      if (data.length === itemCar.length) { // Trường hợp click vào xóa tất cả khi chưa full item
-        setItemCar([])
-      } else {
-        let selectKeyNew = [];
-        await selectedRows.map((item) => {
-          selectKeyNew.push(item.id)
-        })
-        await setItemCar(selectKeyNew);
-      }
-    }
-  }
-
-  const _handleSelect = (record, status) => {
-    if (!itemCar.includes(record.id)) {
-      const selectKeyNew = [...itemCar]
-      selectKeyNew.push(record.id)
-      setItemCar(selectKeyNew)
-    } else {
-      const selectKeyNew = [...itemCar]
-      const index = selectKeyNew.indexOf(record.id);
-      selectKeyNew.splice(index, 1);
-      setItemCar(selectKeyNew)
-    }
-  };
-
-
   const onChange = useCallback((id, nameColumn, e) => {
-    let dataClone = _.cloneDeep(data);
-    if (inputTimer) {
-      clearTimeout(inputTimer);
+    let payload = {
+      id: id
     }
-
     if (nameColumn === 'start_date') {
       let startDate = e && e.length > 0 ? moment(e[0].startOf("day")) : undefined;
       let endDate = e && e.length > 0 ? moment(e[1].endOf("day")) : undefined;
-      dataClone.find(p => p.id === id && (p.start_date = moment(startDate).format("YYYY-MM-DD"), true));
-      dataClone.find(p => p.id === id && (p.end_date = moment(endDate).format("YYYY-MM-DD"), true));
-      setData(dataClone)
-      setCar(dataClone)
+      payload = { ...payload, start_date: moment(startDate).format("YYYY-MM-DD"), end_date: moment(endDate).format("YYYY-MM-DD") };
     }
-    // if (nameColumn === 'end_date') {
-    //   dataClone.find(p => p.id === id && (p.end_date = moment(e).format("YYYY-MM-DD"), true));
-    //   setData(dataClone)
-    //   setCar(dataClone)
-    // }
     if (nameColumn === 'trip_number') {
-      inputTimer = setTimeout(() => {
-        dataClone.find(p => p.id === id && (p.trip_number = e, true));
-        setData(dataClone)
-        setCar(dataClone)
-      }, 400);
+      payload = { ...payload, trip_number: e };
     }
     if (nameColumn === 'service_price') {
-      inputTimer = setTimeout(() => {
-        dataClone.find(p => p.id === id && (p.service_price = e, true));
-        setData(dataClone)
-        setCar(dataClone)
-      }, 400);
+      payload = { ...payload, service_price: e };
     }
     if (nameColumn === 'is_fixed_time') {
-      dataClone.find(p => p.id === id && (p.is_fixed_time = e.target.checked === true ? 1 : 0, true));
-      setData(dataClone)
+      payload = { ...payload, is_fixed_time: e.target.checked === true ? 1 : 0 };
     }
     if (nameColumn === 'fixed_time') {
-      dataClone.find(p => p.id === id && (p.fixed_time = moment(e).format("HH:mm"), true));
-      setData(dataClone)
-      setCar(dataClone)
+      payload = { ...payload, fixed_time: moment(e).format("HH:mm") };
     }
     if (nameColumn === 'status') {
-      dataClone.find(p => p.id === id && (p.status = e.target.checked === true ? 2 : 1, true));
-      setData(dataClone)
-      setCar(dataClone)
+      payload = { ...payload, status: e.target.checked === true ? 2 : 1 };
     }
     if (nameColumn === 'start_date_stop') {
       let startDate = e && e.length > 0 ? moment(e[0].startOf("day")) : undefined;
       let endDate = e && e.length > 0 ? moment(e[1].endOf("day")) : undefined;
-      dataClone.find(p => p.id === id && (p.start_date_stop = moment(startDate).format("YYYY-MM-DD"), true));
-      dataClone.find(p => p.id === id && (p.end_date_stop = moment(endDate).format("YYYY-MM-DD"), true));
-      setData(dataClone)
-      setCar(dataClone)
+      payload = { ...payload, start_date_stop: moment(startDate).format("YYYY-MM-DD"), end_date_stop: moment(endDate).format("YYYY-MM-DD") };
     }
-    // if (nameColumn === 'end_date_stop') {
-    //   dataClone.find(p => p.id === id && (p.end_date_stop = moment(e).format("YYYY-MM-DD"), true));
-    //   setData(dataClone)
-    //   setCar(dataClone)
-    // }
     if (nameColumn === 'is_associate_commerce') {
-      dataClone.find(p => p.id === id && (p.is_associate_commerce = e.target.checked === true ? 1 : 0, true));
-      setData(dataClone)
-      setCar(dataClone)
+      payload = { ...payload, is_associate_commerce: e.target.checked === true ? 1 : 0};
     }
-    // if (nameColumn === 'associate_commerce_id') {
-    //   dataClone.find(p => p.id === id && (p.associate_commerce_id = e, true));
-    //   setData(dataClone)
-    // }
     if (nameColumn === 'note') {
-      inputTimer = setTimeout(() => {
-        dataClone.find(p => p.id === id && (p.note = e, true));
-        setData(dataClone)
-        setCar(dataClone)
-      }, 400);
+      payload = { ...payload, note: e };
     }
     if (nameColumn === 'is_pay_later') {
-      dataClone.find(p => p.id === id && (p.is_pay_later = e.target.checked === true ? 1 : 0, true));
-      setData(dataClone)
-      setCar(dataClone)
+      payload = { ...payload, is_pay_later: e.target.checked === true ? 1 : 0 };
     }
+    if (inputTimer) {
+      clearTimeout(inputTimer);
+    }
+    inputTimer = setTimeout(() => {
+      station.updateCar(payload)
+      .then(res => {
+          if (res.status === 200) {
+          }
+      })
+      .catch(err => {
+          message.error("Có lỗi xảy ra !")
+      })
+    }, 500);
 
   }, [data]);
 
 
   let columns = [
     {
+      title: "STT",
+      width: 80,
+      dataIndex: "route_id",
+      fixed: 'left',
+      render: (text, record, index) => {
+        return {
+          children: <div style={{textAlign:'center'}}>{index + 1}</div>,
+        };
+      },
+    },
+    {
       title: "Mã tuyến",
       width: 80,
-      dataIndex: "merchant_route_id",
+      dataIndex: "route_id",
       fixed: 'left',
       render: (text, record, index) => {
         const name = allRoute.find(item => item?.id === text)?.route_code;
@@ -166,7 +119,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
     },
     {
       title: "Tên tuyến",
-      dataIndex: "merchant_route_id",
+      dataIndex: "route_id",
       width: 160,
       render: (text, record, index) => {
         const name = allRoute.find(item => item?.id === text)?.name;
@@ -197,23 +150,13 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
           <RangePicker
             bordered={false}
             placeholder={["Từ", "Đến"]}
+            defaultValue={record.start_date !== null ? [moment(record.start_date), moment(record.end_date)] : ''}
             style={{ width: '100%' }}
             allowClear={false}
             format={'DD-MM-YYYY'}
-            disabledDate={disableDateRanges({ startDate: moment(startDate).format("YYYY-MM-DD"),endDate:moment(endDate).format("YYYY-MM-DD") })}
-            // ranges={{
-            //   "Hôm nay": [moment(), moment()],
-            //   "Cả tháng": [
-            //     moment().startOf("month"),
-            //     moment().endOf("month"),
-            //   ],
-            //   "Cả tuần": [moment(), moment().weekday(7)],
-            //   "Tuần tới": [moment().weekday(7), moment().weekday(13)],
-            // }}
+            disabledDate={disableDateRanges({ startDate: moment(startDate).format("YYYY-MM-DD"), endDate: moment(endDate).format("YYYY-MM-DD") })}
             onChange={(dates) => {
               onChange(id, nameColumn, dates)
-              // let startDate = dates && dates.length > 0 ? moment(dates[0].startOf("day")) : undefined;
-              // let endDate = dates && dates.length > 0 ? moment(dates[1].endOf("day")) : undefined;
             }}
           />
         )
@@ -298,7 +241,8 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
         const nameColumn = "fixed_time"
         return (
           <TimePicker
-            allowClear={record?.is_fixed_time == 1 ? false:true}
+            allowClear={record?.is_fixed_time == 1 ? false : true}
+            defaultValue={text !== null ? moment(text, format) : ''}
             format={format}
             bordered={false}
             style={{ width: '100%' }}
@@ -318,7 +262,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
         const nameColumn = "status"
         return (
           <div style={{ textAlign: 'center' }}>
-            <Checkbox onChange={(e) => { onChange(id, nameColumn, e) }} />
+            <Checkbox defaultChecked={text?.value!==1?true:false} onChange={(e) => { onChange(id, nameColumn, e) }} />
           </div>
         )
       },
@@ -332,8 +276,9 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
         const nameColumn = "start_date_stop"
         return (
           <RangePicker
-            allowClear={record?.status == 1 ? false:true}
+            allowClear={record?.status == 1 ? false : true}
             placeholder={["Từ", "Đến"]}
+            defaultValue={record.start_date_stop !== null ? [moment(record.start_date_stop), moment(record.end_date_stop)] : ''}
             bordered={false}
             style={{ width: '100%' }}
             format={'DD-MM-YYYY'}
@@ -353,7 +298,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
         const nameColumn = "is_associate_commerce"
         return (
           <div style={{ textAlign: 'center' }}>
-            <Checkbox onChange={(e) => { onChange(id, nameColumn, e) }} />
+            <Checkbox defaultChecked={text?.value} onChange={(e) => { onChange(id, nameColumn, e) }} />
           </div>
         )
       },
@@ -361,12 +306,17 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
     {
       title: "Mã hiệp thương",
       dataIndex: "associate_commerce_id",
-      width: 70,
+      width: 80,
       render: (text, record, index) => {
         const id = record.id
         const nameColumn = "associate_commerce_id"
-        return (
-          <div style={{textAlign:'center'}}>2</div>
+        return (<div style={{ textAlign: 'center' }}>2</div>
+          // <Input bordered={false}
+          //   onChange={(e) => onChange(id, nameColumn, e)}
+          //   defaultValue={text}
+          //   placeholder="Hiệp thương"
+          //   style={{ width: '100%', color: '#01579B', fontWeight: 700, fontFamily: 'Nunito' }}
+          //   suffix={<EditOutlined />} />
         )
       },
     },
@@ -396,7 +346,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
         const nameColumn = "is_pay_later"
         return (
           <div style={{ textAlign: 'center' }}>
-            <Checkbox onChange={(e) => { onChange(id, nameColumn, e) }} />
+            <Checkbox defaultChecked={text?.value} onChange={(e) => { onChange(id, nameColumn, e) }} />
           </div>
         )
       },
@@ -421,12 +371,6 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
     <div className={className}>
       <DefineTable
         bordered
-        rowSelection={{
-          selectedRowKeys: itemCar,
-          onSelect: _handleSelect,
-          onSelectAll: _handleSelectAll,
-        }}
-        rowKey="id"
         columns={columns}
         dataSource={data}
         scroll={{ x: 'calc(700px + 10%)', y: 240 }}

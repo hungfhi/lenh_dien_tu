@@ -6,6 +6,7 @@ import TabTable from "./TabTable";
 import moment from "moment";
 import _ from "lodash";
 import { manage, station } from "configs";
+import TabTableEdit from "./TabTableEdit";
 const { Option } = Select;
 const { TextArea } = Input;
 let inputTimer = null;
@@ -18,8 +19,10 @@ const FormAddEdit = ({
     transport
 }) => {
     const [car, setCar] = useState([]);
+    const [carEdit, setCarEdit] = useState(itemSelected?.contract_merchant_route_vehicles);
     const [isLoad, setIsLoad] = useState(false);
     const [time, setTime] = useState([]);
+    const [timeEdit, setTimeEdit] = useState(itemSelected?.contract_merchant_route_nodes);
     const [merchant, setMerchant] = useState(undefined);
     const [stati, setStati] = useState([]);
     const [itemCar, setItemCar] = useState([]);
@@ -141,6 +144,7 @@ const FormAddEdit = ({
                 start_date_stop: items.start_date_stop || null,
                 end_date_stop: items.end_date_stop || null,
                 is_associate_commerce: items.is_associate_commerce || null,
+                associate_commerce_id: 2,
                 note: items.note || null,
                 is_pay_later: items.is_pay_later || null,
             });
@@ -326,7 +330,6 @@ const FormAddEdit = ({
                         >
                             <Input placeholder={"Nhập E-mail!"} disabled />
                         </Form.Item>
-
                     </Col>
                     <Col span={6}>
                         <Row>
@@ -356,6 +359,7 @@ const FormAddEdit = ({
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
                             <DatePicker
+                                disabled={itemSelected ? true : false}
                                 disabledDate={disableDateRanges({ startDate: moment(moment().format("YYYY-MM-DD"), "YYYY-MM-DD"), endDate: moment(endDate).format("YYYY-MM-DD") })}
                                 allowClear={false}
                                 style={{ width: "100%" }}
@@ -375,6 +379,7 @@ const FormAddEdit = ({
                         >
                             <DatePicker
                                 allowClear={false}
+                                disabled={itemSelected ? true : false}
                                 style={{ width: '100%' }}
                                 format={'DD-MM-YYYY'}
                                 disabledDate={disableDateRanges({ startDate: moment(startDate).format("YYYY-MM-DD") })}
@@ -385,13 +390,42 @@ const FormAddEdit = ({
                         </Form.Item>
                     </Col>
                     <br />
-                    <br />
-                    {car.length !== 0 || time.length !== 0 ? <Col span={24}>
+                    <br /> {
+                        itemSelected ? <Col span={24}>
+                            <Spin spinning={isLoad}>
+                                <TabTableEdit
+                                    car={carEdit}
+                                    setCar={setCar}
+                                    setTime={setTime}
+                                    setItemCar={setItemCar}
+                                    itemCar={itemCar}
+                                    time={timeEdit}
+                                    setItemTime={setItemTime}
+                                    itemTime={itemTime}
+                                    startDate={startDate}
+                                    endDate={endDate} 
+                                    isLoad={isLoad}
+                                    setIsLoad={setIsLoad}
+                                    />
+                            </Spin>
+                        </Col> : <Col span={24}></Col>}
+
+                    {(car.length !== 0 || time.length !== 0) && !itemSelected ? <Col span={24}>
                         <Spin spinning={isLoad}>
-                            <TabTable car={car} setCar={setCar} setTime={setTime} setItemCar={setItemCar} itemCar={itemCar} time={time} setItemTime={setItemTime} itemTime={itemTime} startDate={startDate} endDate={endDate} />
+                            <TabTable
+                                car={car}
+                                setCar={setCar}
+                                setTime={setTime}
+                                setItemCar={setItemCar}
+                                itemCar={itemCar}
+                                time={time}
+                                setItemTime={setItemTime}
+                                itemTime={itemTime}
+                                startDate={startDate}
+                                endDate={endDate} />
                         </Spin>
-                    </Col> :  <Col span={24}></Col>}
-                    
+                    </Col> : <Col span={24}></Col>}
+
 
                     <Row style={{ marginTop: 10 }}>
                         <span style={{ fontWeight: 600 }}>Kết thúc hợp đồng &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -416,21 +450,36 @@ const FormAddEdit = ({
                     <Button style={{ backgroundColor: '#9B0101', color: '#fff', borderRadius: 6, height: 35, width: 120 }} onClick={onHiddenModal}>
                         Thoát
                     </Button>
-
-                    <Button
-                        htmlType="submit"
-                        disabled={itemSelected ? true : false}
-                        style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: itemSelected ? '#8c8c8c' : '#01579B', color: itemSelected ? '' : '#fff', marginLeft: 20 }}
-                    >
-                        {itemSelected ? "Cập nhật" : "Thêm mới"}
-                    </Button>
+                    {
+                        !itemSelected ? <Button
+                            htmlType="submit"
+                            disabled={itemSelected ? true : false}
+                            style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: itemSelected ? '#8c8c8c' : '#01579B', color: itemSelected ? '' : '#fff', marginLeft: 20 }}
+                        >
+                            Thêm mới
+                        </Button> : <Button
+                            disabled={itemSelected ? true : false}
+                            style={{ borderRadius: 6, height: 35, width: 150, backgroundColor: '#FEA032', color: '#fff', marginLeft: 20 }}
+                        >
+                            Kết thúc hợp đông
+                        </Button>
+                    }
                     {itemSelected ?
                         <Button
-                            style={{ height: 35, float: "right", backgroundColor: '#00A991', color: '#fff' }}
+                        style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: '#F57F17', color: '#fff', marginLeft: 20 }}
+                        >
+                            In
+                        </Button>
+                        : ''}
+                        {itemSelected ?
+                        <Button
+                        style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: '#00A991', color: '#fff', marginLeft: 20 }}
                         >
                             Lịch sử
                         </Button>
                         : ''}
+
+
                 </div>
             </Form>
 

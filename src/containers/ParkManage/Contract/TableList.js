@@ -5,9 +5,10 @@ import moment from 'moment';
 import PropTypes from "prop-types";
 import { useState } from "react";
 import styled from "styled-components";
-
+import { useNavigate } from "react-router-dom";
 
 const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
+  const navigate = useNavigate();
   const [stickyCss, setStickyCss] = useState(10);
   const [scollX, setScollX] = useState(10);
 
@@ -51,37 +52,37 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
               <thead className={` ${className} sticky`}>
                 <tr>
                   <th
-                    className="header fixTopOne stickyLeft"
+                    className="header"
                     rowspan="2"
-                    style={{ minWidth: 85, zIndex: 2, }}
+                    style={{ minWidth: 85 }}
                   >
                     <div>Mã hợp đồng</div>
                   </th>
                   <th
-                    className="header fixTopOne stickyLeft"
+                    className="header"
                     rowspan="2"
-                    style={{ minWidth: 85, zIndex: 2, }}
+                    style={{ minWidth: 85 }}
                   >
                     <div>Số hợp đồng</div>
                   </th>
                   <th
-                    className="header fixTopOne stickyLeft"
+                    className="header"
                     rowspan="2"
-                    style={{ minWidth: 150, zIndex: 2, }}
+                    style={{ minWidth: 150 }}
                   >
                     <div>Tên hợp đồng</div>
                   </th>
                   <th
-                    className="header fixTopOne stickyLeft"
+                    className="header"
                     rowspan="2"
-                    style={{ minWidth: 150, zIndex: 2, }}
+                    style={{ minWidth: 150 }}
                   >
                     <div>Thời hạn</div>
                   </th>
                   <th
-                    className="header fixTopOne  stickyLeft"
+                    className="header"
                     rowspan="2"
-                    style={{ minWidth: 150, zIndex: 2, }}
+                    style={{ minWidth: 150 }}
                   >
                     <div>Tên khách hàng</div>
                   </th>
@@ -90,12 +91,12 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                     let resultScroll = stickyCss && scollX >= item.width
                     return (
                       <th
-                        className={`tg-0pky header text-center fixTopOne`}
+                        className={`tg-0pky header text-center`}
                         style={{
                           top: 0,
                           position: stickyCss && "relative",
                           border: resultScroll && 'none',
-                          minWidth: 100, zIndex: 2,
+                          minWidth: 100
                         }}
                         key={index}
                       >
@@ -107,23 +108,23 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                     );
                   })}
                   <th
-                    className="header fixTopOne fixLeftOne stickyLeft"
+                    className="header"
                     rowspan="2"
-                    style={{ minWidth: 85, zIndex: 2, }}
+                    style={{ minWidth: 85 }}
                   >
                     <div>Active</div>
                   </th>
                   <th
-                    className="header fixTopOne fixLeftOne stickyLeft"
+                    className="header"
                     rowspan="2"
-                    style={{ minWidth: 200, zIndex: 2, }}
+                    style={{ minWidth: 150 }}
                   >
                     <div>Địa chỉ</div>
                   </th>
                   <th
-                    className="header fixTopOne fixLeftOne stickyLeft"
+                    className="header"
                     rowspan="2"
-                    style={{ minWidth: 85, zIndex: 2, }}
+                    style={{ minWidth: 85 }}
                   >
                     <div>Thao tác</div>
                   </th>
@@ -135,7 +136,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                   let _renderTT = (
                     <>
                       <td
-                        className={`tg-73oq customerBorderRight border borderBottom`}
+                        className={`tg-73oq border borderBottom`}
                         style={{
                           minWidth: "125px", color: 'rgba(0, 0, 0, 0.85)'
                         }}
@@ -181,24 +182,24 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                         }}
                         rowSpan="1"
                         key={`${index}-5`}
-                      >
+                      > <div className="d-flex">{item?.merchant?.name}</div>
                       </td>
                     </>
                   );
                   let _renderActive = (
                     <>
                       <td
-                        className={`tg-73oq text-center customerBorderRight borderLeft fixLeft borderBottom`}
+                        className={`tg-73oq text-center customerBorderRight borderBottom`}
                         style={{
                           minWidth: "85px",
                         }}
                         rowSpan="1"
                         key={`${index}-6`}
                       >
-                        {renderActive(item?.is_active)}
+                        {renderActive(item?.status_contract?.value)}
                       </td>
                       <td
-                        className={`tg-73oq customerBorderRight borderLeft fixLeft borderBottom`}
+                        className={`tg-73oq customerBorderRight borderLeft borderBottom`}
                         style={{
                           minWidth: "125px",
                         }}
@@ -208,7 +209,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                         <div>{item?.address}</div>
                       </td>
                       <td
-                        className={`tg-73oq text-center customerBorderRight borderLeft fixLeft borderBottom`}
+                        className={`tg-73oq text-center customerBorderRight borderLeft borderBottom`}
                         style={{
                           minWidth: "85px",
                         }}
@@ -219,7 +220,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                           <Tooltip placement="topLeft">
                             <Button
                               type="link"
-                              onClick={() => onEdit(item?.id)}
+                              onClick={() => navigate(`/contract-detail?id=${item?.id}`, { replace: false })}
                             >
                               <i class="fa-regular fa-pen-to-square" style={{ color: '#01579B', fontSize: 20 }}></i>
                             </Button>
@@ -297,10 +298,10 @@ table {
 }
 
 td:first-child, th:first-child {
-  position:sticky;
+  position:sticky !important;
   left:0;
   z-index:1;
-  border-right: 1px solid #e5e5e8 !important;
+  border: 1px solid #e5e5e8 !important;
 }
 td:last-child, th:last-child {
   position:sticky;
@@ -402,11 +403,6 @@ td:last-child, th:last-child {
 .fixLeft {
   left: 0px;
   z-index: 1;
-  position: sticky;
-}
-.fixLeftOne {
-  left: 125px;
-  z-index: 2;
   position: sticky;
 }
 .fixTop {

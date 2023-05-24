@@ -73,7 +73,8 @@ const RouterStart = memo(({ className, data, setData, params, total, itemSelecte
     }
     if (inputTimer) {
       clearTimeout(inputTimer);
-    } inputTimer = setTimeout(() => {
+    } 
+    inputTimer = setTimeout(() => {
       category.updatePlace(payload)
         .then(res => {
           let dataClone = _.cloneDeep(data);

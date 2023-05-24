@@ -3,6 +3,7 @@ import { Row, Col, DatePicker, Select, Button, Input, Spin } from "antd";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import _ from "lodash";
+import { useNavigate } from "react-router-dom";
 import { TuyenSelect } from "components";
 import moment from "moment";
 const { RangePicker } = DatePicker;
@@ -11,6 +12,7 @@ const { Option } = Select;
 let inputTimer = null;
 
 const Filter = ({ className, setParams, params, setShowModal, transport }) => {
+  const navigate = useNavigate();
   const [fetching, setFetching] = useState(false);
   const [search, setSearch] = useState(false);
 
@@ -92,7 +94,7 @@ const Filter = ({ className, setParams, params, setShowModal, transport }) => {
           </Select>
         </Col>
         <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', paddingBottom: 10 }}>
-          <Button className="btn-add" onClick={() => setShowModal(true)} style={{ backgroundColor: '#01579B', color: '#fff', borderRadius: 6, height: 35, width: 120 }}> Thêm mới</Button>
+          <Button className="btn-add" onClick={() => navigate(`/contract-detail`, { replace: true })} style={{ backgroundColor: '#01579B', color: '#fff', borderRadius: 6, height: 35, width: 120 }}> Thêm mới</Button>
         </Col>
       </Row>
     </div>
