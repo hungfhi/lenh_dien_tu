@@ -38,8 +38,13 @@ const Trip = ({ itemSelected }) => {
 
     const getDataTable = useCallback(async () => {
         // setLoading(true);
-        category.getMerchantRoutes().then(res => {
+        category.getDetailMerchantRoutes(itemSelected?.id).then(res => {
+            console.log(res);
+                
             if (res.status === 200) {
+                    setDataA(res?.data?.data?.node_a);
+                    setDataB(res?.data?.data?.node_b);
+                
                 // console.log(res);
                 // setData(res?.data?.data);
                 // setTotal(res?.data?.meta?.total);
@@ -53,9 +58,12 @@ const Trip = ({ itemSelected }) => {
             Ui.showError({ message: 'Có lỗi xảy ra' });
         });
     }, []);
+    useEffect(() => {
+        getDataTable();
+    }, []);
 
     const onRefreshList = () => {
-        // getDataTable();
+        getDataTable();
     }
 
     // console.log(itemTripSelected);
