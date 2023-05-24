@@ -13,6 +13,7 @@ const Trip = ({ itemSelected }) => {
     const [dataB, setDataB] = useState(itemSelected?.node_b);
     const [isShowModalTripPlan, setIsShowModalTripPlan] = useState(false);
     const [itemTripSelected, setItemTripSelected] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const onTripPlan = useCallback(async (row) => {
         setIsShowModalTripPlan(true);
@@ -37,19 +38,18 @@ const Trip = ({ itemSelected }) => {
     // }, [dataB]);
 
     const getDataTable = useCallback(async () => {
-        // setLoading(true);
+        setLoading(true);
         category.getDetailMerchantRoutes(itemSelected?.id).then(res => {
-            console.log(res);
-                
+
             if (res.status === 200) {
-                    setDataA(res?.data?.data?.node_a);
-                    setDataB(res?.data?.data?.node_b);
-                
+                setDataA(res?.data?.data?.node_a);
+                setDataB(res?.data?.data?.node_b);
+
                 // console.log(res);
                 // setData(res?.data?.data);
                 // setTotal(res?.data?.meta?.total);
             }
-            // setLoading(false);
+            setLoading(false);
         }).catch(err => {
             // if (err.response?.status === 422 && err.response?.data?.errors) {
             //     message.warn(err.response.data?.errors[0].msg)
@@ -82,12 +82,15 @@ const Trip = ({ itemSelected }) => {
                 >
                     Xuất phát từ bến xe {itemSelected?.route?.start_station?.name}
                 </div>
-                <TableList
-                    data={dataA}
-                    itemSelected={itemSelected}
-                    setData={setDataA}
-                    onTripPlan={onTripPlan}
-                />
+                <Spin spinning={loading}>
+                    <TableList
+                        data={dataA}
+                        itemSelected={itemSelected}
+                        setData={setDataA}
+                        onTripPlan={onTripPlan}
+                    />
+                </Spin>
+
             </Col>
             <Col span={12}>
                 <div
@@ -101,12 +104,15 @@ const Trip = ({ itemSelected }) => {
                 >
                     Xuất phát từ bến xe {itemSelected?.route?.end_station?.name}
                 </div>
-                <TableList
-                    data={dataB}
-                    itemSelected={itemSelected}
-                    setData={setDataB}
-                    onTripPlan={onTripPlan}
-                />
+                <Spin spinning={loading}>
+                    <TableList
+                        data={dataB}
+                        itemSelected={itemSelected}
+                        setData={setDataB}
+                        onTripPlan={onTripPlan}
+                    />
+                </Spin>
+
             </Col>
             <Drawer
                 destroyOnClose
