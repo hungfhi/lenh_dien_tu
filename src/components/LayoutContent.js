@@ -274,9 +274,17 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                     }
                   })
                 })
-                return <Breadcrumb.Item>
-                  <div style={{ color: 'white' }}>{newName}</div>
-                </Breadcrumb.Item>
+                if (name == 'contract-detail') {
+                  return <Breadcrumb.Item>
+                    <div style={{ color: 'white' }}><span style={{cursor:'pointer'}} onClick={() => navigate("/contract", { replace: true })} >Hợp đồng</span> <RightOutlined style={{ fontSize: 12, color: "#fafafa" }} /> Chi tiết hợp đồng</div>
+                  </Breadcrumb.Item>
+                }
+                else {
+                  return <Breadcrumb.Item>
+                    <div style={{ color: 'white' }}>{newName}</div>
+                  </Breadcrumb.Item>
+                }
+
               })}
             </Breadcrumb>
             <div className='fs-14' style={{ color: COLOR_WHITE, padding: DIMENSION_PADDING_NORMAL, fontWeight: 600, display: 'flex' }}>
