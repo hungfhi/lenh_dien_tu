@@ -152,7 +152,7 @@ const TableList = ({ className, data, setData, params, total, itemSelected, onTr
             dataIndex: "name",
             render: (text, record) => {
                 // console.log(record);
-                const newRecordSchedule = [...record?.schedule].sort((a, b) =>
+                const newRecordSchedule = record?.schedule && [...record?.schedule].sort((a, b) =>
                     a > b ? 1 : -1
                 );
 

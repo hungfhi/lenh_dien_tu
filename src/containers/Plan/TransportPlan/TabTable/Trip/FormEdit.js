@@ -24,10 +24,7 @@ const FormEdit = ({
     const [scheduleTrip, setScheduleTrip] = useState(itemTripSelected && itemTripSelected?.schedule);
 
     // console.log(scheduleTrip);
-    const [buttonItem, setButtonItem] = useState({
-        item: null,
-        choosed: false
-    })
+    const [buttonItem, setButtonItem] = useState(false)
 
     const [form] = Form.useForm();
     const onFinish = async (values) => {
@@ -372,6 +369,12 @@ const FormEdit = ({
         }
     }
 
+    console.log(scheduleTrip);
+
+    // const changeColor = (item) => {
+    //     item && setButtonItem(!buttonItem)
+    // }
+
     const renderButtonAllDay = () => {
         const date = new Date();
         const newDate = [];
@@ -384,12 +387,13 @@ const FormEdit = ({
             <>
                 <Col span={6}></Col>
                 <Col style={{ justifyContent: 'center', marginTop: 20 }} span={12}>
-                    {newDate.map(item => {
-                        let newButtonItem = [];
+                    {newDate.map((item, index) => {
 
                         return (
                             <Button
                                 onClick={e => {
+                                    let newButtonItem = [...scheduleTrip];
+
                                     newButtonItem.push(item);
                                     setScheduleTrip(newButtonItem);
                                 }}
@@ -400,7 +404,7 @@ const FormEdit = ({
                                     borderColor: '#3f3f3f',
                                     color: '#000',
                                     borderRadius: 0,
-                                    background: (buttonItem.choosed && item == buttonItem.item) && '#01579B'
+                                    // background: (buttonItem.choosed && item == buttonItem.item) && '#01579B'
                                 }}
                                 defaultValue={(buttonItem.choosed && item == buttonItem.item) && item}
                             >
@@ -543,10 +547,11 @@ const FormEdit = ({
                                 >Chọn ngày trong tháng</Button>
                             </Col>
 
-                            {buttonChooseByDay == 4 &&
-                                renderButtonAllDay()
-                            }
+
                         </>
+                    }
+                    {typeApply == 1 && buttonChooseByDay == 4 &&
+                        renderButtonAllDay()
                     }
 
                     {typeApply == 2 &&
