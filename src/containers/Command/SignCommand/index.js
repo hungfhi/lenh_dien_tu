@@ -161,7 +161,7 @@ const SignCommand = ({
             <div style={{ zIndex: 1, float: 'right', top: 90, right: 33, position: 'absolute', }}>
                 <Button onClick={() => setShowModal(true)} style={{ backgroundColor: '#00A991', color: '#fff', borderRadius: 6, height: 35, width: 120 }}>Tạo lệnh</Button>
             </div>
-            <Tabs defaultActiveKey="1" style={{ width: '100%' }} onChange={onChange}>
+            <Tabs defaultActiveKey={params?.status} style={{ width: '100%' }} onChange={onChange}>
                 <Tabs.TabPane tab="Dự kiến" key="1">
                     <Filter params={params} setParams={setParams} allRoute={allRoute} showModal={showModal} />
                     <Expected
