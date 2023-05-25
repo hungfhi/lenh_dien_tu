@@ -539,7 +539,7 @@ const FormEdit = ({
                                     disabled={buttonChooseByDay == 4 && true}
                                     onClick={e => {
                                         setButtonChooseByDay(4);
-                                        setScheduleTrip(itemTripSelected && itemTripSelected?.schedule);
+                                        setScheduleTrip([]);
                                     }}
                                     style={{
                                         width: '100%',
