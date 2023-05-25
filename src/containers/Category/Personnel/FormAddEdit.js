@@ -213,7 +213,7 @@ const FormAddEdit = ({
                             name="first_name"
                             rules={[{ required: true, message: 'Vui lòng nhập họ đệm' }]}
                         >
-                            <Input placeholder={""} />
+                            <Input placeholder={"Họ đệm"} />
                         </Form.Item>
 
                     </Col>
@@ -223,7 +223,7 @@ const FormAddEdit = ({
                             name="last_name"
                             rules={[{ required: true, message: 'Vui lòng nhập tên' }]}
                         >
-                            <Input placeholder={""} />
+                            <Input placeholder={"Tên"} />
                         </Form.Item>
 
                     </Col>
@@ -236,7 +236,7 @@ const FormAddEdit = ({
                                 { type: "email", message: 'Vui lòng nhập đúng định dạng email' },
                             ]}
                         >
-                            <Input disabled={itemSelected && true || false} placeholder={""} />
+                            <Input disabled={itemSelected && true || false} placeholder={"Email"} />
                         </Form.Item>
                     </Col>
 
@@ -246,13 +246,17 @@ const FormAddEdit = ({
                             name="phone"
                             rules={[
                                 { required: true, message: "Vui lòng nhập số điện thoại" },
+                                // {
+                                //     pattern: new RegExp(/^[0-9]+$/i),
+                                //     message: "Chỉ được nhập số",
+                                // },
                                 {
-                                    pattern: new RegExp(/^[0-9]+$/i),
-                                    message: "Chỉ được nhập số",
+                                    pattern: new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g),
+                                    message: "Ví dụ: 0981914596",
                                 },
                             ]}
                         >
-                            <Input placeholder={""} />
+                            <Input placeholder={"Số điện thoại"} />
                         </Form.Item>
                     </Col>
                     <Col style={{ margin: 0 }} span={12}>
@@ -261,16 +265,22 @@ const FormAddEdit = ({
                             name="staff_code"
                             rules={[{ required: true, message: 'Vui lòng nhập mã nhân viên' }]}
                         >
-                            <Input placeholder={""} />
+                            <Input placeholder={"Mã NV"} />
                         </Form.Item>
                     </Col>
                     <Col style={{ margin: 0 }} span={12}>
                         <div>Căn cước công dân <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
                             name="citizen_identity"
-                            rules={[{ required: true, message: 'Vui lòng nhập CCCD' }]}
+                            rules={[
+                                // { required: true, message: 'Vui lòng nhập CCCD' }
+                                {
+                                    pattern: new RegExp(/^[0-9]{12}$/g),
+                                    message: "CCCD phải có 12 số",
+                                },
+                            ]}
                         >
-                            <Input placeholder={""} />
+                            <Input placeholder={"CCCD"} />
                         </Form.Item>
 
                     </Col>
@@ -308,7 +318,10 @@ const FormAddEdit = ({
                             name="position_id"
                             rules={[{ required: true, message: 'Vui lòng chọn chức vụ' }]}
                         >
-                            <Select defaultValue>
+                            <Select
+                                // defaultValue
+                                placeholder={"Chọn chức vụ"}
+                            >
                                 {listPositions && listPositions.map((item, index) => {
 
                                     return <Select.Option value={item?.id}>{item?.name}</Select.Option>
@@ -325,6 +338,7 @@ const FormAddEdit = ({
                         >
                             <Select
                                 mode="multiple"
+                                placeholder={"Chọn quyền tài khoản"}
                             // onChange={e => {
                             //     listRoles.push({
                             //         value: e
@@ -348,6 +362,7 @@ const FormAddEdit = ({
                         >
                             <Select
                                 mode="multiple"
+                                placeholder={"Chọn mô hình kinh doanh"}
                                 // defaultValue={itemSelected && itemSelected?.user?.model_used?.id || null}
                                 onChange={e => {
                                     setListModels(e);
@@ -388,7 +403,7 @@ const FormAddEdit = ({
                             name="address"
                         // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input placeholder="" />
+                            <Input placeholder="Địa chỉ" />
                         </Form.Item>
 
                     </Col>
@@ -404,7 +419,7 @@ const FormAddEdit = ({
                                 },
                             ]}
                         >
-                            <Input placeholder={""} />
+                            <Input placeholder={"Số GPLX"} />
                         </Form.Item>
 
                     </Col>
@@ -415,7 +430,9 @@ const FormAddEdit = ({
                             name="driving_license_rank_id"
                         // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Select>
+                            <Select
+                                // placeholder="Hạng GPLX"
+                            >
                                 {listDrivingLicenseRank && listDrivingLicenseRank.map((item, index) => {
 
                                     return <Select.Option value={item?.id}>{item?.name}</Select.Option>
