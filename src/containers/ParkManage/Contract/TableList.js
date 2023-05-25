@@ -30,16 +30,16 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
   ];
 
   const renderRatito = (checked) => {
-    return  <div>{checked!==0 ? <div style={{fontSize:18}}>✔</div> :""}</div>
+    return <div>{checked !== 0 ? <div style={{ fontSize: 18 }}>✔</div> : ""}</div>
   }
 
   const renderActive = (is_active) => {
     if (is_active === 1) {
-      return <div style={{ color: '#00A991', fontWeight: 700, fontFamily: 'Nunito' }}>Đang hoạt động</div>
+      return '#00A991'
     } else if (is_active === 2) {
-      return <div style={{ color: '#9B0101', fontWeight: 700, fontFamily: 'Nunito' }}>Kết thúc hợp đồng</div>
+      return '#9B0101'
     }
-    else return <div style={{ color: '#F57F17', fontWeight: 700, fontFamily: 'Nunito' }}>Hết hạn hợp đồng</div>
+    else return '#F57F17'
   }
 
 
@@ -196,7 +196,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
                         rowSpan="1"
                         key={`${index}-6`}
                       >
-                        {renderActive(item?.status_contract?.value)}
+                        <div style={{ color: renderActive(item?.status_contract?.value) }}>{item?.status_contract?.name}</div>
                       </td>
                       <td
                         className={`tg-73oq customerBorderRight borderLeft borderBottom`}
