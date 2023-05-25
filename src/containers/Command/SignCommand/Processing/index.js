@@ -1,4 +1,4 @@
-import { Col, Row, Spin, message } from 'antd';
+import { Button, Col, Modal, Row, Spin, message } from 'antd';
 import { category, command } from 'configs';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -12,8 +12,11 @@ const Processing = ({ className, allRoute, data, params, setParams, onRefreshLis
 
     const [itemSelected, setItemSelected] = useState([]);
     const [total, setTotal] = useState(0);
-
-    const onView = useCallback(async (ids) => {
+    const [fileUrl, setfileUrl] = useState(undefined);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = useCallback(async (ids) => {
+        setfileUrl(undefined)
+        setIsModalOpen(true);
         const payload = {
             ids: ids,
             responseType: "blob",
@@ -28,15 +31,30 @@ const Processing = ({ className, allRoute, data, params, setParams, onRefreshLis
                     // document.body.appendChild(link);
                     // link.click();
                     onRefreshList()
-                    const file = new Blob([res.data],{ type: 'application/pdf' });
+                    const file = new Blob([res.data], { type: 'application/pdf' });
+                    // setfileUrl(file)
                     const fileURL = URL.createObjectURL(file);
-                    window.open(fileURL);
+                    setfileUrl(fileURL)
+                    // window.open(fileURL);
                 }
             })
             .catch(err => {
                 message.error("Có lỗi xảy ra !")
             })
     }, []);
+
+    // const showModal = () => {
+    //     setIsModalOpen(true);
+    //     onView()
+    // };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
 
 
 
@@ -57,12 +75,22 @@ const Processing = ({ className, allRoute, data, params, setParams, onRefreshLis
                             setIdRow={setIdRow}
                             allMerchant={allMerchant}
                             allDriver={allDriver}
-                            onView={onView}
+                            showModal={showModal}
                         // setTotal={setTotal}
                         />
                     </Spin>
                 </Col>
             </Row>
+            {/* <Button type="primary" onClick={showModal}>
+                Open Modal
+            </Button> */}
+            <Modal title={null} footer={null} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={1000} bodyStyle={{ height: window.innerHeight-40}} style={{
+                top: 20
+            }}>
+                {fileUrl ? <object data={fileUrl} type="application/pdf" width="100%" height="100%">
+                    <p>Alternative text - include a link <a href={fileUrl}>to the PDF!</a></p>
+                </object> : <Spin>Đang load dữ liệu</Spin>}
+            </Modal>
         </div>
 
     );
@@ -72,4 +100,4 @@ Processing.propTypes = {
     className: PropTypes.any,
 };
 export default styled(Processing)`
-   `;
+`;

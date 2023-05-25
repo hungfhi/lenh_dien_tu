@@ -10,6 +10,7 @@ const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,
 
   const [data, setData] = useState(time);
   const [isActive, setIsActive] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
   const [itemTime, setItemTime] = useState([]);
   const [addTime, setAddTime] = useState();
   const [params, setParams] = useState({
@@ -35,6 +36,7 @@ const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,
       // route:undefined,
 
     }
+    setIsLoad(true)
     station.createTabContract(payload)
       .then(res => {
         if (res.status === 200) {
@@ -48,6 +50,7 @@ const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,
             Array.prototype.push.apply(departureTime, item?.merchant_route_nodes);
           })
           setAddTime(departureTime)
+          setIsLoad(false)
         }
       })
       .catch(err => {
@@ -114,6 +117,7 @@ const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,
             onUpdate={onUpdate}
             addTime={addTime}
             params={params}
+            isLoad={isLoad}
             setParams={setParams}
             setItemTime={setItemTime}
             itemTime={itemTime}

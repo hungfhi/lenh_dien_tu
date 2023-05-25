@@ -30,7 +30,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
   ];
 
   const renderRatito = (checked) => {
-    return <Checkbox checked={checked}></Checkbox>
+    return  <div>{checked!==0 ? <div style={{fontSize:18}}>✔</div> :""}</div>
   }
 
   const renderActive = (is_active) => {

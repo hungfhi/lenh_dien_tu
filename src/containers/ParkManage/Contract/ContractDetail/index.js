@@ -1,15 +1,14 @@
-import { Button, Col, Form, Input, Row, InputNumber, Switch, DatePicker, Checkbox, message, Select, Spin } from "antd";
-import PropTypes from "prop-types";
-import React, { useCallback, useState, useEffect } from "react";
-import styled from "styled-components";
-import moment from "moment";
-import _ from "lodash";
+import { Spin, message } from "antd";
 import { manage, station } from "configs";
-import { useNavigate } from "react-router-dom";
-import TableList from "./TableList";
-import { useLocation } from "react-router-dom";
+import _ from "lodash";
+import moment from "moment";
+import PropTypes from "prop-types";
 import * as qs from "query-string";
-import TableListEdit from "./TableListEdit";
+import { useCallback, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import FormAdd from "./FormAdd";
+import FormEdit from "./FormEdit";
 
 const ContractDetail = ({ className }) => {
     const { search } = useLocation();
@@ -181,7 +180,7 @@ const ContractDetail = ({ className }) => {
         <div className={className}>
             <Spin spinning={loading}>
                 {isEdit ?
-                    <TableListEdit
+                    <FormEdit
                         transport={transport}
                         stations={stationConvert}
                         setStartDate={setStartDate}
@@ -193,7 +192,7 @@ const ContractDetail = ({ className }) => {
                         loading={loading}
                         onRefreshList={onRefreshList}
                     />
-                    : <TableList
+                    : <FormAdd
                         transport={transport}
                         stations={stationConvert}
                         setStartDate={setStartDate}

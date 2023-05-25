@@ -2,76 +2,32 @@ import { Button, Col, Form, Input, Row, InputNumber, Switch, DatePicker, Checkbo
 import PropTypes from "prop-types";
 import React, { useCallback, useState, useEffect, memo } from "react";
 import styled from "styled-components";
-import TabTable from "./TabTable";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import _ from "lodash";
-import TabTableEdit from "./TabTableEdit";
+import TabEdit from "./TabEdit";
 import { station } from "configs";
 const { Option } = Select;
 const { TextArea } = Input;
 let inputTimer = null;
-const TableList = memo(({ className, onSave, itemSelected, stations, transport, startDate, endDate, stationConvert,  setStartDate, setEndDate }) => {
-  
+const TableList = memo(({ className, onSave, isEdit, stations, transport, startDate, endDate, stationConvert, setStartDate, setEndDate, onRefreshList }) => {
   const navigate = useNavigate();
-  const [itemCar, setItemCar] = useState([]);
-  const [itemTime, setItemTime] = useState([]);
+  const [itemCar, setItemCar] = useState(isEdit?.contract_merchant_route_vehicles);
+  const [itemTime, setItemTime] = useState(isEdit?.contract_merchant_route_nodes);
   const [car, setCar] = useState([]);
-  const [carEdit, setCarEdit] = useState(itemSelected?.contract_merchant_route_vehicles);
   const [isLoad, setIsLoad] = useState(false);
   const [time, setTime] = useState([]);
-  const [timeEdit, setTimeEdit] = useState(itemSelected?.contract_merchant_route_nodes);
   const [merchant, setMerchant] = useState(undefined);
   const [stati, setStati] = useState([]);
 
-  const getDataAll = useCallback(async () => {
-    const arr = stati.map((item) => {
-        return item.value
-    })
-    const payload = {
-        merchant_id: merchant,
-        stations: arr
+
+
+  useEffect(() => {
+    if (isEdit) {
+      setCar(isEdit?.contract_merchant_route_vehicles)
+      setTime(isEdit?.contract_merchant_route_nodes)
     }
-    setIsLoad(true)
-    station.createTabContract(payload)
-        .then(res => {
-            if (res.status === 200) {
-                let contractCar = []
-                let departureTime = []
-                _.map(res?.data?.data, (item) => {
-                    Array.prototype.push.apply(contractCar, item?.merchant_route_vehicles);
-                })
-                _.map(res?.data?.data, (item) => {
-                    Array.prototype.push.apply(departureTime, item?.merchant_route_nodes);
-                })
-                setCar(contractCar)
-                setTime(departureTime)
-                setIsLoad(false)
-            }
-        })
-        .catch(err => {
-            if (err.response?.status === 422 && err.response?.data?.errors) {
-                message.warn(err.response.data?.errors[0].msg)
-                setIsLoad(false)
-            }
-        })
-
-}, [merchant, stati, startDate, endDate]);
-
-
-useEffect(() => {
-  if (merchant && stati.length !== 0) {
-      getDataAll();
-  }
-}, [getDataAll, merchant, stati]);
-
-
-useEffect(() => {
-  if (itemSelected) {
-      setCar(itemSelected?.contract_merchant_route_vehicles)
-      setTime(itemSelected?.contract_merchant_route_nodes)
-  }
-}, [getDataAll, merchant, stati]);
+  }, [merchant, stati, isEdit]);
 
   const [form] = Form.useForm();
   const date = (value) => {
@@ -79,7 +35,7 @@ useEffect(() => {
     return d[2] + "-" + d[1] + "-" + d[0];
   }
   const station_id = []
-  _.map(itemSelected?.stations, (item) => {
+  _.map(isEdit?.stations, (item) => {
     return station_id.push(item?.id)
   })
 
@@ -111,47 +67,63 @@ useEffect(() => {
     };
   }
 
+  const onEndContract = useCallback(async () => {
+    const payload = {
+        id: isEdit?.id,
+    }
+    station.endContract(payload)
+        .then(res => {
+            if (res.status === 200) {
+              message.success("Hợp đồng kết thúc!")
+              navigate(`/contract`, { replace: true })
+            }
+        })
+        .catch(err => {
+            message.error("Có lỗi xảy ra !")
+        })
+}, []);
+
 
 
   const onFinish = async (values) => {
     const update_car_contract = []
     let update_node_contract = []
     let car_data = car.filter(function (item) {
-        return itemCar.indexOf(item.id) != -1;
+      return itemCar.indexOf(item.id) != -1;
     });
     _.map(car_data, (items) => {
-        update_car_contract.push({
-            merchant_route_vehicle_id: items.id,
-            start_date: items.start_date || null,
-            end_date: items.end_date || null,
-            trip_number: items.trip_number || null,
-            service_price: items.service_price || null,
-            is_fixed_time: items.is_fixed_time || null,
-            fixed_time: items.fixed_time || null,
-            status: items.status || null,
-            start_date_stop: items.start_date_stop || null,
-            end_date_stop: items.end_date_stop || null,
-            is_associate_commerce: items.is_associate_commerce || null,
-            associate_commerce_id: 2,
-            note: items.note || null,
-            is_pay_later: items.is_pay_later || null,
-        });
+      update_car_contract.push({
+        merchant_route_vehicle_id: items.id,
+        start_date: items.start_date || null,
+        end_date: items.end_date || null,
+        trip_number: items.trip_number || null,
+        service_price: items.service_price || null,
+        is_fixed_time: items.is_fixed_time || null,
+        fixed_time: items.fixed_time || null,
+        status: items.status || null,
+        start_date_stop: items.start_date_stop || null,
+        end_date_stop: items.end_date_stop || null,
+        is_associate_commerce: items.is_associate_commerce || null,
+        associate_commerce_id: 2,
+        note: items.note || null,
+        is_pay_later: items.is_pay_later || null,
+      });
     })
 
     let time_data = time.filter(function (item) {
-        return itemTime.indexOf(item.id) != -1;
+      return itemTime.indexOf(item.id) != -1;
     });
     _.map(time_data, (items) => {
-        update_node_contract.push({
-            merchant_route_node_id: items.id,
-            start_date: items.start_date || null,
-            end_date: items.end_date || null,
-            trip_number: items.trip_number || null,
-            status: items.status || null,
-            start_date_stop: items.start_date_stop || null,
-            end_date_stop: items.end_date_stop || null,
-            note: items.note || null,
-        });
+      update_node_contract.push({
+        merchant_route_node_id: items.id,
+        start_date: items.start_date || null,
+        end_date: items.end_date || null,
+        trip_number: items.trip_number || null,
+        status: items.status || null,
+        start_date_stop: items.start_date_stop || null,
+        end_date_stop: items.end_date_stop || null,
+        note: items.note || null,
+      });
     })
     onSave(values, update_car_contract, update_node_contract)
   };
@@ -159,7 +131,7 @@ useEffect(() => {
   const onFinishFailed = () => {
   };
 
-  const is_full_package = itemSelected?.is_full_package?.value === 1 ? true : false
+  const is_full_package = isEdit?.is_full_package?.value === 1 ? true : false
 
 
   return (
@@ -170,19 +142,19 @@ useEffect(() => {
         onFinish={onFinish}
         name="control-hooks"
         initialValues={{
-          name: itemSelected && itemSelected.name || '',
-          contract_number: itemSelected && itemSelected.contract_number || '',
-          contract_code: itemSelected && itemSelected.contract_code || '',
-          address: itemSelected && itemSelected.address || '',
-          tax_code: itemSelected && itemSelected.tax_code || '',
-          merchant_id: itemSelected && itemSelected.merchant_id || undefined,
-          email: itemSelected && itemSelected.email || '',
-          start_date: itemSelected && moment((date(itemSelected?.start_date))) || moment(),
-          end_date: itemSelected && moment((date(itemSelected?.end_date))) || moment(new Date()).endOf('year'),
+          name: isEdit && isEdit.name || '',
+          contract_number: isEdit && isEdit.contract_number || '',
+          contract_code: isEdit && isEdit.contract_code || '',
+          address: isEdit && isEdit.address || '',
+          tax_code: isEdit && isEdit.tax_code || '',
+          merchant_id: isEdit && isEdit.merchant_id || undefined,
+          email: isEdit && isEdit.email || '',
+          start_date: isEdit && moment((date(isEdit?.start_date))) || moment(),
+          end_date: isEdit && moment((date(isEdit?.end_date))) || moment(new Date()).endOf('year'),
           stations: station_id,
-          is_full_package: is_full_package === 1 ? true : false || true,
+          is_full_package: is_full_package,
           status: 1,
-          overnight_price: itemSelected && itemSelected.overnight_price || '',
+          overnight_price: isEdit && isEdit.overnight_price || '',
         }}
         form={form}
       >
@@ -199,7 +171,7 @@ useEffect(() => {
                 },
               ]}
             >
-              <Input placeholder={"Số hợp đồng"} />
+              <Input placeholder={"Số hợp đồng"} disabled={isEdit ? true : false} />
             </Form.Item>
           </Col>
           <Col span={8}>
@@ -208,7 +180,7 @@ useEffect(() => {
               name="contract_code"
               rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
             >
-              <Input placeholder={"Mã hợp đồng"} />
+              <Input placeholder={"Mã hợp đồng"} disabled={isEdit ? true : false} />
             </Form.Item>
 
           </Col>
@@ -218,7 +190,7 @@ useEffect(() => {
               name="name"
               rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
             >
-              <Input placeholder={"Tên hợp đồng"} />
+              <Input placeholder={"Tên hợp đồng"} disabled={isEdit ? true : false} />
             </Form.Item>
 
           </Col>
@@ -229,7 +201,7 @@ useEffect(() => {
               rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
             >
               <Select
-                disabled={itemSelected ? true : false}
+                disabled={isEdit ? true : false}
                 allowClear={false}
                 placeholder={"Đơn vị vận tải"}
                 showSearch
@@ -261,7 +233,7 @@ useEffect(() => {
               rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
             >
               <Select
-                disabled={itemSelected ? true : false}
+                disabled={isEdit ? true : false}
                 allowClear={false}
                 mode="multiple"
                 placeholder={"Bến xe"}
@@ -338,7 +310,7 @@ useEffect(() => {
               >
                 <InputNumber min={1000} put placeholder={"Nhập giá trị tiền lưu đêm trọn gói"} style={{ width: '100%' }}
                   formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                  parser={value => value.replace(/\$\s?|(,*)/g, '')} disabled
                 />
               </Form.Item>
             </div>
@@ -350,7 +322,7 @@ useEffect(() => {
               rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
             >
               <DatePicker
-                disabled={itemSelected ? true : false}
+                disabled={isEdit ? true : false}
                 disabledDate={disableDateRanges({ startDate: moment(moment().format("YYYY-MM-DD"), "YYYY-MM-DD"), endDate: moment(endDate).format("YYYY-MM-DD") })}
                 allowClear={false}
                 style={{ width: "100%" }}
@@ -370,7 +342,7 @@ useEffect(() => {
             >
               <DatePicker
                 allowClear={false}
-                disabled={itemSelected ? true : false}
+                disabled={isEdit ? true : false}
                 style={{ width: '100%' }}
                 format={'DD-MM-YYYY'}
                 disabledDate={disableDateRanges({ startDate: moment(startDate).format("YYYY-MM-DD") })}
@@ -383,48 +355,26 @@ useEffect(() => {
           <br />
           <br />
           {
-            itemSelected ? <Col span={24}>
+            isEdit ? <Col span={24}>
               <Spin spinning={isLoad}>
-                <TabTableEdit
-                  car={carEdit}
+                <TabEdit
+                  car={car}
                   setCar={setCar}
                   setTime={setTime}
                   setItemCar={setItemCar}
                   itemCar={itemCar}
-                  time={timeEdit}
+                  time={time}
                   setItemTime={setItemTime}
                   itemTime={itemTime}
                   startDate={startDate}
                   endDate={endDate}
                   isLoad={isLoad}
                   setIsLoad={setIsLoad}
+                  isEdit={isEdit}
+                  onRefreshList={onRefreshList}
                 />
               </Spin>
             </Col> : <Col span={24}></Col>}
-
-          {(car.length !== 0 || time.length !== 0) && !itemSelected ? <Col span={24}>
-            <Spin spinning={isLoad}>
-              <TabTable
-                car={car}
-                setCar={setCar}
-                setTime={setTime}
-                setItemCar={setItemCar}
-                itemCar={itemCar}
-                time={time}
-                setItemTime={setItemTime}
-                itemTime={itemTime}
-                startDate={startDate}
-                endDate={endDate} />
-            </Spin>
-          </Col> : <Col span={24}></Col>}
-          <Row style={{ marginTop: 10 }}>
-            <span style={{ fontWeight: 600 }}>Kết thúc hợp đồng &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <span style={{ marginTop: -4 }}>
-              <Form.Item name="status" valuePropName="checked">
-                <Checkbox style={{ color: '#01579B' }} size="large" />
-              </Form.Item>
-            </span>
-          </Row>
         </Row>
         <div
           className="action"
@@ -440,36 +390,23 @@ useEffect(() => {
           <Button style={{ backgroundColor: '#9B0101', color: '#fff', borderRadius: 6, height: 35, width: 120 }} onClick={() => navigate(`/contract`, { replace: true })}>
             Thoát
           </Button>
-          {
-            !itemSelected ? <Button
-              htmlType="submit"
-              disabled={itemSelected ? true : false}
-              style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: itemSelected ? '#8c8c8c' : '#01579B', color: itemSelected ? '' : '#fff', marginLeft: 20 }}
-            >
-              Thêm mới
-            </Button> : <Button
-              disabled={itemSelected ? true : false}
-              style={{ borderRadius: 6, height: 35, width: 150, backgroundColor: '#FEA032', color: '#fff', marginLeft: 20 }}
-            >
-              Kết thúc hợp đồng
-            </Button>
-          }
-          {itemSelected ?
-            <Button
+          <Button
+            disabled={isEdit?.status_contract?.value!==1 ? true : false}
+            style={{ borderRadius: 6, height: 35, width: 150, backgroundColor: isEdit?.status_contract?.value !== 1? "" : '#FEA032', color: isEdit?.status_contract?.value !== 1? "" : '#fff', marginLeft: 20 }}
+            onClick={onEndContract}
+          >
+            Kết thúc hợp đồng
+          </Button>
+          <Button
               style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: '#F57F17', color: '#fff', marginLeft: 20 }}
             >
               In
             </Button>
-            : ''}
-          {itemSelected ?
             <Button
               style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: '#00A991', color: '#fff', marginLeft: 20 }}
             >
               Lịch sử
             </Button>
-            : ''}
-
-
         </div>
       </Form>
 
