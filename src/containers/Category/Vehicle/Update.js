@@ -11,7 +11,9 @@ const UpdateDinhMuc = ({
     className, 
     onHiddenModalEdit,
     onRefreshList,
-    itemSelected
+    itemSelected,
+    products,
+    seatType
   }) => {
     const onSave = async (values) => {
     const params = {
@@ -19,7 +21,8 @@ const UpdateDinhMuc = ({
       insurance_expired_date: moment(values.insurance_expired_date).format('YYYY-MM-DD'),
       registration_expired_date: moment(values.registration_expired_date).format('YYYY-MM-DD'),
       is_active: values?.is_active ? 1: 0,
-      id: itemSelected?.id
+      id: itemSelected?.id,
+      seat_type: values?.seat_type
     }
     category.updateVehicle(params)
           .then(res => {
@@ -31,9 +34,10 @@ const UpdateDinhMuc = ({
               }
           })
           .catch(err => {
+            // console.log(err);
               if (err.response?.status === 422 && err.response?.data?.errors) {
-                  message.warn(err.response.data?.errors[0].msg)
-                  message.error('Error!')
+                  // message.warn(err.response.data?.errors[0].msg)
+                  message.error(err?.response?.data?.message);
               }
           })
 
@@ -45,6 +49,8 @@ const UpdateDinhMuc = ({
           itemSelected={itemSelected}
           onSave={onSave}
           onHiddenModal={onHiddenModalEdit}
+          products={products}
+          seatType={seatType}
         />
     </div>
   );

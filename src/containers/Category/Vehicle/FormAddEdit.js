@@ -5,18 +5,19 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { DIMENSION_PADDING_NORMAL, DIMENSION_PADDING_SMALL } from 'theme/dimensions';
 
-const FormAddEdit = ({ 
-        className,
-        itemSelected,
-        onSave,
-        onHiddenModal,
-        products
-    }) => {
-   
+const FormAddEdit = ({
+    className,
+    itemSelected,
+    onSave,
+    onHiddenModal,
+    products,
+    seatType
+}) => {
+
 
     const [form] = Form.useForm();
 
-    const [isActive, setActive] = useState(itemSelected && itemSelected.is_active?.value ===1?true: false)
+    const [isActive, setActive] = useState(itemSelected && itemSelected.is_active?.value === 1 ? true : false)
 
     const onFinish = async (values) => {
         onSave(values)
@@ -25,14 +26,14 @@ const FormAddEdit = ({
     };
 
     const onChangeDateInsurance = (date, dateString) => {
-        console.log(date, dateString);
+        // console.log(date, dateString);
     };
 
-      const onChangeDateRegistration = (date, dateString) => {
-        console.log(date, dateString);
+    const onChangeDateRegistration = (date, dateString) => {
+        // console.log(date, dateString);
     };
 
-    const onActive =(value)=>{
+    const onActive = (value) => {
         setActive(!value)
         console.log(!value)
     }
@@ -63,59 +64,93 @@ const FormAddEdit = ({
                     registration_number: itemSelected && itemSelected.registration_number || '',
                     product_id: itemSelected && itemSelected.product_id || '',
                     insurance_expired_date: itemSelected && moment((date(itemSelected?.insurance_expired_date))) || moment(),
-                    is_active: itemSelected && itemSelected.is_active?.value ===1?true: false || true,
+                    is_active: itemSelected && itemSelected.is_active?.value === 1 ? true : false || true,
                     registration_expired_date: itemSelected && moment((date(itemSelected?.registration_expired_date))) || moment(),
+                    seat_type: itemSelected && itemSelected?.seat_type?.value
                 }}
                 form={form}
             >
-                <Row>
-                     <Col span={11}>
+                <Row gutter={[16, 0]}>
+                    <Col span={24}>
                         <div style={styles.txtTitle}>Biển kiểm soát<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="license_plate"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                            <Input  placeholder={"Nhập biển kiểm soát"} />
+                            <Input placeholder={"Nhập biển kiểm soát"} />
                         </Form.Item>
 
                     </Col>
-                    <Col span={2}/>
-                    <Col span={11}>
+                    <Col span={12}>
+                        <div style={styles.txtTitle}>Loại ghế<span style={{ color: '#dc2d2d' }}>*</span></div>
+                        <Form.Item
+                            name="seat_type"
+                            rules={[{ required: true, message: 'Vui lòng chọn loại ghế' }]}
+                        >
+                            <Select
+                                showSearch
+                                placeholder="Chọn loại ghế"
+                                // optionFilterProp="children"
+                                // onChange={onChangeProduct}
+                                // onSearch={onSearchProduct}
+                                // filterOption={(input, option) =>
+                                //     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                // }
+                                options={[
+                                    {
+                                        value: 1,
+                                        label: 'Ghế ngồi'
+                                    },
+                                    {
+                                        value: 2,
+                                        label: 'Giường nằm'
+                                    },
+                                ]}
+                            />
+                        </Form.Item>
+
+                    </Col>
+                    <Col span={12}>
                         <div style={styles.txtTitle}>Số chỗ<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="number_seat"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                            rules={[
+                                { required: true, message: 'Vui lòng nhập số chỗ' },
+                                {
+                                    pattern: new RegExp(/^[0-9]+$/i),
+                                    message: "Chỉ được nhập số",
+                                }
+                            ]}
                         >
-                            <Input  placeholder={"Số chỗ"} />
+                            <Input placeholder={"Số chỗ"} />
                         </Form.Item>
 
                     </Col>
-                 
-                    <Col span={11}>
+
+                    <Col span={12}>
                         <div style={styles.txtTitle}>Đăng ký xe<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="registration_number"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập số đăng ký' }]}
                         >
-                            <Input  placeholder={"Nhập số đăng ký"} />
+                            <Input placeholder={"Nhập số đăng ký"} />
                         </Form.Item>
 
                     </Col>
-                    <Col span={2}/>
-                    <Col span={11}>
+                    <Col span={12}>
                         <div style={styles.txtTitle}>Loại xe<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="product_id"
-                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                            rules={[{ required: true, message: 'Vui lòng chọn loại xe' }]}
                         >
                             <Select
                                 showSearch
                                 placeholder="Chọn loại xe"
                                 optionFilterProp="children"
-                                onChange={onChangeProduct}
-                                onSearch={onSearchProduct}
+                                // onChange={onChangeProduct}
+                                // onSearch={onSearchProduct}
                                 filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
                                 options={products}
                             />
@@ -123,40 +158,39 @@ const FormAddEdit = ({
 
                     </Col>
 
-                     <Col span={11}>
+                    <Col span={12}>
                         <div style={styles.txtTitle}>Hạn bảo hiểm xe<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="insurance_expired_date"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                             <DatePicker style={{width:'100%'}} format='DD-MM-YYYY' onChange={onChangeDateInsurance} />
+                            <DatePicker style={{ width: '100%' }} format='DD-MM-YYYY' onChange={onChangeDateInsurance} />
                         </Form.Item>
 
                     </Col>
-                    <Col span={2}/>
-                    <Col span={11}>
+                    <Col span={12}>
                         <div style={styles.txtTitle}>Hạn đăng kiểm xe<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="registration_expired_date"
                             rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                             <DatePicker style={{width:'100%'}} format='DD-MM-YYYY' onChange={onChangeDateRegistration} />
+                            <DatePicker style={{ width: '100%' }} format='DD-MM-YYYY' onChange={onChangeDateRegistration} />
                         </Form.Item>
 
                     </Col>
 
                     <Row>
-                       
-                        <div style={{...styles.txtTitle, paddingTop: DIMENSION_PADDING_SMALL/2, paddingRight: DIMENSION_PADDING_NORMAL}}>Trạng thái hoạt động<span style={{ color: '#dc2d2d' }}>*</span></div>
+
+                        <div style={{ ...styles.txtTitle, paddingTop: DIMENSION_PADDING_SMALL / 2, paddingRight: DIMENSION_PADDING_NORMAL }}>Trạng thái hoạt động<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item
                             name="is_active"
                             rules={[{ required: false, message: 'Vui lòng nhập dữ liệu' }]}
                         >
-                             <Switch
+                            <Switch
                                 onChange={(e) => onActive(e)}
                                 size='small'
                                 defaultChecked={isActive}
-                                />
+                            />
                         </Form.Item>
                     </Row>
                 </Row>
@@ -188,12 +222,12 @@ const FormAddEdit = ({
     );
 };
 FormAddEdit.propTypes = {
-  className: PropTypes.any,
+    className: PropTypes.any,
 };
 
 const styles = {
-    txtTitle:{
-       
+    txtTitle: {
+
     }
 }
 export default styled(FormAddEdit)`

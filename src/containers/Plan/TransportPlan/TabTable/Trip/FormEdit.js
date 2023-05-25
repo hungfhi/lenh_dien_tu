@@ -560,13 +560,13 @@ const FormEdit = ({
                             <Col span={10}></Col>
                             <Col span={4}>
                                 <Button
-                                    style={{ background: '#ffc20e', color: '#000', borderColor: '#ffc20e' }}
+                                style={{ background: '#ffc20e', color: '#000', borderColor: '#ffc20e' }}
                                     onClick={e => setScheduleTrip([])}
                                 >Làm mới</Button>
                             </Col>
                             <Col span={10}></Col>
                         </>
-
+                        
                     }
 
                     {typeApply == 2 &&

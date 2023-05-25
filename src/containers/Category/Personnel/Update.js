@@ -45,7 +45,7 @@ const UpdateDinhMuc = ({
       station_id: values?.station_id || null,
       model_id: values?.model_id
     };
-    // console.log(payload);
+    console.log(payload);
 
 
     category.updatePerson(itemSelected?.id, payload).then(res => {

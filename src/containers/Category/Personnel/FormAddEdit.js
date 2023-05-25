@@ -29,14 +29,32 @@ const FormAddEdit = ({
     const [listModel, setListModel] = useState([]);
     const [modelChooses, setModelChooses] = useState(itemSelected && itemSelected?.user?.model_used?.id || null);
     const [rolesChooses, setRolesChooses] = useState([]);
+    const [statusChooseModel, setStatusChooseModel] = useState(true);
 
     let listRoles = _.map(itemSelected?.roles, (i) => {
         return i?.id;
     });
 
-    let listModels = _.map(itemSelected?.models, (i) => {
+    const [listModels, setListModels] = useState(_.map(itemSelected?.models, (i) => {
         return i?.id
-    })
+    }));
+
+    let listStation = _.map(itemSelected?.stations, (i) => {
+        return i?.id
+    });
+    console.log(listModels);
+
+    useEffect(() => {
+        // listModels.map(item => {
+        //     if (item == 1) {
+        //         setStatusChooseModel(true);
+        //     } else {
+        //         setStatusChooseModel(false);
+        //     }
+        // });
+        listModels.includes(1) ? setStatusChooseModel(false) : setStatusChooseModel(true);
+    }, [listModels]);
+
 
     useEffect(() => {
         const newRoles = [];
@@ -156,6 +174,8 @@ const FormAddEdit = ({
     const onFinishFailed = () => {
     };
 
+    console.log(itemSelected);
+
     return (
         <div className={className}>
             <Form
@@ -180,7 +200,7 @@ const FormAddEdit = ({
                     modelable_id: itemSelected && itemSelected?.modelable_id || null,
                     modelable_type: itemSelected && itemSelected?.modelable_type || null,
                     email: itemSelected && itemSelected?.user?.email || null,
-                    station_id: itemSelected && itemSelected?.user?.station_used?.id || null,
+                    station_id: listStation,
                     roles: listRoles,
                     model_id: listModels
                 }}
@@ -298,46 +318,6 @@ const FormAddEdit = ({
 
                     </Col>
                     <Col style={{ margin: 0 }} span={12}>
-                        <div>Bến làm việc <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
-                        <Form.Item
-                            name="station_id"
-                        // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                            <Select
-                                defaultValue
-                                placeholder="Chọn bến làm việc"
-                                disabled={itemSelected?.user?.model_used?.model_type === "App\\\Models\\\Station" ? false : true}
-                            >
-                                {listStations && listStations.map((item, index) => {
-
-                                    return <Select.Option value={item?.id}>{item?.name}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
-
-                    </Col>
-                    <Col style={{ margin: 0 }} span={12}>
-                        <div>Mô hình kinh doanh <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
-                        <Form.Item
-                            name="model_id"
-                        // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
-                        >
-                            <Select
-                                mode="multiple"
-                                // defaultValue={itemSelected && itemSelected?.user?.model_used?.id || null}
-                                // onChange={e => {
-                                //     listModels.push(e);
-                                // }}
-                            >
-                                {listModel && listModel.map((item) => {
-
-                                    return <Select.Option value={item?.value}>{item?.label}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
-
-                    </Col>
-                    <Col style={{ margin: 0 }} span={12}>
                         <div>Quyền tài khoản <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
                             name="roles"
@@ -360,6 +340,48 @@ const FormAddEdit = ({
                         </Form.Item>
 
                     </Col>
+                    <Col style={{ margin: 0 }} span={12}>
+                        <div>Mô hình kinh doanh <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <Form.Item
+                            name="model_id"
+                        // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Select
+                                mode="multiple"
+                                // defaultValue={itemSelected && itemSelected?.user?.model_used?.id || null}
+                                onChange={e => {
+                                    setListModels(e);
+                                }}
+                            >
+                                {listModel && listModel.map((item) => {
+
+                                    return <Select.Option value={item?.value}>{item?.label}</Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
+
+                    </Col>
+                    <Col style={{ margin: 0 }} span={12}>
+                        <div>Bến làm việc <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                        <Form.Item
+                            name="station_id"
+                        // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                        >
+                            <Select
+                                defaultValue
+                                mode="multiple"
+                                placeholder="Chọn bến làm việc"
+                                disabled={statusChooseModel}
+                            >
+                                {listStations && listStations.map((item, index) => {
+
+                                    return <Select.Option value={item?.id}>{item?.name}</Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
+
+                    </Col>
+
                     <Col style={{ margin: 0 }} span={24}>
                         <div>Địa chỉ</div>
                         <Form.Item
@@ -416,28 +438,6 @@ const FormAddEdit = ({
                         </Form.Item>
 
                     </Col>
-                    {/* <div style={{ width: '100%', display: 'flex' }}>
-                        <Col span={3}>
-                            <div style={{ paddingTop: 5 }}>Quản lý bến</div>
-                        </Col>
-                        <Col span={2}>
-                            <Form.Item>
-                                <Checkbox></Checkbox>
-                            </Form.Item>
-                        </Col>
-
-                    </div>
-                    <div style={{ width: '100%', display: 'flex', marginTop: -15 }}>
-                        <Col span={3}>
-                            <div style={{ paddingTop: 5 }}>Vận hành tuyến</div>
-                        </Col>
-                        <Col span={2}>
-                            <Form.Item>
-                                <Checkbox></Checkbox>
-                            </Form.Item>
-                        </Col>
-                    </div> */}
-
                     <Col style={{ margin: 0, display: 'flex' }} span={24}>
                         <div style={{ ...styles.txtTitle }}>Trạng thái hoạt động<span style={{ color: '#dc2d2d' }}>*</span></div>
                         <Form.Item

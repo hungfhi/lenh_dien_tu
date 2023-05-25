@@ -1,4 +1,4 @@
-import {  Col, Drawer, Row, Spin, message } from "antd";
+import { Col, Drawer, Row, Spin, message } from "antd";
 import PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
@@ -17,53 +17,61 @@ const Index = ({ className, profile }) => {
   const [loadding, setLoading] = useState(false);
   const [isShowModal, setShowModal] = useState(false);
   const [itemSelected, setItemSelected] = useState(null);
-  const [isShowModalEdit, setShowModalEdit] = useState(false)
+  const [isShowModalEdit, setShowModalEdit] = useState(false);
+  const [seatType, setSeatType] = useState([]);
   const [params, setParams] = useState({
     page: 1,
     size: 20
   });
 
   const getListProduct = useCallback(async () => {
-   
-      category.getProduct()
-          .then(res => {
-              if (res.status === 200) {
-                const newProducts = []
-                res?.data?.data.map(item => {
-                  newProducts.push({
-                    ...item,
-                    value: item?.id,
-                    label: item?.name,
-                  })
-                })
-                setProducts(newProducts)
-                setTotal(res?.data?.meta?.total)
-              }
+
+    category.getProduct()
+      .then(res => {
+        if (res.status === 200) {
+          const newProducts = []
+          res?.data?.data.map(item => {
+            newProducts.push({
+              ...item,
+              value: item?.id,
+              label: item?.name,
+            })
           })
-          .catch(err => {
-              if (err.response?.status === 422 && err.response?.data?.errors) {
-                  message.warn(err.response.data?.errors[0].msg)
-                  message.error('Error!')
-              }
-          })
-   
+          setProducts(newProducts)
+          setTotal(res?.data?.meta?.total)
+        }
+      })
+      .catch(err => {
+        if (err.response?.status === 422 && err.response?.data?.errors) {
+          message.warn(err.response.data?.errors[0].msg)
+          message.error('Error!')
+        }
+      })
+
   }, []);
 
   const getDataTable = useCallback(async () => {
     setLoading(true);
-      category.getVehicle(params)
-          .then(res => {
-              if (res.status === 200) {
-                setData(res?.data?.data)
-              }
-          })
-          .catch(err => {
-              if (err.response?.status === 422 && err.response?.data?.errors) {
-                  message.warn(err.response.data?.errors[0]?.msg)
-                  message.error('Error!')
-              }
-          })
-    await setLoading(false);
+    category.getVehicle(params)
+      .then(res => {
+        if (res.status === 200) {
+          setData(res?.data?.data);
+          const newSeatType = [];
+          res.data.data.map(item => {
+            newSeatType.push({
+              value: item?.seat_type?.value,
+              label: item?.seat_type?.name
+            });
+          });
+          setSeatType(newSeatType);
+        }
+        setLoading(false);
+      }).catch(err => {
+        if (err.response?.status === 422 && err.response?.data?.errors) {
+          message.warn(err.response.data?.errors[0]?.msg)
+          message.error('Error!')
+        }
+      });
   }, [params]);
 
 
@@ -78,17 +86,17 @@ const Index = ({ className, profile }) => {
 
   const onEdit = useCallback(async (row) => {
     setShowModalEdit(true)
-     setItemSelected(row);
+    setItemSelected(row);
   }, [])
 
-    useEffect(() => {
+  useEffect(() => {
     getListProduct();
   }, []);
 
 
   useEffect(() => {
     getDataTable();
-   
+
   }, [getDataTable]);
 
   const onRefreshList = () => {
@@ -128,6 +136,7 @@ const Index = ({ className, profile }) => {
           onRefreshList={onRefreshList}
           onHiddenModal={onHiddenModal}
           products={products}
+          seatType={seatType}
         />
       </Drawer>
       <Drawer
@@ -143,8 +152,10 @@ const Index = ({ className, profile }) => {
           itemSelected ? (
             <Update
               onRefreshList={onRefreshList}
+              products={products}
               onHiddenModalEdit={onHiddenModalEdit}
               itemSelected={itemSelected}
+              seatType={seatType}
             />
           ) : <div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spin spinning /></div>
         }

@@ -9,7 +9,7 @@ let inputTimer = null;
 const Filter = ({ className, setParams, params, setShowModal, operator }) => {
   const _changeQuery = useCallback(
     (payload) => {
-      console.log('payload',payload)
+      // console.log('payload',payload)
       if (inputTimer) {
         clearTimeout(inputTimer);
       }
