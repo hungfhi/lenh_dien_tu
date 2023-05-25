@@ -16,7 +16,7 @@ const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,
   const [params, setParams] = useState({
     page: 1,
     size: 20,
-    phone: undefined
+    route_id: undefined
   });
 
   const [isShowModal, setShowModal] = useState(false);
@@ -33,7 +33,7 @@ const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,
       merchant_id: isEdit?.merchant_id,
       stations: arr,
       contract_id: !isActive ? isEdit?.id : undefined,
-      // route:undefined,
+      route_id:params?.route_id,
 
     }
     setIsLoad(true)
@@ -57,7 +57,7 @@ const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,
         message.error("Có lỗi xảy ra!")
       })
 
-  }, [isEdit,isActive]);
+  }, [isEdit,isActive,params]);
 
   const onRefreshModal = () => {
     getDataAll();
@@ -77,7 +77,7 @@ const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,
         }
       })
       .catch(err => {
-        message.error("Có lỗi xảy ra hehehehe!")
+        message.error("Có lỗi xảy ra !")
       })
   }, [itemTime]);
 
@@ -106,7 +106,7 @@ const ContractCar = ({ className,time,allRoute,isEdit,setTime,startDate,endDate,
         <Drawer
           destroyOnClose
           width={"40%"}
-          title={<div style={{ textAlign: 'center', color: '#fff' }}>Thêm xe vào hợp đồng</div>}
+          title={<div style={{ textAlign: 'center', color: '#fff' }}>Thêm nốt vào hợp đồng</div>}
           placement="right"
           closable={true}
           onClose={onHiddenModal}

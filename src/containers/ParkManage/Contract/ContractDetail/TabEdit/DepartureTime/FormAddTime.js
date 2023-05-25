@@ -1,15 +1,27 @@
-import { Button, Modal, Pagination, Row, Col, Select, Checkbox, Spin } from "antd";
+import { Button, Checkbox, Col, Modal, Row, Select, Spin } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
+import _ from "lodash";
 import PropTypes from "prop-types";
-import React, { memo, useCallback } from "react";
+import { memo, useCallback, useState } from "react";
 import styled from "styled-components";
-import { COLOR_GREEN, COLOR_RED } from 'theme/colors';
-import { Ui } from "utils/Ui";
 let inputTimer = null;
-const { confirm } = Modal;
 
 const TableList = memo(({ className, params, addTime, allRoute, itemTime, setItemTime, onHiddenModal, setParams, onUpdate, isLoad, setIsActive }) => {
+    
+    const [search, setSearch] = useState(false);
+    const [fetching, setFetching] = useState(false);
+
+    const _handleSearch = useCallback((input) => {
+        setTimeout(() => {
+            setSearch(input || "");
+        }, 666000)
+    }, []);
+
+    const localSearchFunc = (input, option) =>
+        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+
+
     const onChange = (e) => {
         setIsActive(e.target.checked)
     };
@@ -59,14 +71,6 @@ const TableList = memo(({ className, params, addTime, allRoute, itemTime, setIte
         }
     };
 
-    const onChangeRoute = (value) => {
-        if (value !== undefined)
-            _changeQuery({ name: "route_id", value: value });
-        else
-            _changeQuery({ name: "route_id", value: '' });
-    }
-
-
     const columns = [
         {
             title: "Mã tuyến",
@@ -109,32 +113,31 @@ const TableList = memo(({ className, params, addTime, allRoute, itemTime, setIte
                     <Col span={10}>
                         <div>Tuyến</div>
                         <Select
-                            showSearch
+                            size="default"
+                            style={{ width: "100%" }}
                             placeholder="Tuyến"
-                            optionFilterProp="children"
                             allowClear
-                            style={{ width: '100%' }}
-                            onChange={onChangeRoute}
-                            filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                            options={allRoute}
-                        />
-                    </Col>
-                    <Col span={10}>
-                        <div>Biển kiểm sát</div>
-                        <Select
+                            loadOnMount
                             showSearch
-                            placeholder="Tuyến"
-                            optionFilterProp="children"
-                            allowClear
-                            style={{ width: '100%' }}
-                            onChange={onChangeRoute}
-                            filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                            options={allRoute}
-                        />
+                            className={className}
+                            loading={fetching}
+                            notFoundContent={fetching ? <Spin size="small" /> : "Không có dữ liệu"}
+                            onSearch={_handleSearch}
+                            filterOption={localSearchFunc}
+                            onChange={(data) => {
+                                setParams((prevState) => {
+                                    let nextState = { ...prevState };
+                                    nextState.route_id = data;
+                                    return nextState;
+                                });
+                            }}
+                        >
+                            {_.map(allRoute, (item, itemId) => (
+                                <Select.Option key={itemId} value={item.id}>
+                                    {item.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </Col>
                     <Col span={4}>
                         <div style={{ marginTop: 25 }}>
