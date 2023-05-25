@@ -149,7 +149,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, allDriver,
     },
     {
       title: "Lái xe 3",
-      dataIndex: "code",
+      dataIndex: "third_driver",
       width: 170,
       render: (text, record, row) => {
         return (<div>{ text?.first_name!== undefined ?`${text?.first_name} ${text?.last_name}`:''}</div>)
