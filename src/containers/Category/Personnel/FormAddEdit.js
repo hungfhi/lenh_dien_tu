@@ -246,13 +246,13 @@ const FormAddEdit = ({
                             name="phone"
                             rules={[
                                 { required: true, message: "Vui lòng nhập số điện thoại" },
-                                // {
-                                //     pattern: new RegExp(/^[0-9]+$/i),
-                                //     message: "Chỉ được nhập số",
-                                // },
+                                {
+                                    pattern: new RegExp(/^[0-9]+$/i),
+                                    message: "Chỉ được nhập số",
+                                },
                                 {
                                     pattern: new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g),
-                                    message: "Ví dụ: 0981914596",
+                                    message: "SĐT chỉ được nhập 10 chữ số",
                                 },
                             ]}
                         >
@@ -273,10 +273,10 @@ const FormAddEdit = ({
                         <Form.Item
                             name="citizen_identity"
                             rules={[
-                                // { required: true, message: 'Vui lòng nhập CCCD' }
+                                { required: true, message: 'Vui lòng nhập CCCD' },
                                 {
-                                    pattern: new RegExp(/^[0-9]{12}$/g),
-                                    message: "CCCD phải có 12 số",
+                                    pattern: new RegExp(/^[0-9]{12}$/),
+                                    message: "CCCD chỉ được nhập 12 chữ số",
                                 },
                             ]}
                         >
