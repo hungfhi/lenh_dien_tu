@@ -139,7 +139,7 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
       },
     },
     {
-      title: "Thời gian",
+      title: () => <div>Thời gian <EditOutlined /></div>,
       dataIndex: "start_date",
       width: 245,
       render: (text, record, index) => {
@@ -160,7 +160,7 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
       },
     },
     {
-      title: "Số chuyến",
+      title: () => <div>Số chuyến <EditOutlined /></div>,
       dataIndex: "trip_number",
       width: 120,
       align: "center",
@@ -173,13 +173,13 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
             onChange={(e) => onChange(id, nameColumn, e)}
             defaultValue={text}
             placeholder="Chuyến..."
-            style={{ width: '100%', color: '#01579B', fontWeight: 700, fontFamily: 'Nunito' }}
-            addonAfter={<EditOutlined style={{ color: "#01579B" }} />} />
+            style={{ width: '100%', fontWeight: 700, fontFamily: 'Nunito' }}
+          />
         )
       },
     },
     {
-      title: "Thời gian",
+      title: () => <div>Thời gian <EditOutlined /></div>,
       dataIndex: "departure_time",
       width: 100,
       render: (text, record, index) => {
@@ -189,7 +189,7 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
       },
     },
     {
-      title: "Dừng",
+      title: () => <div>Dừng <EditOutlined /></div>,
       dataIndex: "status",
       width: 80,
       render: (text, record, index) => {
@@ -203,7 +203,7 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
       },
     },
     {
-      title: "Thời gian",
+      title: () => <div>Thời gian <EditOutlined /></div>,
       dataIndex: "start_date_stop",
       width: 245,
       render: (text, record, index) => {
@@ -224,7 +224,7 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
       },
     },
     {
-      title: "Ghi chú",
+      title: () => <div>Ghi chú <EditOutlined /></div>,
       dataIndex: "note",
       width: 180,
       render: (text, record, index) => {
@@ -235,8 +235,8 @@ const Social = ({ className, data, itemTime, setItemTime, allRoute, setData, set
             onChange={(e) => onChange(id, nameColumn, e.target.value)}
             defaultValue={text}
             placeholder="Ghi chú..."
-            style={{ width: '100%', color: '#01579B', fontWeight: 700, fontFamily: 'Nunito' }}
-            suffix={<EditOutlined />} />
+            style={{ width: '100%', fontWeight: 600, fontFamily: 'Nunito' }}
+          />
         )
       },
     },

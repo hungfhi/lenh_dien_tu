@@ -44,6 +44,9 @@ const station = {
     addTimeEdit(payload) {
         return axios.post(`${domain.ServiceAddress}/contract/add-node-to-contract/${payload?.id}`, payload);
     },
+    endContract(payload) {
+        return axios.patch(`${domain.ServiceAddress}/contract/cancel-contract/${payload?.id}`);
+    },
 }
 
 export default station

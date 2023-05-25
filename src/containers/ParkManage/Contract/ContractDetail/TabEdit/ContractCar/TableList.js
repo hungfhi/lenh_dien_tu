@@ -19,7 +19,7 @@ import { station } from "configs";
 const format = 'HH:mm';
 let inputTimer = null;
 const { RangePicker } = DatePicker;
-const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCar, startDate, endDate }) => {
+const Social = ({ className, data, allRoute,startDate, endDate }) => {
 
   function disableDateRanges(range = { startDate: false, endDate: false }) {
     const { startDate, endDate } = range;
@@ -140,7 +140,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
       },
     },
     {
-      title: "Thời gian",
+      title: () =><div>Thời gian <EditOutlined /></div>,
       dataIndex: "start_date",
       width: 245,
       render: (text, record, index) => {
@@ -163,7 +163,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
       },
     },
     {
-      title: "Số chuyến",
+      title: () =><div>Số chuyến <EditOutlined /></div>,
       dataIndex: "trip_number",
       width: 120,
       align: "center",
@@ -176,8 +176,8 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
             onChange={(e) => onChange(id, nameColumn, e)}
             defaultValue={text}
             placeholder="Chuyến"
-            style={{ width: '100%', color: '#01579B', fontWeight: 700, fontFamily: 'Nunito' }}
-            addonAfter={<EditOutlined style={{ color: "#01579B" }} />} />
+            style={{ width: '100%', fontWeight: 700, fontFamily: 'Nunito' }}
+            />
         )
       },
     },
@@ -200,7 +200,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
       },
     },
     {
-      title: "Giá dịch vụ",
+      title: () =><div>Giá dịch vụ <EditOutlined /></div>,
       dataIndex: "service_price",
       width: 150,
       render: (text, record, index) => {
@@ -213,13 +213,13 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
             onChange={(e) => onChange(id, nameColumn, e)}
             defaultValue={text}
             placeholder="Giá"
-            style={{ width: '100%', color: '#01579B', fontWeight: 700, fontFamily: 'Nunito' }}
-            addonAfter={<EditOutlined style={{ color: "#01579B" }} />} />
+            style={{ width: '100%', fontWeight: 700, fontFamily: 'Nunito' }}
+            />
         )
       },
     },
     {
-      title: "Giờ cố định",
+      title: () =><div>Giờ cố định <EditOutlined /></div>,
       dataIndex: "is_fixed_time",
       width: 80,
       render: (text, record, index) => {
@@ -233,7 +233,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
       },
     },
     {
-      title: "Thời gian",
+      title: () =><div>Thời gian <EditOutlined /></div>,
       dataIndex: "fixed_time",
       width: 130,
       render: (text, record, index) => {
@@ -254,7 +254,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
       },
     },
     {
-      title: "Dừng",
+      title: () =><div>Dừng <EditOutlined /></div>,
       dataIndex: "status",
       width: 80,
       render: (text, record, index) => {
@@ -268,7 +268,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
       },
     },
     {
-      title: "Thời gian",
+      title: () =><div>Thời gian <EditOutlined /></div>,
       dataIndex: "start_date_stop",
       width: 245,
       render: (text, record, index) => {
@@ -290,7 +290,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
       },
     },
     {
-      title: "Hiệp thương",
+      title: () =><div>Hiệp thương <EditOutlined /></div>,
       dataIndex: "is_associate_commerce",
       width: 80,
       render: (text, record, index) => {
@@ -321,7 +321,7 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
       },
     },
     {
-      title: "Ghi chú",
+      title: () =><div>Ghi chú <EditOutlined /></div>,
       dataIndex: "note",
       width: 180,
       render: (text, record, index) => {
@@ -332,13 +332,13 @@ const Social = ({ className, data, itemCar, setItemCar, allRoute, setData, setCa
             onChange={(e) => onChange(id, nameColumn, e.target.value)}
             defaultValue={text}
             placeholder="Ghi chú"
-            style={{ width: '100%', color: '#01579B', fontWeight: 700, fontFamily: 'Nunito' }}
-            suffix={<EditOutlined />} />
+            style={{ width: '100%', fontWeight: 600, fontFamily: 'Nunito' }}
+            />
         )
       },
     },
     {
-      title: "Trả sau",
+      title: () =><div>Trả sau <EditOutlined /></div>,
       dataIndex: "is_pay_later",
       width: 80,
       render: (text, record, index) => {

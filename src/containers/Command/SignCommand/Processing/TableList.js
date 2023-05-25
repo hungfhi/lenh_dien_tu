@@ -10,12 +10,12 @@ import _ from 'lodash'
 import moment from 'moment';
 const { confirm } = Modal;
 const { TextArea } = Input;
-const TableList = memo(({ className, data, params, onView, setParams, onEdit, allDriver, onRefreshList, setIdRow, itemSelected, setItemSelected, total, allMerchant }) => {
+const TableList = memo(({ className, data, params, setParams, onRefreshList, itemSelected,showModal, total}) => {
   const [form] = Form.useForm();
   const [vehicle, setVehicle] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [idSelect, setIdSelect] = useState(undefined);
-  const showModal = (ids) => {
+  const showModals = (ids) => {
     setIsModalOpen(true);
     setIdSelect(ids)
   };
@@ -189,14 +189,14 @@ const TableList = memo(({ className, data, params, onView, setParams, onEdit, al
               <Button
                 type="link"
                 icon={<CloseCircleOutlined style={{ color: 'red' }} />}
-                onClick={() => showModal(ids)}
+                onClick={() => showModals(ids)}
               />
             </Tooltip>
             <Tooltip placement="topLeft">
               <Button
                 type="link"
                 icon={<EyeOutlined />}
-                onClick={() => onView(command_code)}
+                onClick={() => showModal(command_code)}
               />
             </Tooltip>
           </div>

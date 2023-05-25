@@ -1,4 +1,4 @@
-import { Button, Modal, Pagination, Row, Col, Select, Checkbox } from "antd";
+import { Button, Modal, Pagination, Row, Col, Select, Checkbox, Spin } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
 import PropTypes from "prop-types";
@@ -9,7 +9,7 @@ import { Ui } from "utils/Ui";
 let inputTimer = null;
 const { confirm } = Modal;
 
-const TableList = memo(({ className, params, addTime, allRoute, itemTime, setItemTime, onHiddenModal, setParams, onUpdate,isActive,setIsActive }) => {
+const TableList = memo(({ className, params, addTime, allRoute, itemTime, setItemTime, onHiddenModal, setParams, onUpdate, isLoad, setIsActive }) => {
     const onChange = (e) => {
         setIsActive(e.target.checked)
     };
@@ -97,83 +97,84 @@ const TableList = memo(({ className, params, addTime, allRoute, itemTime, setIte
             width: 100,
             render: (text, record, index) => {
                 const time = (record?.departure_time).substring(0, 5);
-                return (<div style={{textAlign:'center'}}>{time}</div>)
+                return (<div style={{ textAlign: 'center' }}>{time}</div>)
             },
         },
     ];
 
     return (
         <div className={className}>
-            <Row gutter={[16, 16]} style={{marginBottom:10}}>
-                <Col span={10}>
-                    <div>Tuyến</div>
-                    <Select
-                        showSearch
-                        placeholder="Tuyến"
-                        optionFilterProp="children"
-                        allowClear
-                        style={{ width: '100%' }}
-                        onChange={onChangeRoute}
-                        filterOption={(input, option) =>
-                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                        }
-                        options={allRoute}
-                    />
-                </Col>
-                <Col span={10}>
-                    <div>Biển kiểm sát</div>
-                    <Select
-                        showSearch
-                        placeholder="Tuyến"
-                        optionFilterProp="children"
-                        allowClear
-                        style={{ width: '100%' }}
-                        onChange={onChangeRoute}
-                        filterOption={(input, option) =>
-                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                        }
-                        options={allRoute}
-                    />
-                </Col>
-                <Col span={4}>
+            <Spin spinning={isLoad}>
+                <Row gutter={[16, 16]} style={{ marginBottom: 10 }}>
+                    <Col span={10}>
+                        <div>Tuyến</div>
+                        <Select
+                            showSearch
+                            placeholder="Tuyến"
+                            optionFilterProp="children"
+                            allowClear
+                            style={{ width: '100%' }}
+                            onChange={onChangeRoute}
+                            filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={allRoute}
+                        />
+                    </Col>
+                    <Col span={10}>
+                        <div>Biển kiểm sát</div>
+                        <Select
+                            showSearch
+                            placeholder="Tuyến"
+                            optionFilterProp="children"
+                            allowClear
+                            style={{ width: '100%' }}
+                            onChange={onChangeRoute}
+                            filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={allRoute}
+                        />
+                    </Col>
+                    <Col span={4}>
                         <div style={{ marginTop: 25 }}>
                             <Checkbox onChange={onChange} />&nbsp; Trùng lặp
                         </div>
                     </Col>
-            </Row>
-            <DefineTable
-                rowSelection={{
-                    selectedRowKeys: itemTime,
-                    onSelect: _handleSelect,
-                    onSelectAll: _handleSelectAll,
-                }}
-                rowKey="id"
-                columns={columns}
-                dataSource={addTime}
-                scroll={{ y: "calc(100vh - 330px)" }}
-                pagination={false}
-            />
+                </Row>
+                <DefineTable
+                    rowSelection={{
+                        selectedRowKeys: itemTime,
+                        onSelect: _handleSelect,
+                        onSelectAll: _handleSelectAll,
+                    }}
+                    rowKey="id"
+                    columns={columns}
+                    dataSource={addTime}
+                    scroll={{ y: "calc(100vh - 330px)" }}
+                    pagination={false}
+                />
 
-            <div
-                className="action"
-                style={{
-                    right: 0,
-                    bottom: 0,
-                    width: "100%",
-                    padding: "10px 0px",
-                    background: "#fff",
-                    textAlign: "left",
-                }}
-            >
-                <Button style={{ backgroundColor: '#9B0101', color: '#fff', borderRadius: 6, height: 35, width: 120 }} onClick={onHiddenModal}>
-                    Huỷ
-                </Button>
-                <Button style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: '#01579B', color: '#fff', marginLeft: 20 }} onClick={()=>onUpdate(itemTime)}>
-                    Cập nhật
-                </Button>
+                <div
+                    className="action"
+                    style={{
+                        right: 0,
+                        bottom: 0,
+                        width: "100%",
+                        padding: "10px 0px",
+                        background: "#fff",
+                        textAlign: "left",
+                    }}
+                >
+                    <Button style={{ backgroundColor: '#9B0101', color: '#fff', borderRadius: 6, height: 35, width: 120 }} onClick={onHiddenModal}>
+                        Huỷ
+                    </Button>
+                    <Button style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: '#01579B', color: '#fff', marginLeft: 20 }} onClick={() => onUpdate(itemTime)}>
+                        Cập nhật
+                    </Button>
 
-            </div>
-
+                </div>
+            </Spin>
         </div >
     );
 });
