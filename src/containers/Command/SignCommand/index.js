@@ -52,6 +52,7 @@ const SignCommand = ({
     };
 
     const getAllData = useCallback(async () => {
+        setAllData([])
         const payload = {
             route: params.route,
             direction: params.direction,
