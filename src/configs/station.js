@@ -26,6 +26,10 @@ const station = {
         return axios.get(`${domain.ServiceAddress}/routes`);
     },
 
+    getVehicle() {
+        return axios.get(`${domain.ServiceAddress}/vehicle`);
+    },
+
     addCarCreate(payload) {
         return axios.post(`${domain.ServiceAddress}/contract/add-car-contract`, payload);
     },

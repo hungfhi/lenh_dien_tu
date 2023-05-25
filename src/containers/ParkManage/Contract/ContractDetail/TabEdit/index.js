@@ -9,6 +9,7 @@ import { station } from 'configs';
 const TabTableEdit = ({ className, car, time, itemCar, isEdit, setItemCar, itemTime, setItemTime,onRefreshList, setCar,loading,setLoading, setTime, startDate, endDate, setIsLoad, isLoad }) => {
 
     const [allRoute, setAllRoute] = useState([]);
+    const [allVehicle, setAllVehicle] = useState([]);
     const getAllRoutes = useCallback(async () => {
         station.getRoute()
             .then(res => {
@@ -29,9 +30,29 @@ const TabTableEdit = ({ className, car, time, itemCar, isEdit, setItemCar, itemT
             })
     }, []);
 
+    const getAllVehicle = useCallback(async () => {
+        station.getVehicle()
+            .then(res => {
+                if (res.status === 200) {
+                    const allVehicle = []
+                    res?.data?.data.map(item => {
+                        allVehicle.push({
+                            id: item?.id,
+                            name: item?.license_plate,
+                        })
+                    })
+                    setAllVehicle(allVehicle)
+                }
+            })
+            .catch(err => {
+                message.error("Có lỗi xảy ra !")
+            })
+    }, []);
+
     useEffect(() => {
         getAllRoutes();
-    }, [getAllRoutes]);
+        getAllVehicle();
+    }, [getAllRoutes,getAllVehicle]);
 
     return (
         <div className={className}>
@@ -42,6 +63,7 @@ const TabTableEdit = ({ className, car, time, itemCar, isEdit, setItemCar, itemT
                         car={car}
                         setCar={setCar}
                         allRoute={allRoute}
+                        allVehicle={allVehicle}
                         itemCar={itemCar}
                         setItemCar={setItemCar}
                         startDate={startDate}

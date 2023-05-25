@@ -6,14 +6,15 @@ import TableList from './TableList';
 import FormAddCar from "./FormAddCar";
 import _ from "lodash";
 import { station } from "configs";
-const ContractCar = ({ className, car, setCar, allRoute, startDate, endDate, isEdit, onRefreshList }) => {
+const ContractCar = ({ className, car, setCar, allRoute, allVehicle, startDate, endDate, isEdit, onRefreshList }) => {
   const [data, setData] = useState(car);
   const [isActive, setIsActive] = useState(false);
   const [isLoad, setIsLoad] = useState(false);
   const [addCar, setAddCar] = useState();
   const [itemCar, setItemCar] = useState([]);
   const [params, setParams] = useState({
-    route: undefined
+    route_id: undefined,
+    vehicle_id: undefined
   });
   const [isShowModal, setShowModal] = useState(false);
   const onHiddenModal = useCallback(() => {
@@ -29,7 +30,8 @@ const ContractCar = ({ className, car, setCar, allRoute, startDate, endDate, isE
       merchant_id: isEdit?.merchant_id,
       stations: arr,
       contract_id: !isActive ? isEdit?.id : undefined,
-      // route:undefined,
+      route_id: params?.route_id,
+      vehicle_id: params?.vehicle_id,
     }
     setIsLoad(true)
     station.createTabContract(payload)
@@ -53,7 +55,7 @@ const ContractCar = ({ className, car, setCar, allRoute, startDate, endDate, isE
         message.error("Có lỗi xảy ra!")
       })
 
-  }, [isActive, isEdit]);
+  }, [isActive, isEdit,params]);
 
   const onRefreshModal = () => {
     getDataAll();
@@ -92,14 +94,14 @@ const ContractCar = ({ className, car, setCar, allRoute, startDate, endDate, isE
           <Button className="btn-add" onClick={() => setShowModal(true)} style={{ backgroundColor: '#01579B', color: '#fff', borderRadius: 6, height: 35, width: 120 }}> Thêm xe</Button>
         </Col>
         <Col span={24} style={{ width: 'calc(100% - 10px)' }}>
-            <TableList
-              data={data}
-              setCar={setCar}
-              allRoute={allRoute}
-              setData={setData}
-              startDate={startDate}
-              endDate={endDate}
-            />
+          <TableList
+            data={data}
+            setCar={setCar}
+            allRoute={allRoute}
+            setData={setData}
+            startDate={startDate}
+            endDate={endDate}
+          />
         </Col>
         <Drawer
           destroyOnClose
@@ -119,6 +121,7 @@ const ContractCar = ({ className, car, setCar, allRoute, startDate, endDate, isE
             setItemCar={setItemCar}
             itemCar={itemCar}
             allRoute={allRoute}
+            allVehicle={allVehicle}
             onHiddenModal={onHiddenModal}
             setIsActive={setIsActive}
             isActive={isActive}

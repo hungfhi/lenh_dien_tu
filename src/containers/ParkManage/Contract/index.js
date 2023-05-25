@@ -25,7 +25,7 @@ const Contract = ({ className, profile }) => {
 
   const getDataTable = useCallback(async () => {
     const payload = {
-      is_contract : 1
+      is_contract: 1
     }
     setLoading(true);
     station.getContract(params)
@@ -50,33 +50,28 @@ const Contract = ({ className, profile }) => {
               }
             })
             .catch(err1 => {
-                message.error("Có lỗi xảy ra !")
+              message.error("Có lỗi xảy ra !")
             })
 
         }
       })
       .catch(err => {
-        if (err.response?.status === 422 && err.response?.data?.errors) {
-          message.warn(err.response.data?.errors[0].msg)
-          message.error('Error!')
-        }
+        message.error('Có lỗi xảy ra !')
       })
   }, [params]);
   const getTransports = useCallback(async () => {
-      const payload = {
-          is_contract : 1
-      }
-      manage.getTransport(payload)
-          .then(res => {
-              if (res.status === 200) {
-                  setTransport(res?.data?.data)
-              }
-          })
-          .catch(err => {
-              if (err.response?.status === 422 && err.response?.data?.errors) {
-                  message.warn(err.response.data?.errors[0].msg)
-              }
-          })
+    const payload = {
+      is_contract: 1
+    }
+    manage.getTransport(payload)
+      .then(res => {
+        if (res.status === 200) {
+          setTransport(res?.data?.data)
+        }
+      })
+      .catch(err => {
+        message.error('Có lỗi xảy ra !')
+      })
   }, []);
 
 
@@ -97,20 +92,20 @@ const Contract = ({ className, profile }) => {
         return item;
       }));
     }
-  }, [getDataTable,getTransports]);
+  }, [getDataTable, getTransports]);
 
 
   const onRefreshList = () => {
     getDataTable();
   }
 
- 
+
 
 
   return (
     <Row className={className} gutter={[16, 16]}>
       <Col xs={24}>
-        <Filter params={params} setParams={setParams} transport={transport}/>
+        <Filter params={params} setParams={setParams} transport={transport} />
       </Col>
       <Col xs={24}>
         <Spin spinning={loadding}>
