@@ -138,7 +138,7 @@ const Filter = ({ className, setParams, params, allRoute, showModal }) => {
           </Col>
         }
         {
-          params?.status === '1' ? <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', marginTop: 20 }}>
+          params?.status != '2'&&params?.status != '3' ? <Col style={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center', marginTop: 20 }}>
             <Button onClick={() => showModal()} style={{ backgroundColor: '#F57F17', color: '#fff', borderRadius: 6, height: 35, width: 120 }}> Ký lệnh </Button>
           </Col> : null
         }

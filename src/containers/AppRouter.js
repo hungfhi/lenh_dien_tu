@@ -41,6 +41,7 @@ import QualityStandard from './Category/QualityStandard';
 import SignCommand from './Command/SignCommand';
 import TransportPlan from './Plan/TransportPlan';
 import ContractDetail from './ParkManage/Contract/ContractDetail';
+import ScanQr from './ScanQr';
 
 
 const AppRouter = () => {
@@ -297,10 +298,13 @@ const AppRouter = () => {
           }
         />
 
+        <Route
+          path="/lenh-van-chuyen"
+          element={
+            <ScanQr />
+          }
+        />
       </Routes>
-
-
-
     </BrowserRouter>
   );
 };
