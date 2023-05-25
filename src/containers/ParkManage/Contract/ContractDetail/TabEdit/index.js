@@ -1,12 +1,15 @@
-import { Tabs, message, Col } from 'antd';
+import { Tabs, message, Spin } from 'antd';
 import React, { useState, useCallback, useEffect } from 'react';
 import styled from "styled-components";
 import ContractCar from './ContractCar';
 import DepartureTime from './DepartureTime';
 import BackupCar from './BackupCar';
+import _ from "lodash";
 import { station } from 'configs';
-const TabTable = ({ className, car, time, itemCar, setItemCar, itemTime, setItemTime, setCar, setTime, startDate, endDate }) => {
+const TabTableEdit = ({ className, car, time, itemCar, isEdit, setItemCar, itemTime, setItemTime,onRefreshList, setCar,loading,setLoading, setTime, startDate, endDate, setIsLoad, isLoad }) => {
+
     const [allRoute, setAllRoute] = useState([]);
+    const [allVehicle, setAllVehicle] = useState([]);
     const getAllRoutes = useCallback(async () => {
         station.getRoute()
             .then(res => {
@@ -27,26 +30,52 @@ const TabTable = ({ className, car, time, itemCar, setItemCar, itemTime, setItem
             })
     }, []);
 
+    const getAllVehicle = useCallback(async () => {
+        station.getVehicle()
+            .then(res => {
+                if (res.status === 200) {
+                    const allVehicle = []
+                    res?.data?.data.map(item => {
+                        allVehicle.push({
+                            id: item?.id,
+                            name: item?.license_plate,
+                        })
+                    })
+                    setAllVehicle(allVehicle)
+                }
+            })
+            .catch(err => {
+                message.error("Có lỗi xảy ra !")
+            })
+    }, []);
+
     useEffect(() => {
         getAllRoutes();
-    }, [getAllRoutes]);
+        getAllVehicle();
+    }, [getAllRoutes,getAllVehicle]);
 
     return (
         <div className={className}>
             <Tabs defaultActiveKey="1">
                 <Tabs.TabPane tab="Xe hợp đồng" key="1">
                     <ContractCar
+                        onRefreshList={onRefreshList}
                         car={car}
                         setCar={setCar}
                         allRoute={allRoute}
+                        allVehicle={allVehicle}
                         itemCar={itemCar}
                         setItemCar={setItemCar}
                         startDate={startDate}
                         endDate={endDate}
+                        isLoad={isLoad}
+                        setIsLoad={setIsLoad}
+                        isEdit={isEdit}
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Thời gian xuất bến" key="2">
                     <DepartureTime
+                        onRefreshList={onRefreshList}
                         time={time}
                         setTime={setTime}
                         allRoute={allRoute}
@@ -54,6 +83,9 @@ const TabTable = ({ className, car, time, itemCar, setItemCar, itemTime, setItem
                         setItemTime={setItemTime}
                         startDate={startDate}
                         endDate={endDate}
+                        isLoad={isLoad}
+                        setIsLoad={setIsLoad}
+                        isEdit={isEdit}
                     />
                 </Tabs.TabPane>
                 {/* <Tabs.TabPane tab="Xe dự phòng" key="3">
@@ -64,7 +96,7 @@ const TabTable = ({ className, car, time, itemCar, setItemCar, itemTime, setItem
     )
 
 };
-export default styled(TabTable)`
+export default styled(TabTableEdit)`
 .ant-tabs-tab {
     position: relative;
     display: inline-flex;
@@ -83,4 +115,11 @@ export default styled(TabTable)`
     font-weight: 400 !important;
     font-family: Nunito !important;
     color:#01579B !important;
-}`;
+}
+.ant-tabs-nav-wrap {
+    width: 60% !important;
+    z-index:1 !important;
+    flex:none !important
+}
+
+`;
