@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Button, Table, Tooltip } from 'antd';
+import { Button, Pagination, Row, Table, Tooltip } from 'antd';
 import ColumnGroup from 'antd/lib/table/ColumnGroup';
 import Column from 'antd/lib/table/Column';
 import DefineTable from 'components/DefineTable';
@@ -93,7 +93,7 @@ const TableList = ({ className, data, params, setParams, onEdit, onRefreshList, 
                     <div style={{ textAlign: 'center' }}>
                         <Tooltip placement="topLeft">
                             <Button
-                            style={{ width: '100%' }}
+                                style={{ width: '100%' }}
                                 type="link"
                                 icon={<EditOutlined />}
                                 onClick={() => onEdit(record?.id)}
@@ -105,6 +105,34 @@ const TableList = ({ className, data, params, setParams, onEdit, onRefreshList, 
         }
     ];
 
+    const renderContent = () => {
+        return (
+            <Row justify="end" style={{ marginBottom: 5, marginTop: 5 }}>
+                <Pagination
+                    onShowSizeChange={(current, size) => {
+                        setParams((prevState) => {
+                            let nextState = { ...prevState };
+                            nextState.page = 1;
+                            nextState.size = size;
+                            return nextState;
+                        });
+                    }}
+                    onChange={(page, pageSize) => {
+                        setParams((prevState) => {
+                            let nextState = { ...prevState };
+                            nextState.page = page;
+                            return nextState;
+                        });
+                    }}
+                    total={total}
+                    current={params.page}
+                    pageSize={params.size}
+                    showSizeChanger
+                />
+            </Row>
+        );
+    };
+
     return (
         <div className={className}>
             <DefineTable
@@ -113,6 +141,7 @@ const TableList = ({ className, data, params, setParams, onEdit, onRefreshList, 
                 scroll={{ y: "calc(100vh - 330px)" }}
                 pagination={false}
             />
+            {renderContent()}
         </div>
     );
 };

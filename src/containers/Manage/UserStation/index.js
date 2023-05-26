@@ -4,7 +4,7 @@ import { manage } from 'configs';
 import { Ui } from 'utils/Ui';
 import styled from 'styled-components';
 import PropTypes from "prop-types";
-import { Col, Modal, Row, Spin } from 'antd';
+import { Col, Modal, Row, Spin, message } from 'antd';
 import Filter from './Filter';
 import TableList from './TableList';
 import FormChangePass from './FormChangePass';
@@ -34,10 +34,11 @@ const UserMerchant = ({ className }) => {
             console.log(res);
             if (res.status === 200) {
                 setListStationUser(res?.data?.data);
+                setTotal(res?.data?.meta?.total)
             }
             setLoading(false);
         }).catch(err => {
-            Ui.showError({ message: 'Có lỗi xảy ra' });
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
     }, [params]);
 

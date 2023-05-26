@@ -14,21 +14,6 @@ let inputTimer = null;
 
 const Filter = ({ className, setParams, params, setShowModal, operator }) => {
 
-  const [listPositions, setListPositions] = useState([]);
-  const getListPotisions = useCallback(async () => {
-    category.getPositions().then(res => {
-      setListPositions(res?.data?.data);
-    }).catch(err => {
-      if (err.response?.status === 422 && err.response?.data?.errors) {
-        Ui.showErrors('Có lỗi xảy ra');
-      }
-    })
-  }, []);
-
-  useEffect(() => {
-    getListPotisions();
-  }, []);
-
   const _changeQuery = useCallback(
     (payload) => {
       if (inputTimer) {

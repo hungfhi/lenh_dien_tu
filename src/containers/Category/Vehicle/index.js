@@ -38,14 +38,11 @@ const Index = ({ className, profile }) => {
             })
           })
           setProducts(newProducts)
-          setTotal(res?.data?.meta?.total)
+
         }
       })
       .catch(err => {
-        if (err.response?.status === 422 && err.response?.data?.errors) {
-          message.warn(err.response.data?.errors[0].msg)
-          message.error('Error!')
-        }
+        message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
       })
 
   }, []);
@@ -64,13 +61,11 @@ const Index = ({ className, profile }) => {
             });
           });
           setSeatType(newSeatType);
+          setTotal(res?.data?.meta?.total)
         }
         setLoading(false);
       }).catch(err => {
-        if (err.response?.status === 422 && err.response?.data?.errors) {
-          message.warn(err.response.data?.errors[0]?.msg)
-          message.error('Error!')
-        }
+        message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
       });
   }, [params]);
 

@@ -1,5 +1,5 @@
 import { EditOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Row, Tooltip, Empty } from "antd";
+import { Button, Checkbox, Row, Tooltip, Empty, Pagination } from "antd";
 import _, { ceil } from "lodash";
 import moment from 'moment';
 import PropTypes from "prop-types";
@@ -7,11 +7,37 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
+const Loyalty = ({ className, pointReceive, stations, data, onEdit, total, setParams, params }) => {
   const navigate = useNavigate();
   const [stickyCss, setStickyCss] = useState(10);
   const [scollX, setScollX] = useState(10);
-
+  const renderContent = () => {
+    return (
+      <Row justify="end" style={{ marginBottom: 5, marginTop: 5 }}>
+        <Pagination
+          onShowSizeChange={(current, size) => {
+            setParams((prevState) => {
+              let nextState = { ...prevState };
+              nextState.page = 1;
+              nextState.size = size;
+              return nextState;
+            });
+          }}
+          onChange={(page, pageSize) => {
+            setParams((prevState) => {
+              let nextState = { ...prevState };
+              nextState.page = page;
+              return nextState;
+            });
+          }}
+          total={total}
+          current={params.page}
+          pageSize={params.size}
+          showSizeChanger
+        />
+      </Row>
+    );
+  };
 
   const dataOption = [
     {
@@ -261,6 +287,7 @@ const Loyalty = ({ className, pointReceive, stations, data, onEdit }) => {
 
             </table>
           </div>
+          {renderContent()}
         </div>
       </Row>
     </>

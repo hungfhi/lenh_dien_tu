@@ -31,7 +31,6 @@ const Contract = ({ className, profile }) => {
     station.getContract(params)
       .then(res => {
         if (res.status === 200) {
-          setLoading(false);
           setTotal(res?.data?.meta?.total)
           manage.getStation(payload)
             .then(res1 => {
@@ -48,8 +47,11 @@ const Contract = ({ className, profile }) => {
                   return item;
                 }));
               }
+              setLoading(false);
             })
+
             .catch(err1 => {
+              setLoading(false);
               message.error("Có lỗi xảy ra !")
             })
 
@@ -116,6 +118,7 @@ const Contract = ({ className, profile }) => {
             data={data}
             onRefreshList={onRefreshList}
             setParams={setParams}
+            total={total}
           />
         </Spin>
       </Col>

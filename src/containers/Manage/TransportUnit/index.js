@@ -26,7 +26,7 @@ const Index = ({ className, profile }) => {
   const [isShowModalEdit, setShowModalEdit] = useState(false)
   const [params, setParams] = useState({
     page: 1,
-    per_page: 20,
+    size: 20,
     merchant_name: "",
     station_id:undefined
   });

@@ -119,7 +119,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
             setParams((prevState) => {
               let nextState = { ...prevState };
               nextState.page = 1;
-              nextState.per_page = size;
+              nextState.size = size;
               return nextState;
             });
           }}
@@ -132,7 +132,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
           }}
           total={total}
           current={params.page}
-          pageSize={params.per_page}
+          pageSize={params.size}
           showSizeChanger
         />
       </Row>
