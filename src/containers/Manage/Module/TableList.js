@@ -1,5 +1,5 @@
 import { EditOutlined, ExclamationCircleOutlined, CheckOutlined, CloseOutlined, CaretDownOutlined, CaretUpOutlined, HolderOutlined } from "@ant-design/icons";
-import { Button, Modal, Popconfirm, Tooltip, Switch } from "antd";
+import { Button, Modal, Popconfirm, Tooltip, Switch, message } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
 import manage from "configs/manage";
@@ -28,7 +28,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
         }
       })
       .catch(err => {
-        Ui.showError({ message: err?.response?.data?.message });
+        message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
       })
   };
 

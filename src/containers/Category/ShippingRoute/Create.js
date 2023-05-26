@@ -30,9 +30,7 @@ const Create = ({
         onHiddenModal();
       }
     }).catch(err => {
-      if (err.response?.status === 422 && err.response?.data?.errors) {
-        message.error(err.response?.data?.message);
-      }
+      message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
     });
   }
   return (

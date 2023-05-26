@@ -31,7 +31,7 @@ const Processing = ({ className, allRoute, data, params, setParams, onRefreshLis
                 }
             })
             .catch(err => {
-                message.error("Có lỗi xảy ra !")
+                message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
             })
     }, []);
 

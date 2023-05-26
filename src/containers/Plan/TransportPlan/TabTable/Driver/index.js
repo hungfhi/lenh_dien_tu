@@ -47,10 +47,7 @@ const Driver = ({ className, itemSelected }) => {
                 setAllStaff(newAllStaff);
             }
         }).catch(err => {
-            if (err.response?.status === 422 && err.response?.data?.errors) {
-                message.warn(err.response.data?.errors[0].msg)
-                message.error('Error!')
-            }
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         });
     }, []);
 
@@ -66,7 +63,7 @@ const Driver = ({ className, itemSelected }) => {
             }
             setLoading(false);
         }).catch(err => {
-            Ui.showError({ message: err?.response?.data?.message });
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         });
     });
 

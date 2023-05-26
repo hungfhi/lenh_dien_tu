@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Row, Col, DatePicker, Select, Button } from "antd";
+import { Row, Col, DatePicker, Select, Button, message } from "antd";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import _ from "lodash";
@@ -37,7 +37,7 @@ const UpdateDinhMuc = ({
           }
         })
         .catch(err => {
-          Ui.showError({ message: err?.response?.data?.message });
+          message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
         })
 
     })

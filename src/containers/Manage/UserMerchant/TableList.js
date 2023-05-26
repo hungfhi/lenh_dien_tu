@@ -1,5 +1,5 @@
 import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { Button, Modal, Pagination, Row, Switch, Tag, Tooltip } from "antd";
+import { Button, Modal, Pagination, Row, Switch, Tag, Tooltip, message } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
 import moment from "moment";
@@ -27,7 +27,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
         onRefreshList();
       }
     }).catch(err => {
-      Ui.showError({ message: err?.response?.data?.message });
+      message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
     })
   };
 

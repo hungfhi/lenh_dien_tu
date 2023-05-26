@@ -1,5 +1,5 @@
 import { EditOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { Button, Modal, Pagination, Row, Tooltip } from "antd";
+import { Button, Modal, Pagination, Row, Tooltip, message } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
 import PropTypes from "prop-types";
@@ -29,6 +29,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, allDriver,
         }
       })
       .catch(err => {
+        message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
       })
   }, []);
 

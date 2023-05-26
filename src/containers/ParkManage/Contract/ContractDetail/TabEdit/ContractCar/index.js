@@ -52,7 +52,7 @@ const ContractCar = ({ className, car, setCar, allRoute, allVehicle, startDate, 
         }
       })
       .catch(err => {
-        message.error("Có lỗi xảy ra!")
+        message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
       })
 
   }, [isActive, isEdit,params]);
@@ -75,7 +75,7 @@ const ContractCar = ({ className, car, setCar, allRoute, allVehicle, startDate, 
         }
       })
       .catch(err => {
-        message.error("Có lỗi xảy ra !")
+        message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
       })
   }, [itemCar]);
 

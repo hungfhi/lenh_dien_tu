@@ -1,4 +1,4 @@
-import { Col, Drawer, Spin } from 'antd';
+import { Col, Drawer, Spin, message } from 'antd';
 import { category } from 'configs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Ui } from 'utils/Ui';
@@ -51,11 +51,7 @@ const Trip = ({ itemSelected }) => {
             }
             setLoading(false);
         }).catch(err => {
-            // if (err.response?.status === 422 && err.response?.data?.errors) {
-            //     message.warn(err.response.data?.errors[0].msg)
-            //     message.error('Error!')
-            // }
-            Ui.showError({ message: 'Có lỗi xảy ra' });
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         });
     }, []);
     useEffect(() => {
