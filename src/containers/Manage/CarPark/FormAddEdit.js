@@ -37,9 +37,7 @@ const FormAddEdit = ({
                 }
             })
             .catch(err => {
-                if (err.response?.status === 422 && err.response?.data?.errors) {
-                    message.warn(err.response.data?.errors[0].msg)
-                }
+                message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
             })
     }, []);
 
@@ -55,9 +53,7 @@ const FormAddEdit = ({
                 }
             })
             .catch(err => {
-                if (err.response?.status === 422 && err.response?.data?.errors) {
-                    message.warn(err.response.data?.errors[0].msg)
-                }
+                message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
             })
     }, [province_id]);
 
@@ -71,9 +67,7 @@ const FormAddEdit = ({
                 }
             })
             .catch(err => {
-                if (err.response?.status === 422 && err.response?.data?.errors) {
-                    message.warn(err.response.data?.errors[0].msg)
-                }
+                message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
             })
     }, []);
 

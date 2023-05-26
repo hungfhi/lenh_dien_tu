@@ -63,7 +63,7 @@ const ContractDetail = ({ className }) => {
                 }
             })
             .catch(err => {
-                message.error('Có lỗi xảy ra')
+                message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
             })
     }, []);
     const getTransports = useCallback(async () => {
@@ -77,9 +77,7 @@ const ContractDetail = ({ className }) => {
                 }
             })
             .catch(err => {
-                if (err.response?.status === 422 && err.response?.data?.errors) {
-                    message.warn(err.response.data?.errors[0].msg)
-                }
+                message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
             })
     }, []);
 
@@ -93,7 +91,7 @@ const ContractDetail = ({ className }) => {
                 }
             })
             .catch(err => {
-                message.error('Có lỗi xảy ra!')
+                message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
             })
     }, [isEdit])
     useEffect(() => {
@@ -157,7 +155,7 @@ const ContractDetail = ({ className }) => {
                             }
                         })
                         .catch(err => {
-                            message.error("Có lỗi xảy ra khi gán xe")
+                            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
                         })
                     station.addTimeCreate(time)
                         .then(res => {
@@ -165,13 +163,13 @@ const ContractDetail = ({ className }) => {
                             }
                         })
                         .catch(err => {
-                            message.error("Có lỗi xảy ra khi gán thời gian xe xb!")
+                            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
                         })
                     navigate(`/contract`, { replace: true })
                 }
             })
             .catch(err => {
-                message.error("Có lỗi xảy ra!")
+                message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
             })
 
     }

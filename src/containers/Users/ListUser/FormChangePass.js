@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Form, Input, Row } from "antd";
+import { Button, Checkbox, Col, Form, Input, Row, message } from "antd";
 import { users } from "configs";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -33,7 +33,7 @@ const FormChangePass = ({
               }
             })
             .catch(err => {
-              Ui.showError({ message: err?.response?.data?.message });
+                message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
             })
     };
     const onFinishFailed = () => {

@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, InputNumber, Select, DatePicker, Switch, Checkbox } from "antd";
+import { Button, Col, Form, Input, Row, InputNumber, Select, DatePicker, Switch, Checkbox, message } from "antd";
 import { category } from "configs";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -84,9 +84,7 @@ const FormAddEdit = ({
         category.getDrivingLicenseRank().then(res => {
             setListDrivingLicenseRank(res?.data?.data);
         }).catch(err => {
-            if (err.response?.status === 422 && err.response?.data?.errors) {
-                Ui.showErrors('Có lỗi xảy ra');
-            }
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra')
         })
     }, []);
 
@@ -94,9 +92,7 @@ const FormAddEdit = ({
         category.getPositions().then(res => {
             setListPositions(res?.data?.data);
         }).catch(err => {
-            if (err.response?.status === 422 && err.response?.data?.errors) {
-                Ui.showErrors('Có lỗi xảy ra');
-            }
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra')
         })
     }, []);
 
@@ -106,9 +102,7 @@ const FormAddEdit = ({
             // console.log(res);
             setListStations(res?.data?.data);
         }).catch(err => {
-            if (err.response?.status === 422 && err.response?.data?.errors) {
-                Ui.showErrors('Có lỗi xảy ra');
-            }
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra')
         })
     }, []);
 
@@ -127,9 +121,7 @@ const FormAddEdit = ({
 
             setListModel(newListModel);
         }).catch(err => {
-            if (err.response?.status === 422 && err.response?.data?.errors) {
-                Ui.showErrors('Có lỗi xảy ra');
-            }
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra')
         })
     }, []);
 
@@ -148,9 +140,7 @@ const FormAddEdit = ({
 
             setListByMerchant(newListByMerchant);
         }).catch(err => {
-            if (err.response?.status === 422 && err.response?.data?.errors) {
-                Ui.showErrors('Có lỗi xảy ra');
-            }
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra')
         })
     }, []);
 
@@ -431,7 +421,7 @@ const FormAddEdit = ({
                         // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
                             <Select
-                                // placeholder="Hạng GPLX"
+                            // placeholder="Hạng GPLX"
                             >
                                 {listDrivingLicenseRank && listDrivingLicenseRank.map((item, index) => {
 

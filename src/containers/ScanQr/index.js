@@ -35,7 +35,7 @@ const District = ({ className }) => {
                 }
             })
             .catch(err => {
-                message.error("Có lỗi xảy ra !")
+                message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
             })
     }, []);
 

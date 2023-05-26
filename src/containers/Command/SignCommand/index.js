@@ -72,7 +72,7 @@ const SignCommand = ({
                 }
             })
             .catch(err => {
-                message.error("Có lỗi xảy ra !")
+                message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
             })
     }, [params]);
 
@@ -94,7 +94,7 @@ const SignCommand = ({
                 }
             })
             .catch(err => {
-                message.error("Có lỗi xảy ra !")
+                message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
             })
     }, []);
 
@@ -120,7 +120,7 @@ const SignCommand = ({
                     handleCancel()
                 }
             }).catch(err => {
-                message.error("Có lỗi xảy ra !")
+                message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
             })
             message.success("Kí lệnh thành công.");
         } else {
@@ -142,7 +142,7 @@ const SignCommand = ({
                 message.success("Kí lệnh thành công.");
             }
         }).catch(err => {
-            message.error("Có lỗi xảy ra !")
+            message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
         })
     }, []);
 

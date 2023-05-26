@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, InputNumber, TreeSelect } from "antd";
+import { Button, Col, Form, Input, Row, InputNumber, TreeSelect, message } from "antd";
 import { Module, Permission } from "components";
 import manage from "configs/manage";
 import PropTypes from "prop-types";
@@ -47,7 +47,7 @@ const FormAddEdit = ({
                 }
             })
             .catch(err => {
-                Ui.showError({ message: err?.response?.data?.message });
+                message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
             })
     }, []);
 

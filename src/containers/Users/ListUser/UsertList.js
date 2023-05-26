@@ -1,7 +1,7 @@
 import {
     CheckOutlined, CloseOutlined, EditOutlined, ExclamationCircleOutlined
 } from '@ant-design/icons';
-import { Button, Modal, Pagination, Row, Space, Switch, Tag, Tooltip } from "antd";
+import { Button, Modal, Pagination, Row, Space, Switch, Tag, Tooltip, message } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
 import { users } from 'configs';
@@ -25,7 +25,7 @@ const UsertList = memo(({ className, data, params, total, setTotal, setParams, o
                 }
             })
             .catch(err => {
-                Ui.showError({ message: err?.response?.data?.message });
+                message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
             })
     };
 
@@ -59,7 +59,7 @@ const UsertList = memo(({ className, data, params, total, setTotal, setParams, o
             fixed: "left",
             align: 'center',
             render: (value, row, index) => {
-                const stringIndex = `${((params.page - 1) * params.limit + index)}`;
+                const stringIndex = `${((params.page - 1) * params.size + index)}`;
                 return (
                     <h5 style={{ textAlign: 'center' }}>{params.page === 1 ? index + 1 : parseInt(stringIndex) + 1}</h5>
                 );
@@ -163,11 +163,11 @@ const UsertList = memo(({ className, data, params, total, setTotal, setParams, o
         return (
             <Row justify="end" style={{ marginBottom: 5, marginTop: 5 }}>
                 <Pagination
-                    onShowSizeChange={(current, per_page) => {
+                    onShowSizeChange={(current, size) => {
                         setParams((prevState) => {
                             let nextState = { ...prevState };
                             nextState.page = 1;
-                            nextState.per_page = per_page;
+                            nextState.size = size;
                             return nextState;
                         });
                     }}
@@ -180,7 +180,7 @@ const UsertList = memo(({ className, data, params, total, setTotal, setParams, o
                     }}
                     total={total}
                     current={params.page}
-                    pageSize={params.per_page}
+                    pageSize={params.size}
                     showSizeChanger
                 />
             </Row>

@@ -25,9 +25,7 @@ const TableList = ({ className, data, setData, itemSelected, onEdit, onRefreshLi
                 onRefreshList();
             }
         }).catch(err => {
-            if (err.response?.status === 422 && err.response?.data?.errors) {
-                message.error('Error!')
-            }
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         });
     };
 

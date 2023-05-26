@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Row, Col, DatePicker, Select, Button } from "antd";
+import { Row, Col, DatePicker, Select, Button, message } from "antd";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import _ from "lodash";
@@ -25,11 +25,11 @@ const Update = ({
       is_active: values?.is_active ? 1 : 0
     }
     category.updateMerchantRoute(payload).then(res => {
-      Ui.showSuccess({ message: "Thành công" });
+      message.success('Thành công !')
       // onHiddenModalEdit();
       onRefreshList();
     }).catch(err => {
-      Ui.showError({ message: 'Có lỗi xảy ra' });
+      message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
     });
   });
 

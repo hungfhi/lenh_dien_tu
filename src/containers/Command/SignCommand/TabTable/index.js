@@ -60,7 +60,7 @@ const FormSign = ({
                 setNodeA({})
                 setNodeB({})
                 setShowForm(false)
-                message.error("Có lỗi xảy ra !")
+                message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
             })
     }, [params]);
 
@@ -89,7 +89,7 @@ const FormSign = ({
                 }
             })
             .catch(err => {
-                message.error("Có lỗi xảy raaaaaaa !")
+                message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
             })
     }, [itemSelected]);
 

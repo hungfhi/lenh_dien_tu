@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Col, Row, message } from "antd";
 import { users } from "configs";
 import { Map } from "immutable";
 import PropTypes from "prop-types";
@@ -51,7 +51,7 @@ const Roles = ({ className, profile }) => {
               }
             })
             .catch(err => {
-              Ui.showError({ message: err?.response?.data?.message });
+              message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
             })
     }, [params]);
 
@@ -70,7 +70,7 @@ const Roles = ({ className, profile }) => {
           }
         })
         .catch(err => {
-          Ui.showError({ message: err?.response?.data?.message });
+          message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
     }, [body]);
 
@@ -91,7 +91,7 @@ const Roles = ({ className, profile }) => {
           }
         })
         .catch(err => {
-          Ui.showError({ message: err?.response?.data?.message });
+          message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
 
 
@@ -118,7 +118,7 @@ const Roles = ({ className, profile }) => {
           }
         })
         .catch(err => {
-          Ui.showError({ message: err?.response?.data?.message });
+          message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
 
     }, [params]);
@@ -135,7 +135,7 @@ const Roles = ({ className, profile }) => {
           }
         })
         .catch(err => {
-          Ui.showError({ message: err?.response?.data?.message });
+          message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
     }, [modal]);
     useEffect(() => {

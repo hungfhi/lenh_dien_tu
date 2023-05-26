@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import styled from "styled-components";
 import { Ui } from "utils/Ui";
 import FormUser from './FormUser';
+import { message } from "antd";
 const UpdateAccount = ({
     className,
     onHiddenModalEdit,
@@ -35,7 +36,7 @@ const UpdateAccount = ({
           }
         })
         .catch(err => {
-          Ui.showError({ message: err?.response?.data?.message });
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
     }, [])
 

@@ -73,7 +73,7 @@ const ItemRow = memo(({ className, nameColumn, values, setItemSelected, record, 
                 }
             })
             .catch(err => {
-                message.error('Có lỗi xảy ra !')
+                message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
             })
 
     };

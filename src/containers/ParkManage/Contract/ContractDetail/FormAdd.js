@@ -49,10 +49,8 @@ const TableList = memo(({ className, onSave, itemSelected, stations, transport, 
         }
       })
       .catch(err => {
-        if (err.response?.status === 422 && err.response?.data?.errors) {
-          message.warn(err.response.data?.errors[0].msg)
+        message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
           setIsLoad(false)
-        }
       })
 
   }, [merchant, stati, startDate, endDate]);

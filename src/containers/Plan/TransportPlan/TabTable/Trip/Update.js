@@ -5,6 +5,7 @@ import _ from "lodash";
 import FormEdit from './FormEdit';
 import { plan } from 'configs';
 import { Ui } from 'utils/Ui';
+import { message } from 'antd';
 
 const Update = ({ className,
     onHiddenModalTripPlan,
@@ -36,7 +37,7 @@ const Update = ({ className,
             // setData(dataClone)
             onRefreshList();
         }).catch(err => {
-            Ui.showError({ message: 'Có lỗi xảy ra' });
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         });
     });
 

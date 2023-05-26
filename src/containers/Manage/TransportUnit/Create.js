@@ -45,9 +45,7 @@ const Create = ({
         }
       })
       .catch(err => {
-        if (err.response?.status === 422 && err.response?.data?.errors) {
-          message.warn(err.response.data?.message)
-        }
+        message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
       })
   }
   return (

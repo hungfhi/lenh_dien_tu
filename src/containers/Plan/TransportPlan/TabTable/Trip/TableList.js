@@ -103,9 +103,7 @@ const TableList = ({ className, data, setData, params, total, itemSelected, onTr
                 setData(dataClone.filter(item => item.id !== row?.id));
             }
         }).catch(err => {
-            if (err.response?.status === 422 && err.response?.data?.errors) {
-                message.error('Error!')
-            }
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
     };
 

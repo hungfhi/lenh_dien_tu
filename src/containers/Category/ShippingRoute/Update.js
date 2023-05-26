@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Row, Col, DatePicker, Select, Button } from "antd";
+import { Row, Col, DatePicker, Select, Button, message } from "antd";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import _ from "lodash";
@@ -24,13 +24,13 @@ const UpdateDinhMuc = ({
     }
     category.updateRoute(params).then(res => {
         if (res.status === 200) {
-          Ui.showSuccess({ message: "Thành công" });
+          message.success('Thành công !')
           onRefreshList();
           onHiddenModalEdit();
 
         }
       }).catch(err => {
-        Ui.showErrors('Có lỗi xảy ra');
+        message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
       });
 
   });

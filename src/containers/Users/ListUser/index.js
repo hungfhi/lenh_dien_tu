@@ -1,4 +1,4 @@
-import { Col, Drawer, Modal, Row, Spin } from "antd";
+import { Col, Drawer, Modal, Row, Spin, message } from "antd";
 import { users } from "configs";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
@@ -22,7 +22,7 @@ const ListUser = ({ className, profile }) => {
     const [getId, setGetId] = useState("");
     const [params, setParams] = useState({
         page: 1,
-        per_page: 10,
+        size: 20,
     });
 
 
@@ -31,7 +31,7 @@ const ListUser = ({ className, profile }) => {
 
         const payload = {
             page: params?.page,
-            per_page: params?.per_page
+            size: params?.size
           }
 
           users.getUsers(payload)
@@ -42,7 +42,7 @@ const ListUser = ({ className, profile }) => {
               }
             })
             .catch(err => {
-              Ui.showError({ message: err?.response?.data?.message });
+                message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
             })
         await setLoading(false);
     }, [params]);
@@ -61,7 +61,7 @@ const ListUser = ({ className, profile }) => {
           }
         })
         .catch(err => {
-          Ui.showError({ message: err?.response?.data?.message });
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
     }, [])
 
