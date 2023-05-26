@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Form, Input, Row } from "antd";
+import { Button, Checkbox, Col, Form, Input, Row, message } from "antd";
 import { manage, users } from "configs";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -26,12 +26,12 @@ const FormChangePass = ({
 
         manage.changeStationUserPassword(getId, payload).then(res => {
             if (res.status === 200) {
-                Ui.showSuccess({ message: "Thay đổi mật khẩu thành công" });
+                message.success('Thay đổi mật khẩu thành công')
                 onRefreshList();
                 handleClose();
             }
         }).catch(err => {
-            Ui.showError({ message: err?.response?.data?.message });
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         });
     };
     const onFinishFailed = () => {

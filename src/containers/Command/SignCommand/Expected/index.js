@@ -25,7 +25,6 @@ const Expected = ({ className, allRoute, data, params, setParams, onRefreshList,
                         setItemSelected={setItemSelected}
                         itemSelected={itemSelected}
                         setIdRow={setIdRow}
-                    // setTotal={setTotal}
                     />
                 </Spin>
 

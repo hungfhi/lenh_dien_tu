@@ -137,6 +137,7 @@ const Index = ({ className }) => {
                         data={data}
                         onEdit={onEdit}
                         total={total}
+                        setTotal={setTotal}
                         onRefreshList={onRefreshList}
                         setParams={setParams}
                     />

@@ -25,7 +25,7 @@ const SignCommand = ({
     const [itemSelected, setItemSelected] = useState([]);
     const [allData, setAllData] = useState([]);
     const [allRoute, setAllRoute] = useState([]);
-
+    const [total, setTotal] = useState(0);
 
 
     const [params, setParams] = useState({
@@ -67,6 +67,7 @@ const SignCommand = ({
             .then(res => {
                 if (res.status === 200) {
                     setAllData(res?.data?.data)
+                    setTotal(res?.data?.meta?.total)
                     setItemSelected([])
                     setLoading(false)
                 }
@@ -174,6 +175,7 @@ const SignCommand = ({
                         onRefreshList={onRefreshList}
                         loading={loading}
                         onSign={onSign}
+                        total={total}
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Đang thực hiện" key="2">
@@ -186,6 +188,7 @@ const SignCommand = ({
                         itemSelected={itemSelected}
                         loading={loading}
                         onRefreshList={onRefreshList}
+                        total={total}
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Từ chối" key="3">
@@ -197,6 +200,7 @@ const SignCommand = ({
                         setItemSelected={setItemSelected}
                         itemSelected={itemSelected}
                         loading={loading}
+                        total={total}
                     />
                 </Tabs.TabPane>
             </Tabs>

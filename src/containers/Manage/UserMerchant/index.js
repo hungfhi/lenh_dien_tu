@@ -34,6 +34,7 @@ const UserMerchant = ({ className }) => {
             console.log(res);
             if (res.status === 200) {
                 setListUserMerchant(res?.data?.data);
+                setTotal(res?.data?.meta?.total)
             }
             setLoading(false);
         }).catch(err => {
