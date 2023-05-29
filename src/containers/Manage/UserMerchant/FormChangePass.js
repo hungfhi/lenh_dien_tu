@@ -31,7 +31,7 @@ const FormChangePass = ({
                 handleClose();
             }
         }).catch(err => {
-            message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         });
     };
     const onFinishFailed = () => {

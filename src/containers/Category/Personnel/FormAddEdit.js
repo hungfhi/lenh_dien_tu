@@ -235,7 +235,7 @@ const FormAddEdit = ({
                         <Form.Item
                             name="phone"
                             rules={[
-                                { required: true, message: "Vui lòng nhập số điện thoại" },
+                                { required: true, message: "Vui lòng nhập SĐT" },
                                 {
                                     pattern: new RegExp(/^[0-9]+$/i),
                                     message: "SĐT chỉ được nhập số",

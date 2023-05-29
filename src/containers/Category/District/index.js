@@ -1,4 +1,4 @@
-import { Col, Row, Spin } from 'antd';
+import { Col, message, Row, Spin } from 'antd';
 import { category } from 'configs';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import TableList from './TableList';
 import _ from "lodash"
 
-const District = ({className}) => {
+const District = ({ className }) => {
 
     const [listDistrict, setListDistrict] = useState([]);
     const [total, setTotal] = useState(0);
@@ -29,7 +29,7 @@ const District = ({className}) => {
                 setLoading(false);
             }
         }).catch(err => {
-            Ui.showError({ message: 'Có lỗi xảy ra' });
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
         // await setLoading(false);
     }, [params]);
