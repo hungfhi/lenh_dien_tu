@@ -9,7 +9,7 @@ import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
 import { useSelector, } from 'react-redux';
-import {  category } from "configs";
+import { category } from "configs";
 
 const Personnel = ({ className, profile }) => {
 
@@ -35,13 +35,11 @@ const Personnel = ({ className, profile }) => {
   const getDataTable = useCallback(async () => {
     setLoading(true);
     category.getPersons(params).then(res => {
-     
       setData(res?.data?.data);
+      setTotal(res?.data?.meta?.total)
       setLoading(false);
     }).catch(err => {
-      if (err.response?.status === 422 && err.response?.data?.errors) {
-        Ui.showErrors('Có lỗi xảy ra');
-      }
+      message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
     });
     // await setLoading(false);
   }, [params]);
@@ -82,6 +80,8 @@ const Personnel = ({ className, profile }) => {
             onEdit={onEdit}
             onRefreshList={onRefreshList}
             setParams={setParams}
+            setTotal={setTotal}
+            total={total}
           />
         </Spin>
       </Col>

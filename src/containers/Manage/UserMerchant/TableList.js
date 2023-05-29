@@ -1,5 +1,5 @@
 import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { Button, Modal, Pagination, Row, Switch, Tag, Tooltip } from "antd";
+import { Button, Modal, Pagination, Row, Switch, Tag, Tooltip, message } from "antd";
 import "antd/dist/antd.css";
 import { DefineTable } from "components";
 import moment from "moment";
@@ -14,7 +14,7 @@ import { manage } from "configs";
 
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList, onChangeP }) => {
+const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList, onChangeP, total, setTotal }) => {
 
   const onChange = async (e, value, row) => {
     const payload = {
@@ -27,7 +27,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
         onRefreshList();
       }
     }).catch(err => {
-      Ui.showError({ message: err?.response?.data?.message });
+      message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
     })
   };
 
@@ -160,33 +160,33 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
     }
   ];
 
-  // const renderContent = () => {
-  //   return (
-  //     <Row justify="end" style={{ marginBottom: 5, marginTop: 5 }}>
-  //       <Pagination
-  //         onShowSizeChange={(current, size) => {
-  //           setParams((prevState) => {
-  //             let nextState = { ...prevState };
-  //             nextState.page = 1;
-  //             nextState.size = size;
-  //             return nextState;
-  //           });
-  //         }}
-  //         onChange={(page, pageSize) => {
-  //           setParams((prevState) => {
-  //             let nextState = { ...prevState };
-  //             nextState.page = page;
-  //             return nextState;
-  //           });
-  //         }}
-  //         total={total}
-  //         current={params.page}
-  //         pageSize={params.size}
-  //         showSizeChanger
-  //       />
-  //     </Row>
-  //   );
-  // };
+  const renderContent = () => {
+    return (
+      <Row justify="end" style={{ marginBottom: 5, marginTop: 5 }}>
+        <Pagination
+          onShowSizeChange={(current, size) => {
+            setParams((prevState) => {
+              let nextState = { ...prevState };
+              nextState.page = 1;
+              nextState.size = size;
+              return nextState;
+            });
+          }}
+          onChange={(page, pageSize) => {
+            setParams((prevState) => {
+              let nextState = { ...prevState };
+              nextState.page = page;
+              return nextState;
+            });
+          }}
+          total={total}
+          current={params.page}
+          pageSize={params.size}
+          showSizeChanger
+        />
+      </Row>
+    );
+  };
 
   return (
     <div className={className}>
@@ -196,7 +196,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
         scroll={{ y: "calc(100vh - 330px)" }}
         pagination={false}
       />
-      {/* {renderContent()} */}
+      {renderContent()}
 
     </div >
   );

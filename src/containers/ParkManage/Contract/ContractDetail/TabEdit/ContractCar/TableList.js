@@ -86,7 +86,7 @@ const Social = ({ className, data, allRoute,startDate, endDate }) => {
           }
       })
       .catch(err => {
-          message.error("Có lỗi xảy ra !")
+        message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
       })
     }, 500);
 

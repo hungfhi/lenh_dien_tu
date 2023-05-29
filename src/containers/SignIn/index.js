@@ -1,5 +1,5 @@
 import { LockFilled, MailOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Spin } from 'antd';
+import { Button, Form, Input, Spin, message } from 'antd';
 import { auth } from 'configs';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -40,7 +40,7 @@ const SignIn = ({ className }) => {
         }
       })
       .catch(err => {
-        Ui.showError({ message: err?.response?.data?.message });
+        message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
       })
   };
 

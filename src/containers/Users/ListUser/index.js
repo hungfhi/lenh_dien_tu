@@ -1,4 +1,4 @@
-import { Col, Drawer, Modal, Row, Spin } from "antd";
+import { Col, Drawer, Modal, Row, Spin, message } from "antd";
 import { users } from "configs";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
@@ -22,7 +22,11 @@ const ListUser = ({ className, profile }) => {
     const [getId, setGetId] = useState("");
     const [params, setParams] = useState({
         page: 1,
-        per_page: 10,
+        size: 20,
+        phone: '',
+        username: '',
+        full_name: '',
+        email: '',
     });
 
 
@@ -31,20 +35,25 @@ const ListUser = ({ className, profile }) => {
 
         const payload = {
             page: params?.page,
-            per_page: params?.per_page
-          }
+            size: params?.size,
+            phone: params?.phone,
+            username: params?.username,
+            full_name: params?.full_name,
+            email: params?.email,
+        }
 
-          users.getUsers(payload)
+        users.getUsers(payload)
             .then(res => {
-              if (res.status === 200) {
-                setData(res?.data?.data)
-                setTotal(res?.data?.meta?.total)
-              }
+                setLoading(false);
+                if (res.status === 200) {
+                    setData(res?.data?.data)
+                    setTotal(res?.data?.meta?.total)
+                }
             })
             .catch(err => {
-              Ui.showError({ message: err?.response?.data?.message });
+                setLoading(false);
+                message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
             })
-        await setLoading(false);
     }, [params]);
 
 
@@ -52,24 +61,24 @@ const ListUser = ({ className, profile }) => {
     const onEdit = useCallback(async (ids) => {
         setShowModalEdit(true)
         const payload = {
-            uuid:ids
+            uuid: ids
         }
         users.getInfoUser(payload)
-        .then(res => {
-          if (res.status === 200) {
-            setItemSelected(res?.data?.data)
-          }
-        })
-        .catch(err => {
-          Ui.showError({ message: err?.response?.data?.message });
-        })
+            .then(res => {
+                if (res.status === 200) {
+                    setItemSelected(res?.data?.data)
+                }
+            })
+            .catch(err => {
+                message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
+            })
     }, [])
 
     const onChangeP = (ids) => {
         setGetId(ids)
         setShowChange(true);
-      };
-      const handleClose = useCallback(() => {
+    };
+    const handleClose = useCallback(() => {
         setShowChange(false);
     });
 
@@ -143,7 +152,7 @@ const ListUser = ({ className, profile }) => {
             </Drawer>
 
             <Modal footer={null} title="Đổi mật khẩu" visible={showChange} closable={false} destroyOnClose>
-               <FormChangePass   
+                <FormChangePass
                     onRefreshList={onRefreshList}
                     handleClose={handleClose}
                     onChangeP={onChangeP}

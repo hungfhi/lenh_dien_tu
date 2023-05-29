@@ -45,6 +45,7 @@ const TableList = memo(({ className, data, params, setParams, onRefreshList, ite
         }
       })
       .catch(err => {
+        message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
       })
   }, []);
 
@@ -68,7 +69,7 @@ const TableList = memo(({ className, data, params, setParams, onRefreshList, ite
         }
       })
       .catch(err => {
-        message.error('Có lỗi xảy ra!')
+        message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
       })
   };
 
@@ -153,7 +154,7 @@ const TableList = memo(({ className, data, params, setParams, onRefreshList, ite
       dataIndex: "third_driver",
       width: 170,
       render: (text, record, row) => {
-        return (<div>{`${text?.first_name !== undefined ? text?.first_name : ''} ${text?.last_name !== undefined ? text?.last_name : ''}`}</div>)
+        return (<div>{ text!== null ?`${text?.first_name} ${text?.last_name}`:''}</div>)
       }
     },
     {

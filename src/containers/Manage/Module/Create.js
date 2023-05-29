@@ -1,4 +1,4 @@
-import { Form } from "antd";
+import { Form, message } from "antd";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Ui } from "utils/Ui";
@@ -34,7 +34,7 @@ const Create = ({
         }
       })
       .catch(err => {
-        Ui.showError({ message: err?.response?.data?.message });
+        message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
       })
 
   }

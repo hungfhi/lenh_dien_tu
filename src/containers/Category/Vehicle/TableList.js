@@ -126,33 +126,33 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
     }
   ];
 
-  // const renderContent = () => {
-  //   return (
-  //     <Row justify="end" style={{ marginBottom: 5, marginTop: 5 }}>
-  //       <Pagination
-  //         onShowSizeChange={(current, size) => {
-  //           setParams((prevState) => {
-  //             let nextState = { ...prevState };
-  //             nextState.page = 1;
-  //             nextState.size = size;
-  //             return nextState;
-  //           });
-  //         }}
-  //         onChange={(page, pageSize) => {
-  //           setParams((prevState) => {
-  //             let nextState = { ...prevState };
-  //             nextState.page = page;
-  //             return nextState;
-  //           });
-  //         }}
-  //         total={total}
-  //         current={params.page}
-  //         pageSize={params.size}
-  //         showSizeChanger
-  //       />
-  //     </Row>
-  //   );
-  // };
+  const renderContent = () => {
+    return (
+      <Row justify="end" style={{ marginBottom: 5, marginTop: 5 }}>
+        <Pagination
+          onShowSizeChange={(current, size) => {
+            setParams((prevState) => {
+              let nextState = { ...prevState };
+              nextState.page = 1;
+              nextState.size = size;
+              return nextState;
+            });
+          }}
+          onChange={(page, pageSize) => {
+            setParams((prevState) => {
+              let nextState = { ...prevState };
+              nextState.page = page;
+              return nextState;
+            });
+          }}
+          total={total}
+          current={params.page}
+          pageSize={params.size}
+          showSizeChanger
+        />
+      </Row>
+    );
+  };
 
   return (
     <div className={className}>
@@ -162,7 +162,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit,  onRefresh
         scroll={{ y: "calc(100vh - 330px)" }}
         pagination={false}
       />
-      {/* {renderContent()} */}
+      {renderContent()}
 
     </div >
   );

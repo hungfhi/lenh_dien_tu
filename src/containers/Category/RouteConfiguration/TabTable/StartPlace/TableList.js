@@ -52,9 +52,7 @@ const RouterStart = memo(({ className, data, setData, params, total, itemSelecte
           }
         })
         .catch(err => {
-          if (err.response?.data) {
-            message.error(err.response?.data?.message)
-          }
+          message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
         })
     }, 2000);
   },[data]);
@@ -79,9 +77,7 @@ const RouterStart = memo(({ className, data, setData, params, total, itemSelecte
         setData(dataClone)
       })
       .catch(err => {
-        if (err.response?.data) {
-          message.error(err.response?.data?.message)
-        }
+        message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
       })
     }, 2000);
   },[data]);
@@ -104,9 +100,7 @@ const RouterStart = memo(({ className, data, setData, params, total, itemSelecte
         }
       })
       .catch(err => {
-        if (err.response?.data) {
-          message.error('Error!')
-        }
+        message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
       })
   };
 

@@ -68,7 +68,7 @@ const TableList = memo(({ className, data, params, setParams, onRefreshList, ite
         setLoading(false)
       }
     }).catch(err => {
-
+      message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
     })
   }, []);
 
@@ -119,7 +119,7 @@ const TableList = memo(({ className, data, params, setParams, onRefreshList, ite
         }
       })
       .catch(err => {
-        message.error('Có lỗi xảy ra!')
+        message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
       })
   };
 

@@ -26,7 +26,7 @@ const TabTableEdit = ({ className, car, time, itemCar, isEdit, setItemCar, itemT
                 }
             })
             .catch(err => {
-                message.error("Có lỗi xảy ra !")
+                message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
             })
     }, []);
 
@@ -45,7 +45,7 @@ const TabTableEdit = ({ className, car, time, itemCar, isEdit, setItemCar, itemT
                 }
             })
             .catch(err => {
-                message.error("Có lỗi xảy ra !")
+                message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
             })
     }, []);
 

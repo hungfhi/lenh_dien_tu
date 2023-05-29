@@ -24,29 +24,16 @@ const Processing = ({ className, allRoute, data, params, setParams, onRefreshLis
         command.viewCommand(payload)
             .then(res => {
                 if (res.status === 200) {
-                    // const url = window.URL.createObjectURL(new Blob([res.data]));
-                    // const link = document.createElement("a");
-                    // link.href = url;
-                    // link.setAttribute("download", `command_${ids}.pdf`);
-                    // document.body.appendChild(link);
-                    // link.click();
                     onRefreshList()
                     const file = new Blob([res.data], { type: 'application/pdf' });
-                    // setfileUrl(file)
                     const fileURL = URL.createObjectURL(file);
                     setfileUrl(fileURL)
-                    // window.open(fileURL);
                 }
             })
             .catch(err => {
-                message.error("Có lỗi xảy ra !")
+                message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
             })
     }, []);
-
-    // const showModal = () => {
-    //     setIsModalOpen(true);
-    //     onView()
-    // };
 
     const handleOk = () => {
         setIsModalOpen(false);
@@ -65,7 +52,6 @@ const Processing = ({ className, allRoute, data, params, setParams, onRefreshLis
                     <Spin spinning={loading}>
                         <TableList
                             params={params}
-                            // loadding={loadding}
                             data={data}
                             total={total}
                             onRefreshList={onRefreshList}
@@ -76,7 +62,6 @@ const Processing = ({ className, allRoute, data, params, setParams, onRefreshLis
                             allMerchant={allMerchant}
                             allDriver={allDriver}
                             showModal={showModal}
-                        // setTotal={setTotal}
                         />
                     </Spin>
                 </Col>
@@ -84,7 +69,7 @@ const Processing = ({ className, allRoute, data, params, setParams, onRefreshLis
             {/* <Button type="primary" onClick={showModal}>
                 Open Modal
             </Button> */}
-            <Modal title={null} footer={null} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={1000} bodyStyle={{ height: window.innerHeight-40}} style={{
+            <Modal title={null} footer={null} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={1000} bodyStyle={{ height: window.innerHeight - 40 }} style={{
                 top: 20
             }}>
                 {fileUrl ? <object data={fileUrl} type="application/pdf" width="100%" height="100%">
