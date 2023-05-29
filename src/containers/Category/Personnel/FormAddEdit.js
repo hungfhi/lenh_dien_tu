@@ -248,12 +248,12 @@ const FormAddEdit = ({
                                 { required: true, message: "Vui lòng nhập số điện thoại" },
                                 {
                                     pattern: new RegExp(/^[0-9]+$/i),
-                                    message: "Chỉ được nhập số",
+                                    message: "SĐT chỉ được nhập số",
                                 },
-                                {
-                                    pattern: new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g),
-                                    message: "SĐT chỉ được nhập 10 chữ số",
-                                },
+                                // {
+                                //     pattern: new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g),
+                                //     message: "SĐT chỉ được nhập 10 chữ số",
+                                // },
                             ]}
                         >
                             <Input placeholder={"Số điện thoại"} />
@@ -275,8 +275,8 @@ const FormAddEdit = ({
                             rules={[
                                 { required: true, message: 'Vui lòng nhập CCCD' },
                                 {
-                                    pattern: new RegExp(/^[0-9]{12}$/),
-                                    message: "CCCD chỉ được nhập 12 chữ số",
+                                    pattern: new RegExp(/^[0-9]+$/i),
+                                    message: "CCCD chỉ được nhập số",
                                 },
                             ]}
                         >
