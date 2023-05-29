@@ -186,7 +186,7 @@ const FormAddEdit = ({
                     driving_license_rank_id: itemSelected && itemSelected?.driving_license_rank_id?.id || '',
                     driving_license_expire_date: itemSelected && moment(itemSelected?.driving_license_expire_date) || moment(),
                     status: status,
-                    gender: itemSelected && renderGender(itemSelected?.gender) || null,
+                    gender: itemSelected && itemSelected?.gender?.id || null,
                     modelable_id: itemSelected && itemSelected?.modelable_id || null,
                     modelable_type: itemSelected && itemSelected?.modelable_type || null,
                     email: itemSelected && itemSelected?.user?.email || null,
