@@ -150,7 +150,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
     users.onTransportUnit(payload)
       .then(res => {
         if (res.status === 200) {
-          message.error("Thay đổi nhà xe thành công")
+          message.success("Thay đổi nhà xe thành công")
           setIsModalOpen(false);
         }
       })
