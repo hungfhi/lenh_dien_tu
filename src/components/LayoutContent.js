@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../index.scss";
 import { Link, useLocation } from "react-router-dom"
 import _ from 'lodash'
-import { Breadcrumb, Layout, Menu, Modal, Dropdown, Button, Select, Form, Row, Col, Spin, Popover } from 'antd';
+import { Breadcrumb, Layout, Menu, Modal, Dropdown, Button, Select, Form, Row, Col, Spin, Popover, message } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setProfileUser } from 'redux/action'
@@ -150,12 +150,12 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
     users.onTransportUnit(payload)
       .then(res => {
         if (res.status === 200) {
-          Ui.showSuccess({ message: "Thay đổi nhà xe thành công" });
+          message.error("Thay đổi nhà xe thành công")
           setIsModalOpen(false);
         }
       })
       .catch(err => {
-        Ui.showError({ message: err?.response?.data?.message });
+        message.error(err?.response?.data?.message)
       })
   };
   const onFinishFailed = () => {

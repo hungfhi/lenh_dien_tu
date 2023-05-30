@@ -1,4 +1,4 @@
-import { INCREMENT, DECREMENT, SET_PROFILE, SET_MENU, SET_LOAD } from '../types';
+import { INCREMENT, DECREMENT, SET_PROFILE, SET_MENU, SET_LOAD, SET_DEFINITIONS } from '../types';
 
 export const setProfileUser = (payload) => {
     return {
@@ -18,6 +18,13 @@ export const setMenu = (payload) => {
 export const setLoad = (payload) => {
     return {
         type: SET_LOAD,
+        payload: payload,
+    };
+};
+
+export const setDefinitions = (payload) => {
+    return {
+        type: SET_DEFINITIONS,
         payload: payload,
     };
 };
