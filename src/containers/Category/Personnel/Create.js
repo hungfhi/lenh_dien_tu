@@ -52,13 +52,13 @@ const Create = ({
     // console.log(payload);
     category.createPerson(payload).then(res => {
       if (res.status === 200) {
-        Ui.showSuccess({ message: "Thành công" });
+        Ui.showSuccess({ message: "Thêm mới thành công" });
         onRefreshList()
         onHiddenModal()
 
       }
     }).catch(err => {
-      Ui.showError({ message: 'Có lỗi xảy ra' });
+      message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
     });
   }
   return (

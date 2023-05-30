@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from "prop-types";
 import _ from "lodash"
-import { Col, Drawer, Row, Spin } from 'antd';
+import { Col, Drawer, message, Row, Spin } from 'antd';
 import Filter from './Filter';
 import TableList from './TableList';
 import Create from './Create';
@@ -29,7 +29,7 @@ const BusinessType = ({ className }) => {
             setListBusinessModel(res.data.data);
             setLoading(false);
         }).catch(err => {
-            Ui.showErrors('Có lỗi xảy ra');
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
     }, [params]);
 
@@ -52,7 +52,7 @@ const BusinessType = ({ className }) => {
                 setItemSelected(res?.data?.data)
             }
         }).catch(err => {
-            Ui.showError({ message: err?.response?.data?.message });
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
     }, []);
 

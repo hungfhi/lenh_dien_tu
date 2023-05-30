@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Row, Col, DatePicker, Select, Button } from "antd";
+import { Row, Col, DatePicker, Select, Button, message } from "antd";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import _ from "lodash";
@@ -25,7 +25,7 @@ const UpdateDinhMuc = ({
       order_number: values?.order_number,
       parent_id: values?.parent_id?.value !== undefined ? values?.parent_id?.value : values?.parent_id || 0,
     }
-    
+
     category.updateStandard(itemSelected?.id, payload).then(res => {
       if (res.status === 200) {
         Ui.showSuccess({ message: "Cập nhật thành công" });
@@ -33,7 +33,7 @@ const UpdateDinhMuc = ({
         onHiddenModalEdit();
       }
     }).catch(err => {
-      Ui.showError({ message: err?.response?.data?.message });
+      message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
     });
 
   });

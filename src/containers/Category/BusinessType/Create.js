@@ -36,7 +36,7 @@ const Create = ({
 
       }
     }).catch(err => {
-      Ui.showError({ message: 'Có lỗi xảy ra' });
+      message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
     });
   }
   return (

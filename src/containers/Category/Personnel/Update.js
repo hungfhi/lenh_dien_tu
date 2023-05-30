@@ -50,13 +50,13 @@ const UpdateDinhMuc = ({
 
     category.updatePerson(itemSelected?.id, payload).then(res => {
       if (res.status === 200) {
-        Ui.showSuccess({ message: "Thành công" });
+        Ui.showSuccess({ message: "Cập nhật thành công" });
         onRefreshList();
         onHiddenModalEdit();
 
       }
     }).catch(err => {
-      Ui.showError({ message: 'Có lỗi xảy ra' });
+      message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
     });
   }
   return (

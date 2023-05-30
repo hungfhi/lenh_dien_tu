@@ -182,7 +182,7 @@ const FormAddEdit = ({
                     driving_license_rank_id: itemSelected && itemSelected?.driving_license_rank_id?.id || '',
                     driving_license_expire_date: itemSelected && moment(itemSelected?.driving_license_expire_date) || moment(),
                     status: status,
-                    gender: itemSelected && renderGender(itemSelected?.gender) || null,
+                    gender: itemSelected && itemSelected?.gender?.id || null,
                     modelable_id: itemSelected && itemSelected?.modelable_id || null,
                     modelable_type: itemSelected && itemSelected?.modelable_type || null,
                     email: itemSelected && itemSelected?.user?.email || null,
@@ -231,15 +231,15 @@ const FormAddEdit = ({
                         <Form.Item
                             name="phone"
                             rules={[
-                                { required: true, message: "Vui lòng nhập số điện thoại" },
+                                { required: true, message: "Vui lòng nhập SĐT" },
                                 {
                                     pattern: new RegExp(/^[0-9]+$/i),
-                                    message: "Chỉ được nhập số",
+                                    message: "SĐT chỉ được nhập số",
                                 },
-                                {
-                                    pattern: new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g),
-                                    message: "SĐT chỉ được nhập 10 chữ số",
-                                },
+                                // {
+                                //     pattern: new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g),
+                                //     message: "SĐT chỉ được nhập 10 chữ số",
+                                // },
                             ]}
                         >
                             <Input placeholder={"Số điện thoại"} />
@@ -261,8 +261,8 @@ const FormAddEdit = ({
                             rules={[
                                 { required: true, message: 'Vui lòng nhập CCCD' },
                                 {
-                                    pattern: new RegExp(/^[0-9]{12}$/),
-                                    message: "CCCD chỉ được nhập 12 chữ số",
+                                    pattern: new RegExp(/^[0-9]+$/i),
+                                    message: "CCCD chỉ được nhập số",
                                 },
                             ]}
                         >

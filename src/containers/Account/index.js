@@ -1,5 +1,5 @@
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Input, Row } from "antd";
+import { Button, Checkbox, Col, Form, Input, message, Row } from "antd";
 import { auth } from "configs";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState, } from "react";
@@ -55,14 +55,14 @@ const Roles = ({ className, profile }) => {
       .then(res => {
         if (res.status === 200) {
           Ui.showSuccess({ message: "Thay đổi mật khẩu thành công" });
-          if(payload?.logout_other_devices===true){
+          if (payload?.logout_other_devices === true) {
             dispatch(setProfileUser(null));
-          navigate("/sign-in", { replace: true })
+            navigate("/sign-in", { replace: true })
           }
         }
       })
       .catch(err => {
-        Ui.showError({ message: err?.response?.data?.message });
+        message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
       })
   };
 
@@ -77,7 +77,7 @@ const Roles = ({ className, profile }) => {
 
   return (
     <Row className={className} gutter={[16, 16]}>
-      <Form form={form} style={{fontFamily:'NUNITO'}}>
+      <Form form={form} style={{ fontFamily: 'NUNITO' }}>
         <Row>
           <Col offset="4" span="8">
             <Row className={className} gutter={[30, 30]}>

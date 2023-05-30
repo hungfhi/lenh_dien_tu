@@ -59,7 +59,7 @@ const Index = ({ className, profile }) => {
         }
       })
       .catch(err => {
-        message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
+        message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
       })
 
   }, []);
@@ -83,7 +83,7 @@ const Index = ({ className, profile }) => {
         setProvince(newProvince);
       }
     }).catch(err => {
-      Ui.showError({ message: 'Có lỗi xảy ra' });
+      // message.error(err?.response?.data?.message||'Có lỗi xảy ra !')
     });
   }, []);
 
@@ -113,8 +113,7 @@ const Index = ({ className, profile }) => {
       })
       .catch(err => {
         if (err.response?.status === 422 && err.response?.data?.errors) {
-          message.warn(err.response.data?.errors[0].msg)
-          message.error('Error!')
+          // message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         }
       })
     await setLoading(false);
@@ -129,7 +128,7 @@ const Index = ({ className, profile }) => {
       }
       setLoading(false);
     }).catch(err => {
-      Ui.showErrors('Có lỗi xảy ra');
+      message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
     });
   }, [params]);
 
