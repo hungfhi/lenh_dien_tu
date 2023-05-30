@@ -1,0 +1,120 @@
+import { Pagination, Row, Switch } from "antd";
+import "antd/dist/antd.css";
+import PropTypes from "prop-types";
+import moment from 'moment';
+import React, { memo, useCallback } from "react";
+import styled from "styled-components";
+import { DefinePagination, DefineTable } from "components";
+const TableList = memo(({ className, data, params, total, setItems, items, itemSelected, setItemSelected, setParams }) => {
+
+  const removeItems = (array, itemToRemove) => {
+    return array.filter(v => {
+      return !itemToRemove.includes(v);
+    });
+  }
+  const _handleSelectAll = useCallback((selected, selectedRows, changeRows) => {
+    if (!selected) {
+
+      setItemSelected(removeItems(itemSelected, items))
+      setItems([])
+    } else {
+      if (data.length === items.length) {
+        setItemSelected(removeItems(itemSelected, items))
+        setItems([])
+      } else {
+        let selectKeyNew = [];
+        selectedRows.map((item) => {
+          selectKeyNew.push(item.id)
+        })
+        setItems(selectKeyNew);
+        const arr = selectKeyNew.concat(itemSelected);
+        var uniq = arr.reduce(function (a, b) {
+          if (a.indexOf(b) < 0) a.push(b);
+          return a;
+        }, []);
+        setItemSelected(uniq)
+      }
+    }
+  },
+    [itemSelected, items]
+  );
+
+  const _handleSelect = (record, status) => {
+    if (!items.includes(record.id)) {
+      const selectKeyNew = [...items]
+      selectKeyNew.push(record.id)
+      setItems(selectKeyNew)
+      const arr = selectKeyNew.concat(itemSelected);
+      var uniq = arr.reduce(function (a, b) {
+        if (a.indexOf(b) < 0) a.push(b);
+        return a;
+      }, []);
+      setItemSelected(uniq)
+    } else {
+      const selectKeyNew = [...items]
+      const index = selectKeyNew.indexOf(record.id);
+      const indexs = itemSelected.indexOf(record.id);
+      const arr = [...itemSelected]
+      selectKeyNew.splice(index, 1);
+      arr.splice(indexs, 1);
+      setItems(selectKeyNew)
+      setItemSelected(arr)
+    }
+  };
+
+
+
+  const columns = [
+    {
+      title: "Nốt",
+      dataIndex: "departure_time",
+      width: 200,
+      fixed: "left",
+      render: (value) => {
+        return (
+          <div style={{fontWeight:700,fontFamily:'Nunito',fontSize:15}}>{moment(value, 'HH:mm:ss').format('HH:mm')}</div>
+        )
+      }
+    },
+    {
+      title: "Kế hoạch",
+      dataIndex: "name",
+      render:(value,row,record) => {
+        return <div>{row?.type_apply?.name}-{row?.schedule?.toString()}</div>
+      }
+    },
+  ];
+
+
+  return (
+    <div className={className}>
+      <DefineTable
+        rowSelection={{
+          selectedRowKeys: items,
+          onSelect: _handleSelect,
+          onSelectAll: _handleSelectAll,
+        }}
+        rowKey="id"
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+      />
+    </div >
+  );
+});
+TableList.propTypes = {
+  className: PropTypes.any,
+};
+export default styled(TableList)`
+.ant-table-thead > tr > th {
+  background: #fff !important;
+  color: #000 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  font-family: Nunito !important;
+}
+.ant-table-tbody > tr > td {
+  font-family: 'Nunito' !important;
+  font-size: 15px !important;
+}
+`;

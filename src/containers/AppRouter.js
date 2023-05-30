@@ -16,7 +16,7 @@ import Home from './Home'
 import NotFound from './NotFound'
 import Account from './Account';
 import { Ui } from 'utils/Ui';
-import { setLoad, setMenu } from 'redux/action';
+import { setDefinitions, setLoad, setMenu } from 'redux/action';
 import { setProfileUser } from '../redux/action';
 import ListUser from './Users/ListUser';
 import Roles from './Users/Roles';
@@ -107,6 +107,14 @@ const AppRouter = () => {
         })
         .catch(err => {
           Ui.showError({ message: err?.response?.data?.message });
+        })
+        apis.getDefinitions()
+        .then(res => {
+          if (res.status === 200 && res?.data?.data) {
+            dispatch(setDefinitions(res?.data?.data));
+          }
+        })
+        .catch(err => {
         })
     }
   }, [user, load])

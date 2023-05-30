@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { DIMENSION_PADDING_NORMAL, DIMENSION_PADDING_SMALL } from 'theme/dimensions';
 import { Ui } from "utils/Ui";
 import _ from 'lodash';
+import { definitions } from "configs";
 
 
 const { TextArea } = Input;
@@ -108,8 +109,7 @@ const FormAddEdit = ({
 
     const getListModel = useCallback(async () => {
         const payload = {};
-        category.getModel(payload).then(res => {
-            // console.log(res);
+        definitions.getModels(payload).then(res => {
             const newListModel = [];
             res?.data?.data?.map(item => {
                 newListModel.push({
@@ -118,7 +118,6 @@ const FormAddEdit = ({
                     label: item?.name
                 });
             });
-
             setListModel(newListModel);
         }).catch(err => {
             message.error(err?.response?.data?.message || 'Có lỗi xảy ra')
@@ -128,7 +127,6 @@ const FormAddEdit = ({
     const getListByMerchant = useCallback(async () => {
         const payload = {};
         category.getByMerchant(payload).then(res => {
-            // console.log(res);
             const newListByMerchant = [];
             res?.data?.data?.map(item => {
                 newListByMerchant.push({
@@ -163,8 +161,6 @@ const FormAddEdit = ({
 
     const onFinishFailed = () => {
     };
-
-    console.log(itemSelected);
 
     return (
         <div className={className}>

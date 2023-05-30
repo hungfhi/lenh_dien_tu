@@ -8,4 +8,6 @@ import report from './report'
 import plan from './plan'
 import manage from './manage'
 import station from './station'
-export { domain,  apis, auth, users, category, manage,plan, command, report, station }
+import definitions from './definitions'
+
+export { domain,  apis, auth, users, category, manage,plan, command, report, station, definitions }

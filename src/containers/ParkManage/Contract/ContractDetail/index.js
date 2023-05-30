@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import FormAdd from "./FormAdd";
 import FormEdit from "./FormEdit";
+import { definitions } from "configs";
 
 const ContractDetail = ({ className }) => {
     const { search } = useLocation();
@@ -31,7 +32,7 @@ const ContractDetail = ({ className }) => {
         station.getContract()
             .then(res => {
                 if (res.status === 200) {
-                    manage.getStation(payload)
+                    definitions.getStation(payload)
                         .then(res1 => {
                             if (res1.status === 200) {
                                 const stationCheck = []
@@ -70,7 +71,7 @@ const ContractDetail = ({ className }) => {
         const payload = {
             is_contract: 1
         }
-        manage.getTransport(payload)
+        definitions.getMerchant(payload)
             .then(res => {
                 if (res.status === 200) {
                     setTransport(res?.data?.data)

@@ -10,6 +10,9 @@ const apis = {
     getBusStation(payload) {
         return axios.get(`${domain.ServiceAddress}/menus`)
     },
+    getDefinitions(payload) {
+        return axios.get(`${domain.ServiceAddress}/definitions`)
+    },
 }
 
 export default apis

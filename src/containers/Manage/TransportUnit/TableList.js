@@ -10,7 +10,7 @@ import { Ui } from "utils/Ui";
 import _ from "lodash"
 const { confirm } = Modal;
 
-const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList, total,models }) => {
+const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshList, total, models }) => {
 
   const columns = [
     {
@@ -57,11 +57,7 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
       width: 100,
       render: (values) => {
         const check = values.find(item => item?.model_type == 'App\\Models\\Station') !== undefined ? 1 : 0;
-        return <div style={{ textAlign: 'center' }}>
-          <Checkbox
-            checked={check}
-            size='small' />
-        </div>
+        return <div style={{ textAlign: 'center' }}>{check===1?"✔":"" }</div>
       }
     },
     {
@@ -70,23 +66,15 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
       width: 100,
       render: (values) => {
         const check = values.find(item => item?.model_type == 'App\\Models\\Merchant') !== undefined ? 1 : 0;
-        return <div style={{ textAlign: 'center' }}>
-          <Checkbox
-            checked={check}
-            size='small' />
-        </div>
+        return <div style={{ textAlign: 'center' }}>{check===1?"✔":"" }</div>
       }
     },
     {
       title: "Trạng thái",
       dataIndex: "is_active",
       width: 100,
-      render: (value, row,record) => {
-        return <div style={{ textAlign: 'center' }}>
-          <Checkbox
-            checked={value}
-            size='small' />
-        </div>
+      render: (value, row, record) => {
+        return <div style={{ textAlign: 'center' }}>{value===1?"✔":"" }</div>
       }
     },
     {
