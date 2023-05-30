@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import Filter from './Filter';
 import TableList from './TableList';
+import { definitions } from "configs";
 
 const Contract = ({ className, profile }) => {
 
@@ -32,7 +33,7 @@ const Contract = ({ className, profile }) => {
       .then(res => {
         if (res.status === 200) {
           setTotal(res?.data?.meta?.total)
-          manage.getStation(payload)
+          definitions.getStation(payload)
             .then(res1 => {
               if (res1.status === 200) {
                 setStations(res1?.data?.data)
@@ -65,7 +66,7 @@ const Contract = ({ className, profile }) => {
     const payload = {
       is_contract: 1
     }
-    manage.getTransport(payload)
+    definitions.getMerchant(payload)
       .then(res => {
         if (res.status === 200) {
           setTransport(res?.data?.data)
