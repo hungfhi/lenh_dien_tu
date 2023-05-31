@@ -44,16 +44,16 @@ const FormAccount = ({
     const [transport, setTransport] = useState([]);
     const [statusChooseModel, setStatusChooseModel] = useState(true);
     const [listModels, setListModels] = useState([]);
-    let res = listModel.filter(({is_station}) => is_station).map(({id}) => id);
+    let res = listModel.filter(({ is_station }) => is_station).map(({ id }) => id);
     let listStation = _.map(itemSelected?.stations, (i) => {
         return i?.id
     });
     useEffect(() => {
         const found = res.find((val, index) => {
             return listModels.includes(val)
-          })
-          found === 1  ? setStatusChooseModel(false) : setStatusChooseModel(true);
-          found === 1  ? form.setFieldsValue({station_id: listStation}) : form.setFieldsValue({station_id: [],})
+        })
+        found === 1 ? setStatusChooseModel(false) : setStatusChooseModel(true);
+        found === 1 ? form.setFieldsValue({ station_id: listStation }) : form.setFieldsValue({ station_id: [], })
     }, [listModels]);
 
 
@@ -424,7 +424,7 @@ const FormAccount = ({
                                 </Form.Item>
                             </Col>
                             <Col style={{ margin: 0 }} span={24}>
-                                <div>Số GPLX</div>
+                                <div>Số GPLX<span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                                 <Form.Item
                                     name="driving_license"
                                     rules={[
