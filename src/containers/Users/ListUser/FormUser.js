@@ -25,18 +25,11 @@ const FormAccount = ({
     })
     const [form] = Form.useForm();
 
-    const onFinish = async (values) => {
-        onSave(values)
-    };
-    const onFinishFailed = () => {
-    };
+    
 
 
-    const onChange = (e) => {
-        e.target.checked === true ? setIsShow(true) : setIsShow(false)
-        setIsStaff(e.target.checked)
-    };
-    const [isStaff, setIsStaff] = useState(itemSelected ? (itemSelected?.is_staff?.id == 1 ? true : false) : false)
+    
+    const [isStaff, setIsStaff] = useState(false)
     const [listDrivingLicenseRank, setListDrivingLicenseRank] = useState([]);
     const [listPositions, setListPositions] = useState([]);
     const [listStations, setListStations] = useState([]);
@@ -48,6 +41,13 @@ const FormAccount = ({
     let listStation = _.map(itemSelected?.stations, (i) => {
         return i?.id
     });
+
+    const onChange = (e) => {
+        console.log('e.target.checkede.target.checked',e.target.checked)
+        e.target.checked === true ? setIsShow(true) : setIsShow(false)
+        setIsStaff(e.target.checked)
+    };
+    
     useEffect(() => {
         const found = res.find((val, index) => {
             return listModels.includes(val)
@@ -56,6 +56,12 @@ const FormAccount = ({
         found === 1 ? form.setFieldsValue({ station_id: listStation }) : form.setFieldsValue({ station_id: [], })
     }, [listModels]);
 
+
+    const onFinish = async (values) => {
+        onSave(values,isStaff)
+    };
+    const onFinishFailed = () => {
+    };
 
 
     const renderGender = (gender) => {

@@ -12,7 +12,8 @@ const CreateUser = ({
     itemSelected,
     parsed
 }) => {
-    const onSave = async (values) => {
+    const onSave = async (values,isStaff) => {
+        console.log('isStaff',isStaff)
         const payload = {
             username: values?.username,
             full_name: values?.full_name,
@@ -25,7 +26,7 @@ const CreateUser = ({
             driving_license: values?.driving_license,
             driving_license_rank_id: values?.driving_license_rank_id,
             driving_license_expire_date: moment(values.driving_license_expire_date).format('YYYY-MM-DD'),
-            is_staff: values?.is_staff ? 1 : 0,
+            is_staff: isStaff ? 1 : 0,
             gender: values?.gender,
             date_of_birth: moment(values?.date_of_birth).format('YYYY-MM-DD'),
             address: values?.address,
