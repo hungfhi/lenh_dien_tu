@@ -6,7 +6,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-
+import { useSelector } from 'react-redux';
 const FormAccount = ({
     className,
     itemSelected,
@@ -14,7 +14,7 @@ const FormAccount = ({
     onHiddenModal,
 }) => {
     const [isShow, setIsShow] = useState(false)
-
+    const definitions = useSelector((state) => state?.rootReducer?.definitions);
 
     let perByRole = itemSelected?.roles || []
     let list_roles = _.map(perByRole, (i) => {
@@ -40,44 +40,23 @@ const FormAccount = ({
     const [listDrivingLicenseRank, setListDrivingLicenseRank] = useState([]);
     const [listPositions, setListPositions] = useState([]);
     const [listStations, setListStations] = useState([]);
-    const [listByMerchant, setListByMerchant] = useState([]);
-    const [listModel, setListModel] = useState([]);
+    const [listModel, setListModel] = useState(definitions?.models);
     const [transport, setTransport] = useState([]);
-    const [rolesChooses, setRolesChooses] = useState([]);
     const [statusChooseModel, setStatusChooseModel] = useState(true);
-
-    let listRoles = _.map(itemSelected?.roles, (i) => {
-        return i?.id;
-    });
-
-    const [listModels, setListModels] = useState(_.map(itemSelected?.models, (i) => {
-        return i?.id
-    }));
-
+    const [listModels, setListModels] = useState([]);
+    let res = listModel.filter(({is_station}) => is_station).map(({id}) => id);
     let listStation = _.map(itemSelected?.stations, (i) => {
         return i?.id
     });
-    console.log(listModels);
-
     useEffect(() => {
-        // listModels.map(item => {
-        //     if (item == 1) {
-        //         setStatusChooseModel(true);
-        //     } else {
-        //         setStatusChooseModel(false);
-        //     }
-        // });
-        listModels.includes(1) ? setStatusChooseModel(false) : setStatusChooseModel(true);
+        const found = res.find((val, index) => {
+            return listModels.includes(val)
+          })
+          found === 1  ? setStatusChooseModel(false) : setStatusChooseModel(true);
+          found === 1  ? form.setFieldsValue({station_id: listStation}) : form.setFieldsValue({station_id: [],})
     }, [listModels]);
 
 
-    useEffect(() => {
-        const newRoles = [];
-        listRoles?.map(item => {
-            newRoles.push(item?.value);
-        });
-        setRolesChooses(newRoles);
-    }, []);
 
     const renderGender = (gender) => {
         switch (gender) {
@@ -114,50 +93,12 @@ const FormAccount = ({
     const getListStations = useCallback(async () => {
         const payload = {};
         category.getStation(payload).then(res => {
-            // console.log(res);
             setListStations(res?.data?.data);
         }).catch(err => {
             message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
     }, []);
 
-    const getListModel = useCallback(async () => {
-        const payload = {};
-        category.getModel(payload).then(res => {
-            // console.log(res);
-            const newListModel = [];
-            res?.data?.data?.map(item => {
-                newListModel.push({
-                    ...item,
-                    value: item?.id,
-                    label: item?.name
-                });
-            });
-
-            setListModel(newListModel);
-        }).catch(err => {
-            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
-        })
-    }, []);
-
-    const getListByMerchant = useCallback(async () => {
-        const payload = {};
-        category.getByMerchant(payload).then(res => {
-            // console.log(res);
-            const newListByMerchant = [];
-            res?.data?.data?.map(item => {
-                newListByMerchant.push({
-                    ...item,
-                    value: item?.id,
-                    label: item?.name
-                });
-            });
-
-            setListByMerchant(newListByMerchant);
-        }).catch(err => {
-            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
-        })
-    }, []);
 
     const getTransports = useCallback(async () => {
         const payload = {
@@ -177,8 +118,6 @@ const FormAccount = ({
         getListDrivingLicenseRank();
         getListPotisions();
         getListStations();
-        getListByMerchant();
-        getListModel();
         getTransports();
     }, []);
 
@@ -282,7 +221,7 @@ const FormAccount = ({
                     </Col>
                     <Col span={12}>
                         <div>Chọn quyền<span style={{ color: '#dc2d2d' }}>(*)</span></div>
-                        <Form.Item name="roles"
+                        {/* <Form.Item name="roles"
                             rules={[{ required: true, message: 'Vui lòng chọn loại tài khoản' },]}>
                             <RoleSelect
                                 mode="multiple"
@@ -292,7 +231,28 @@ const FormAccount = ({
                                     form.setFieldsValue({ role: data });
                                 }}
                             />
+                        </Form.Item> */}
+
+                        <Form.Item
+                            name="roles"
+                            rules={[{ required: true, message: 'Vui lòng chọn loại tài khoản' }]}
+                        >
+                            <Select
+                                placeholder={"Chọn đơn vị vận tải"}
+                                mode="multiple"
+                                onChange={(data) => {
+                                    form.setFieldsValue({ role: data });
+                                }}
+                            >
+                                {definitions && definitions?.roles.map((item, index) => {
+
+                                    return <Select.Option value={item?.id}>{item?.name}</Select.Option>
+                                })}
+                            </Select>
                         </Form.Item>
+
+
+
                     </Col>
                     {itemSelected ? null : <>
                         <Col span={12}>
@@ -430,7 +390,7 @@ const FormAccount = ({
                                     >
                                         {listModel && listModel.map((item) => {
 
-                                            return <Select.Option value={item?.value}>{item?.label}</Select.Option>
+                                            return <Select.Option value={item?.id} is_station={item?.is_station}>{item?.name}</Select.Option>
                                         })}
                                     </Select>
                                 </Form.Item>
