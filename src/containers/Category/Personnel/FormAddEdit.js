@@ -31,7 +31,6 @@ const FormAddEdit = ({
     const [modelChooses, setModelChooses] = useState(itemSelected && itemSelected?.user?.model_used?.id || null);
     const [rolesChooses, setRolesChooses] = useState([]);
     const [statusChooseModel, setStatusChooseModel] = useState(true);
-
     let listRoles = _.map(itemSelected?.roles, (i) => {
         return i?.id;
     });
@@ -46,14 +45,12 @@ const FormAddEdit = ({
     console.log(listModels);
 
     useEffect(() => {
-        // listModels.map(item => {
-        //     if (item == 1) {
-        //         setStatusChooseModel(true);
-        //     } else {
-        //         setStatusChooseModel(false);
-        //     }
-        // });
-        listModels.includes(1) ? setStatusChooseModel(false) : setStatusChooseModel(true);
+        let res = listModel.filter(({ is_station }) => is_station).map(({ id }) => id);
+        const found = res.find((val, index) => {
+            return listModels.includes(val)
+        })
+        found === 1 ? setStatusChooseModel(false) : setStatusChooseModel(true);
+        found === 1 ? form.setFieldsValue({ station_id: listStation }) : form.setFieldsValue({ station_id: [], })
     }, [listModels]);
 
 

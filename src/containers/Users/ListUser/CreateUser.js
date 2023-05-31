@@ -13,10 +13,6 @@ const CreateUser = ({
     parsed
 }) => {
     const onSave = async (values) => {
-        let list_roles = [];
-        values.roles.map((item) => {
-            list_roles.push(item.value);
-        });
         const payload = {
             username: values?.username,
             full_name: values?.full_name,
@@ -24,7 +20,7 @@ const CreateUser = ({
             email: values?.email,
             citizen_identity: values?.citizen_identity,
             password: values?.password,
-            roles: list_roles,
+            roles: values?.roles,
             position_id: values?.position_id,
             driving_license: values?.driving_license,
             driving_license_rank_id: values?.driving_license_rank_id,
