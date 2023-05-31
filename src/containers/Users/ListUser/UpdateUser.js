@@ -13,10 +13,6 @@ const UpdateAccount = ({
     parsed
 }) => {
     const onSave = useCallback(async (values) => {
-        let list_roles = [];
-        values.roles.map((item) => {
-            list_roles.push(item.value);
-        });
         const payload = {
             uuid:itemSelected?.id,
             username: values?.username,
@@ -25,12 +21,12 @@ const UpdateAccount = ({
             email: values?.email,
             citizen_identity:values?.citizen_identity,
             password: values?.password,
-            roles:list_roles
+            roles: values?.roles,
         }
         users.updateInfoUser(payload)
         .then(res => {
           if (res.status === 200) {
-            Ui.showSuccess({ message: "Cập nhật thông tin tài khoản thành công." });
+            message.success("Cập nhật thông tin tài khoản thành công.")
             onRefreshList()
             onHiddenModalEdit()
           }
