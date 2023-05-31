@@ -17,18 +17,21 @@ const FormAccount = ({
     const definitions = useSelector((state) => state?.rootReducer?.definitions);
 
     let perByRole = itemSelected?.roles || []
+    // let list_roles = _.map(perByRole, (i) => {
+    //     return {
+    //         value: i?.id,
+    //         label: i?.name,
+    //     }
+    // })
     let list_roles = _.map(perByRole, (i) => {
-        return {
-            value: i?.id,
-            label: i?.name,
-        }
-    })
+        return i?.id;
+    });
     const [form] = Form.useForm();
 
-    
 
 
-    
+
+
     const [isStaff, setIsStaff] = useState(false)
     const [listDrivingLicenseRank, setListDrivingLicenseRank] = useState([]);
     const [listPositions, setListPositions] = useState([]);
@@ -43,11 +46,11 @@ const FormAccount = ({
     });
 
     const onChange = (e) => {
-        console.log('e.target.checkede.target.checked',e.target.checked)
+        console.log('e.target.checkede.target.checked', e.target.checked)
         e.target.checked === true ? setIsShow(true) : setIsShow(false)
         setIsStaff(e.target.checked)
     };
-    
+
     useEffect(() => {
         const found = res.find((val, index) => {
             return listModels.includes(val)
@@ -58,7 +61,7 @@ const FormAccount = ({
 
 
     const onFinish = async (values) => {
-        onSave(values,isStaff)
+        onSave(values, isStaff)
     };
     const onFinishFailed = () => {
     };
