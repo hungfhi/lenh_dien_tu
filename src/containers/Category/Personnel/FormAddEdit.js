@@ -34,6 +34,8 @@ const FormAddEdit = ({
     let listRoles = _.map(itemSelected?.roles, (i) => {
         return i?.id;
     });
+    console.log("listByMerchant", listByMerchant)
+    console.log("listRoles", listRoles)
 
     const [listModels, setListModels] = useState(_.map(itemSelected?.models, (i) => {
         return i?.id
@@ -42,16 +44,16 @@ const FormAddEdit = ({
     let listStation = _.map(itemSelected?.stations, (i) => {
         return i?.id
     });
-    console.log(listModels);
 
     useEffect(() => {
         let res = listModel.filter(({ is_station }) => is_station).map(({ id }) => id);
         const found = res.find((val, index) => {
             return listModels.includes(val)
         })
+        console.log('foundfound', found)
         found === 1 ? setStatusChooseModel(false) : setStatusChooseModel(true);
-        found === 1 ? form.setFieldsValue({ station_id: listStation }) : form.setFieldsValue({ station_id: [], })
-    }, [listModels]);
+        found === 1 ? form.setFieldsValue({ station_id: listStation }) : form.setFieldsValue({ station_id: [] })
+    }, [listModels, listModel, form, listStation]);
 
 
     useEffect(() => {
@@ -96,7 +98,7 @@ const FormAddEdit = ({
 
     const getListStations = useCallback(async () => {
         const payload = {};
-        category.getStation(payload).then(res => {
+        definitions.getStation(payload).then(res => {
             // console.log(res);
             setListStations(res?.data?.data);
         }).catch(err => {
@@ -317,17 +319,11 @@ const FormAddEdit = ({
                         <div>Quyền tài khoản <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
                             name="roles"
-                        // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                         >
                             <Select
                                 mode="multiple"
                                 placeholder={"Chọn quyền tài khoản"}
-                            // onChange={e => {
-                            //     listRoles.push({
-                            //         value: e
-                            //     })
-                            // }}
-                            // defaultValue={listRoles}
                             >
                                 {listByMerchant && listByMerchant.map((item) => {
 
@@ -391,7 +387,7 @@ const FormAddEdit = ({
 
                     </Col>
                     <Col style={{ margin: 0 }} span={24}>
-                        <div>Số GPLX</div>
+                        <div>Số GPLX<span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                         <Form.Item
                             name="driving_license"
                             rules={[
