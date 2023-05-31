@@ -114,23 +114,23 @@ const TableList = memo(({ className, data, params, setParams, onEdit, onRefreshL
         <span>{moment(text).format("DD-MM-YYYY HH:mm")}</span>
       )
     },
-    // {
-    //   title: "Trạng thái",
-    //   dataIndex: "is_active",
-    //   render: (value, row) => {
+    {
+      title: "Trạng thái",
+      dataIndex: "is_active",
+      render: (value, row) => {
 
-    //     return (
-    //       <div style={{ textAlign: 'center' }}>
-    //         <Switch
-    //           onChange={(e) => onActive(e, value?.id, row)}
-    //           checked={value?.id == 1 ? true : false}
-    //           size='small'
-    //         />
-    //       </div>
-    //     )
-    //   },
-    //   width: 120,
-    // },
+        return (
+          <div style={{ textAlign: 'center' }}>
+            <Switch
+              onChange={(e) => onActive(e, value?.id, row)}
+              checked={value?.id == 1 ? true : false}
+              size='small'
+            />
+          </div>
+        )
+      },
+      width: 120,
+    },
     {
       title: "Thao tác",
       width: 100,
