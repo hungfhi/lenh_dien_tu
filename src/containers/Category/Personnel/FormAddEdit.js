@@ -34,8 +34,8 @@ const FormAddEdit = ({
     let listRoles = _.map(itemSelected?.roles, (i) => {
         return i?.id;
     });
-    console.log("listByMerchant", listByMerchant)
-    console.log("listRoles", listRoles)
+    // console.log("listByMerchant", listByMerchant)
+    // console.log("listRoles", listRoles)
 
     const [listModels, setListModels] = useState(_.map(itemSelected?.models, (i) => {
         return i?.id
@@ -50,7 +50,7 @@ const FormAddEdit = ({
         const found = res.find((val, index) => {
             return listModels.includes(val)
         })
-        console.log('foundfound', found)
+        // console.log('foundfound', found)
         found === 1 ? setStatusChooseModel(false) : setStatusChooseModel(true);
         found === 1 ? form.setFieldsValue({ station_id: listStation }) : form.setFieldsValue({ station_id: [] })
     }, [listModels, listModel, form, listStation]);
