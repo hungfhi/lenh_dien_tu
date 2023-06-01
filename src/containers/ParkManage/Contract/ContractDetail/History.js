@@ -51,6 +51,11 @@ const History = memo(({ className, data, params, }) => {
         {
             title: "Nội dung",
             dataIndex: "email",
+            render: (value, row, index) => {
+                return (
+                    <h5 style={{ textAlign: 'center' }}>{index + 1}</h5>
+                );
+            },
         },
     ];
 
