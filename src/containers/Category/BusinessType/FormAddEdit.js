@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, InputNumber, Switch, Select } from "antd";
+import { Button, Col, Form, Input, Row, InputNumber, Switch, Select, message } from "antd";
 import { manage } from "configs";
 import _ from "lodash";
 import PropTypes from "prop-types";
@@ -45,7 +45,7 @@ const FormAddEdit = ({
                 setAllRoles(newRoles);
             }
         }).catch(err => {
-            Ui.showErrors('Có lỗi xảy ra');
+            message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
         })
     })
 

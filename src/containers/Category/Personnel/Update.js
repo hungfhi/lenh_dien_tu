@@ -50,7 +50,7 @@ const UpdateDinhMuc = ({
 
     category.updatePerson(itemSelected?.id, payload).then(res => {
       if (res.status === 200) {
-        Ui.showSuccess({ message: "Cập nhật thành công" });
+        message.success("Cập nhật thành công")
         onRefreshList();
         onHiddenModalEdit();
 

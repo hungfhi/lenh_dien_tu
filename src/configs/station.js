@@ -51,6 +51,11 @@ const station = {
     endContract(payload) {
         return axios.patch(`${domain.ServiceAddress}/contract/cancel-contract/${payload?.id}`);
     },
+
+    getHistory(payload){
+        return axios.get(`${domain.ServiceAddress}/contract/get-history-contract/${payload?.id}`);
+    }
+
 }
 
 export default station

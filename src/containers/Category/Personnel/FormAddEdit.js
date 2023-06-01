@@ -89,7 +89,7 @@ const FormAddEdit = ({
     }, []);
 
     const getListPotisions = useCallback(async () => {
-        category.getPositions().then(res => {
+        definitions.getPositions().then(res => {
             setListPositions(res?.data?.data);
         }).catch(err => {
             message.error(err?.response?.data?.message || 'Có lỗi xảy ra')

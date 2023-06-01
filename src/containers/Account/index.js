@@ -54,7 +54,7 @@ const Roles = ({ className, profile }) => {
     auth.onUpdatePass(payload)
       .then(res => {
         if (res.status === 200) {
-          Ui.showSuccess({ message: "Thay đổi mật khẩu thành công" });
+          message.success('Thay đổi mật khẩu thành công')
           if (payload?.logout_other_devices === true) {
             dispatch(setProfileUser(null));
             navigate("/sign-in", { replace: true })

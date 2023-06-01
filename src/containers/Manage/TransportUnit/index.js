@@ -9,7 +9,7 @@ import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
 import { useSelector,  } from 'react-redux';
-import { apis, manage } from "configs";
+import { apis, definitions, manage } from "configs";
 
 const Index = ({ className, profile }) => {
 
@@ -62,7 +62,7 @@ const Index = ({ className, profile }) => {
 
 
   const getStations = useCallback(async () => {
-    manage.getStation()
+    definitions.getStation()
         .then(res => {
             if (res.status === 200) {
               setStations(res?.data?.data)

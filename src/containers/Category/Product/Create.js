@@ -27,7 +27,6 @@ const Create = ({
         Ui.showSuccess({ message: "Thành công" });
         onRefreshList()
         onHiddenModal()
-
       }
     }).catch(err => {
       Ui.showError({message: 'Có lỗi xảy ra'});
