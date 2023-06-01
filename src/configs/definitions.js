@@ -13,6 +13,9 @@ const definitions = {
     getModels(payload) {
         return axios.get(`${domain.ServiceAddress}/definitions/models`,payload)
     },
+    getPositions(payload) {
+        return axios.get(`${domain.ServiceAddress}/definitions/positions`,payload)
+    },
 }
 
 export default definitions

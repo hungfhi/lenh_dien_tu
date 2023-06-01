@@ -9,7 +9,7 @@ import TableList from './TableList';
 import Update from './Update';
 import _ from "lodash"
 import { useSelector, } from 'react-redux';
-import { category } from "configs";
+import { category, definitions } from "configs";
 
 const Index = ({ className, profile }) => {
 
@@ -36,7 +36,7 @@ const Index = ({ className, profile }) => {
 
   const getStation = useCallback(async () => {
 
-    category.getStation(params)
+    definitions.getStation(params)
       .then(res => {
         if (res.status === 200) {
           const newStations = []

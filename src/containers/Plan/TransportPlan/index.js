@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Col, Drawer, message, Row, Spin } from 'antd';
 import Filter from './Filter';
 import TableList from './TableList';
-import { category } from 'configs';
+import { category, definitions } from 'configs';
 import { Ui } from 'utils/Ui';
 import Update from './Update';
 
@@ -77,7 +77,7 @@ const Index = ({ className }) => {
 
     const getStation = useCallback(async () => {
 
-        category.getStation(params)
+        definitions.getStation(params)
             .then(res => {
                 if (res.status === 200) {
                     const newStations = []

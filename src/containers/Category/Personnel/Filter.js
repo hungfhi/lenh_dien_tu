@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import _ from "lodash";
 import { TuyenSelect } from "components";
 import moment from "moment";
-import { category } from "configs";
+import { category, definitions } from "configs";
 import { Ui } from "utils/Ui";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -16,7 +16,7 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
 
   const [listPositions, setListPositions] = useState([]);
   const getListPotisions = useCallback(async () => {
-    category.getPositions().then(res => {
+    definitions.getPositions().then(res => {
       setListPositions(res?.data?.data);
     }).catch(err => {
       if (err.response?.status === 422 && err.response?.data?.errors) {
