@@ -30,7 +30,7 @@ const Create = ({
 
     manage.createBusinessType(payload).then(res => {
       if (res.status === 200) {
-        Ui.showSuccess({ message: "Thành công" });
+        message.success("Thành công")
         onRefreshList();
         onHiddenModal();
 

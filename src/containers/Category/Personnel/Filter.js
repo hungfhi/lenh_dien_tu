@@ -1,12 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Row, Col, DatePicker, Select, Button, Input, Spin } from "antd";
-import styled from "styled-components";
+import { Button, Col, DatePicker, Input, Row, Select, message } from "antd";
+import { definitions } from "configs";
 import PropTypes from "prop-types";
-import _ from "lodash";
-import { TuyenSelect } from "components";
-import moment from "moment";
-import { category, definitions } from "configs";
-import { Ui } from "utils/Ui";
+import { useCallback, useEffect, useState } from "react";
+import styled from "styled-components";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -19,9 +15,7 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
     definitions.getPositions().then(res => {
       setListPositions(res?.data?.data);
     }).catch(err => {
-      if (err.response?.status === 422 && err.response?.data?.errors) {
-        Ui.showErrors('Có lỗi xảy ra');
-      }
+      message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
     })
   }, []);
 

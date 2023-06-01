@@ -71,12 +71,12 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
       .then(res => {
         if (res.status === 200) {
           dispatch(setProfileUser(null));
-          Ui.showSuccess({ message: "Đăng xuất hệ thống thành công" });
+          message.success("Đăng xuất hệ thống thành công")
           navigate("/sign-in", { replace: true })
         }
       })
       .catch(err => {
-        Ui.showError({ message: err?.response?.data?.message });
+        message.error(err?.response?.data?.message)
       })
 
   }
@@ -276,7 +276,7 @@ const LayoutContent = ({ children, className, typeSearch = "local", }) => {
                 })
                 if (name == 'contract-detail') {
                   return <Breadcrumb.Item>
-                    <div style={{ color: 'white' }}><span style={{cursor:'pointer'}} onClick={() => navigate("/contract", { replace: true })} >Hợp đồng</span> <RightOutlined style={{ fontSize: 12, color: "#fafafa" }} /> Chi tiết hợp đồng</div>
+                    <div style={{ color: 'white' }}><span style={{ cursor: 'pointer' }} onClick={() => navigate("/contract", { replace: true })} >Hợp đồng</span> <RightOutlined style={{ fontSize: 12, color: "#fafafa" }} /> Chi tiết hợp đồng</div>
                   </Breadcrumb.Item>
                 }
                 else {

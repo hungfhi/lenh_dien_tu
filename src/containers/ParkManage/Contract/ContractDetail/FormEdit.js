@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, InputNumber, Switch, DatePicker, Checkbox, message, Select, Spin } from "antd";
+import { Button, Col, Form, Input, Row, InputNumber, Switch, DatePicker, Checkbox, message, Select, Spin, Modal } from "antd";
 import PropTypes from "prop-types";
 import React, { useCallback, useState, useEffect, memo } from "react";
 import styled from "styled-components";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import _ from "lodash";
 import TabEdit from "./TabEdit";
 import { station } from "configs";
+import History from "./History";
 const { Option } = Select;
 const { TextArea } = Input;
 let inputTimer = null;
@@ -19,8 +20,19 @@ const TableList = memo(({ className, onSave, isEdit, stations, transport, startD
   const [time, setTime] = useState([]);
   const [merchant, setMerchant] = useState(undefined);
   const [stati, setStati] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [history, setHistory] = useState([]);
 
-
+  const showModal = () => {
+    setIsModalOpen(true);
+    onHistory()
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     if (isEdit) {
@@ -69,19 +81,36 @@ const TableList = memo(({ className, onSave, isEdit, stations, transport, startD
 
   const onEndContract = useCallback(async () => {
     const payload = {
-        id: isEdit?.id,
+      id: isEdit?.id,
     }
     station.endContract(payload)
-        .then(res => {
-            if (res.status === 200) {
-              message.success("Hợp đồng kết thúc!")
-              navigate(`/contract`, { replace: true })
-            }
-        })
-        .catch(err => {
-          message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
-        })
-}, []);
+      .then(res => {
+        if (res.status === 200) {
+          message.success("Hợp đồng kết thúc!")
+          navigate(`/contract`, { replace: true })
+        }
+      })
+      .catch(err => {
+        message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
+      })
+  }, []);
+
+
+
+  const onHistory = useCallback(async () => {
+    const payload = {
+      id: isEdit?.id,
+    }
+    station.getHistory(payload)
+      .then(res => {
+        if (res.status === 200) {
+          setHistory(res?.data?.data)
+        }
+      })
+      .catch(err => {
+        message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
+      })
+  }, []);
 
 
 
@@ -391,25 +420,27 @@ const TableList = memo(({ className, onSave, isEdit, stations, transport, startD
             Thoát
           </Button>
           <Button
-            disabled={isEdit?.status_contract?.value!==1 ? true : false}
-            style={{ borderRadius: 6, height: 35, width: 150, backgroundColor: isEdit?.status_contract?.value !== 1? "" : '#FEA032', color: isEdit?.status_contract?.value !== 1? "" : '#fff', marginLeft: 20 }}
+            disabled={isEdit?.status_contract?.value !== 1 ? true : false}
+            style={{ borderRadius: 6, height: 35, width: 150, backgroundColor: isEdit?.status_contract?.value !== 1 ? "" : '#FEA032', color: isEdit?.status_contract?.value !== 1 ? "" : '#fff', marginLeft: 20 }}
             onClick={onEndContract}
           >
             Kết thúc hợp đồng
           </Button>
           <Button
-              style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: '#F57F17', color: '#fff', marginLeft: 20 }}
-            >
-              In
-            </Button>
-            <Button
-              style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: '#00A991', color: '#fff', marginLeft: 20 }}
-            >
-              Lịch sử
-            </Button>
+            style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: '#F57F17', color: '#fff', marginLeft: 20 }}
+          >
+            In
+          </Button>
+          <Button onClick={showModal}
+            style={{ borderRadius: 6, height: 35, width: 120, backgroundColor: '#00A991', color: '#fff', marginLeft: 20 }}
+          >
+            Lịch sử
+          </Button>
         </div>
       </Form>
-
+      <Modal width={"80%"} title={<div style={{ fontFamily: 'Nunito', fontSize: 18, fontWeight: 700 }}>Lịch sử</div>} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} closable={false} destroyOnClose className={className}>
+        <History data={history}/>
+      </Modal>
     </div>
   );
 });

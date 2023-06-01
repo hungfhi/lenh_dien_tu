@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Select, Spin, TreeSelect } from "antd";
+import { Select, Spin, TreeSelect, message } from "antd";
 import { users } from "configs";
 import manage from "configs/manage";
 import _ from "lodash";
@@ -55,7 +55,7 @@ const Permission = memo(
                     }
                 })
                 .catch(err => {
-                    Ui.showError({ message: err?.response?.data?.message });
+                    message.error(err?.response?.data?.message)
                 })
             setFetching(false);
         }, [setDataSource, search]);

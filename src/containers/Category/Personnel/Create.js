@@ -52,7 +52,7 @@ const Create = ({
     // console.log(payload);
     category.createPerson(payload).then(res => {
       if (res.status === 200) {
-        Ui.showSuccess({ message: "Thêm mới thành công" });
+        message.success("Thêm mới thành công")
         onRefreshList()
         onHiddenModal()
 
