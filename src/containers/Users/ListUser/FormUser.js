@@ -387,7 +387,7 @@ const FormAccount = ({
                                 <div>Mô hình kinh doanh <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                                 <Form.Item
                                     name="model_id"
-                                // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                                    rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                                 >
                                     <Select
                                         mode="multiple"
@@ -405,10 +405,10 @@ const FormAccount = ({
                                 </Form.Item>
                             </Col>
                             <Col style={{ margin: 0 }} span={12}>
-                                <div>Bến làm việc <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                                <div>Bến làm việc {statusChooseModel ? false : <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span>} </div>
                                 <Form.Item
                                     name="station_id"
-                                    rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                                    rules={[{ required: statusChooseModel ? false : true, message: statusChooseModel ? false : 'Vui lòng nhập dữ liệu' }]}
                                 >
                                     <Select
                                         defaultValue
