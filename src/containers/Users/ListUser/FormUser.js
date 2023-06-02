@@ -387,7 +387,7 @@ const FormAccount = ({
                                 <div>Mô hình kinh doanh <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                                 <Form.Item
                                     name="model_id"
-                                    rules={[{ required: true, message: 'Vui lòng chọn mô hình kinh doanh' }]}
+                                // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
                                 >
                                     <Select
                                         mode="multiple"
@@ -406,40 +406,22 @@ const FormAccount = ({
                             </Col>
                             <Col style={{ margin: 0 }} span={12}>
                                 <div>Bến làm việc <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
-                                {statusChooseModel ?
-                                    <Form.Item
-                                        name="station_id"
-                                    // rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                                <Form.Item
+                                    name="station_id"
+                                    rules={[{ required: true, message: 'Vui lòng nhập dữ liệu' }]}
+                                >
+                                    <Select
+                                        defaultValue
+                                        mode="multiple"
+                                        placeholder="Chọn bến làm việc"
+                                        disabled={statusChooseModel}
                                     >
-                                        <Select
-                                            defaultValue
-                                            mode="multiple"
-                                            placeholder="Chọn bến làm việc"
-                                            disabled={statusChooseModel}
-                                        >
-                                            {listStations && listStations.map((item, index) => {
+                                        {listStations && listStations.map((item, index) => {
 
-                                                return <Select.Option value={item?.id}>{item?.name}</Select.Option>
-                                            })}
-                                        </Select>
-                                    </Form.Item> :
-                                    <Form.Item
-                                        name="station_id"
-                                        rules={[{ required: true, message: 'Vui lòng chọn bến làm việc' }]}
-                                    >
-                                        <Select
-                                            defaultValue
-                                            mode="multiple"
-                                            placeholder="Chọn bến làm việc"
-                                            disabled={statusChooseModel}
-                                        >
-                                            {listStations && listStations.map((item, index) => {
-
-                                                return <Select.Option value={item?.id}>{item?.name}</Select.Option>
-                                            })}
-                                        </Select>
-                                    </Form.Item>
-                                }
+                                            return <Select.Option value={item?.id}>{item?.name}</Select.Option>
+                                        })}
+                                    </Select>
+                                </Form.Item>
                             </Col>
                             <Col style={{ margin: 0 }} span={24}>
                                 <div>Địa chỉ</div>
@@ -451,11 +433,11 @@ const FormAccount = ({
                                 </Form.Item>
                             </Col>
                             <Col style={{ margin: 0 }} span={24}>
-                                <div>Số GPLX <span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
+                                <div>Số GPLX<span style={{ color: '#dc2d2d', fontWeight: 'bold' }}>*</span></div>
                                 <Form.Item
                                     name="driving_license"
                                     rules={[
-                                        { required: true, message: 'Vui lòng nhập GPLX' },
+                                        // { required: true, message: 'Vui lòng nhập dữ liệu' },
                                         {
                                             pattern: new RegExp(/^[0-9]+$/i),
                                             message: "Chỉ được nhập số",
