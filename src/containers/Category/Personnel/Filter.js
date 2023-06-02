@@ -15,7 +15,7 @@ const Filter = ({ className, setParams, params, setShowModal, operator }) => {
     definitions.getPositions().then(res => {
       setListPositions(res?.data?.data);
     }).catch(err => {
-      message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')
+      message.error(err?.response?.data?.message || 'Có lỗi xảy ra !')                          
     })
   }, []);
 
