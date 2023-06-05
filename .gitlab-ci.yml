@@ -162,4 +162,3 @@ release:
     - $TAG_RUNNER
   only:
     - main
-    - dev
